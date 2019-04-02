@@ -3,12 +3,10 @@ package io.codelex.groupdinner;
 import io.codelex.groupdinner.api.Attendee;
 import io.codelex.groupdinner.api.CreateDinnerRequest;
 import io.codelex.groupdinner.api.Dinner;
+import io.codelex.groupdinner.api.JoinDinnerRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -28,11 +26,13 @@ public class UserController {
     public ResponseEntity<Dinner> createDinner(@Valid @RequestBody CreateDinnerRequest request) {
         return new ResponseEntity<>(userModule.createDinner(request), HttpStatus.CREATED);
     }
-    
-   /* @PostMapping("/events/{id}")
-    public ResponseEntity<Dinner> joinDinner(@Valid @RequestBody CreateDinnerRequest request) {
-        return new ResponseEntity<>(userModule.joinDinner(request);, HttpStatus.OK);
-    }*/
-   
+
+    @PostMapping("/events/{id}")  //if we pass {id} here, does JoinDinnerRequest need to include dinner info too or just user
+    public ResponseEntity<Boolean> joinDinner(
+            @PathVariable Long id,
+            @Valid @RequestBody JoinDinnerRequest request) {
+        return new ResponseEntity<>(userModule.joinDinner(request), HttpStatus.OK);
+    }
+
 
 }

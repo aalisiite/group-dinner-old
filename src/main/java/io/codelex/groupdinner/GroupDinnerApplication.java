@@ -1,9 +1,6 @@
 package io.codelex.groupdinner;
 
-import io.codelex.groupdinner.api.Attendee;
-import io.codelex.groupdinner.api.Dinner;
-import io.codelex.groupdinner.api.Location;
-import io.codelex.groupdinner.api.User;
+import io.codelex.groupdinner.api.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.time.LocalDateTime;
@@ -46,17 +43,13 @@ public class GroupDinnerApplication {
         UserModule userModule = new UserModule(attendeeService, dinnerService);
 
         Dinner dinner = userModule.createDinner(
-                user1,
-                1L,
-                "Test Dinner",
-                2,
-                "description",
-                location,
-                LocalDateTime.now().plusDays(2)
+                createDinnerRequest(createUser(), 
+                        createLocation(), 
+                        LocalDateTime.of(2019,1,1,0,0))
         );
 
-        userModule.joinDinner(user2, dinner);
-        userModule.joinDinner(user3, dinner);
+        userModule.joinDinner(joinDinnerRequest(user2, dinner));
+        userModule.joinDinner(joinDinnerRequest(user3, dinner));
 
 
         for (Attendee attendee : attendeeService.attendees) {
@@ -68,5 +61,38 @@ public class GroupDinnerApplication {
 
         //SpringApplication.run(GroupDinnerApplication.class, args);
     }
+    private static User createUser () {
+        return new User(
+                1L,
+                "Janis",
+                "Berzins",
+                "berzins@gmai.com"
+        );
+    }
 
+    private static JoinDinnerRequest joinDinnerRequest (User user, Dinner dinner) {
+        return new JoinDinnerRequest(
+                user,
+                dinner
+        );
+    }
+    private static CreateDinnerRequest createDinnerRequest (User user, Location location, LocalDateTime localDateTime) {
+        return new CreateDinnerRequest(
+                "This is a title",
+                user,
+                2,
+                "This is a description",
+                location,
+                localDateTime
+        );
+    }
+
+    private static Location createLocation() {
+        return new Location(
+                "Jurmalas Gatve",
+                76
+        );
+    }
 }
+
+

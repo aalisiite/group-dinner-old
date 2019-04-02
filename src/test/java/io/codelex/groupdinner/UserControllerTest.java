@@ -15,16 +15,16 @@ public class UserControllerTest {
     private AttendeeService attendeeService = Mockito.mock(AttendeeService.class);
     private DinnerService dinnerService = Mockito.mock(DinnerService.class);
     private UserModule userModule = new UserModule(attendeeService, dinnerService);
-
+    private User user = createUser();
+    private Location location = createLocation();
+    private LocalDateTime localDateTime = LocalDateTime.of(2019,1,1,0,0);
+    CreateDinnerRequest request = createDinnerRequest(user, location, localDateTime);
+    
     @Test
     public void should_return_dinner_and_status_created () {
         //given
-        User user = createUser();
-        
-        CreateDinnerRequest request = createDinnerRequest()
         
         //when
-        
         
         //then
         
@@ -57,49 +57,4 @@ public class UserControllerTest {
         );
     }
     
-    /*//given
-        FindTripRequest request = createFindTripRequest();
-        Trip trip = new Trip(
-                1L,
-                request.getFrom(),
-                request.getTo(),
-                "Ryanair",
-                LocalDateTime.now(),
-                LocalDateTime.now().plusHours(1)
-        );
-        String jsonRequest = MAPPER.writeValueAsString(request);
-
-        TripWithForecast tripWithForecast = createTripWithForecast();
-
-
-        //when
-        Mockito.lenient()
-                .when(service.findTrip(any()))
-                .thenReturn(Collections.singletonList(trip)
-                );
-
-        Mockito.lenient()
-                .when(mapToTripWithForecast.findTrips(request))
-                .thenReturn(Collections.singletonList(tripWithForecast));
-
-        //expect
-        String jsonResponse = mockMvc.perform(
-                post("/api/flights")
-                        .content(jsonRequest)
-                        .contentType(APPLICATION_JSON)
-                        .accept(APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        List<TripWithForecast> result = MAPPER.readValue(
-                jsonResponse, new TypeReference<List<TripWithForecast>>() {
-                }
-        );
-
-        //and
-        assertEquals(trip.getFrom().getAirport(), result.get(0).getFrom().getAirport());
-        assertEquals(trip.getTo().getAirport(), result.get(0).getTo().getAirport());*/
 }
