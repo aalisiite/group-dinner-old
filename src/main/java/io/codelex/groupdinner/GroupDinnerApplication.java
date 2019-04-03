@@ -12,7 +12,7 @@ import java.util.List;
 public class GroupDinnerApplication {
 
     public static void main(String[] args) {
-
+/*
         User user1 = new User(
                 1L,
                 "Nikola",
@@ -58,9 +58,6 @@ public class GroupDinnerApplication {
             System.out.println(attendee.getStatus());
 
         }
-
-
-        //SpringApplication.run(GroupDinnerApplication.class, args);
     }
     private static User createUser () {
         return new User(
@@ -94,6 +91,10 @@ public class GroupDinnerApplication {
                 76
         );
     }
-}
+    
+*/
+
+        SpringApplication.run(GroupDinnerApplication.class, args);
+}}
 
 
