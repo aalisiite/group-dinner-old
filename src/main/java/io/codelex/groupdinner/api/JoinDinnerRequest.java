@@ -8,10 +8,10 @@ import javax.validation.constraints.NotNull;
 
 public class JoinDinnerRequest {
 
-    @OneToMany
+
     @NotNull
     private User user;
-    @ManyToOne
+    
     @NotNull
     private Dinner dinner;
 

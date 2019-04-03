@@ -32,10 +32,10 @@ public class Dinner {
         this.dateTime = dateTime;
     }
 
-    public boolean shouldAcceptRequest () {
+    public boolean shouldAcceptRequest() {
         return maxGuests > currentGuests;
     }
-    
+
     public void incrementCurrentGuests() {
         currentGuests++;
     }
