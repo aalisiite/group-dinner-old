@@ -11,7 +11,7 @@ import java.util.Objects;
 
 
 public class CreateDinnerRequest {
-    
+
     @NotEmpty
     private String title;
     @OneToMany
@@ -23,7 +23,7 @@ public class CreateDinnerRequest {
     private String description;
     private Location location;
     private LocalDateTime dateTime;
-    
+
     @JsonCreator
     public CreateDinnerRequest(
             @JsonProperty("title") @NotEmpty String title,

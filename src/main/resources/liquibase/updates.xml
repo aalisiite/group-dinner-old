@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+
+    <changeSet id="create users table" author="alise">
+        <createSequence sequenceName="users_seq"/>
+        <createTable tableName="users">
+            <column name="id" type="bigint" defaultValueSequenceNext="flights_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="users_id_seq"/>
+            </column>
+            <column name="firstName" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lastName" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create dinner table" author="alise">
+        <createSequence sequenceName="dinner_seq"/>
+        <createTable tableName="dinner">
+            <column name="id" type="bigint" defaultValueSequenceNext="dinner_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="dinner_id_seq"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creator" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="maxGuests" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="acceptedRequests" type="int">
+                <constraints nullable="true"/>
+            </column>
+            <column name="pendingRequests" type="int">
+                <constraints nullable="true"/>
+            </column>
+            <column name="location" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="dateTime" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="dinner"
+                                 baseColumnNames="creator"
+                                 constraintName="fk_dinner_creator_users_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"
+        />
+        <createIndex tableName="dinner" indexName="idx_dinner_creator">
+            <column name="creator"/>
+        </createIndex>
+        <addForeignKeyConstraint baseTableName="dinner"
+                                 baseColumnNames="acceptedRequests"
+                                 constraintName="fk_dinner_acceptedRequests_users_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"
+        />
+        <createIndex tableName="dinner" indexName="idx_dinner_acceptedRequests">
+            <column name="acceptedRequests"/>
+        </createIndex>
+        <addForeignKeyConstraint baseTableName="dinner"
+                                 baseColumnNames="pendingRequests"
+                                 constraintName="fk_dinner_pendingRequests_users_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"
+        />
+        <createIndex tableName="dinner" indexName="idx_dinner_pendingRequests">
+            <column name="pendingRequests"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="create feedback table" author="alise">
+        <createTable tableName="feedback">
+            <column name="rating" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="provider" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="receiver" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="feedback"
+                                 baseColumnNames="provider"
+                                 constraintName="fk_feedback_provider_users_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"
+        />
+        <createIndex tableName="feedback" indexName="idx_feedback_provider">
+            <column name="provider"/>
+        </createIndex>
+        <addForeignKeyConstraint baseTableName="feedback"
+                                 baseColumnNames="receiver"
+                                 constraintName="fk_feedback_receiver_users_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"
+        />
+        <createIndex tableName="feedback" indexName="idx_receiver">
+            <column name="receiver"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

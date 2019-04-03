@@ -1,6 +1,7 @@
 package io.codelex.groupdinner;
 
 import io.codelex.groupdinner.api.*;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.time.LocalDateTime;
