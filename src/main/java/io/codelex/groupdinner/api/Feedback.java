@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Table
-@Entity(name = "Feedback")
+@Entity
 public class Feedback {
     
     private User provider;

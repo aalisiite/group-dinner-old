@@ -2,6 +2,8 @@ package io.codelex.groupdinner.api;
 
 import javax.persistence.*;
 
+@Table
+@Entity (name = "attendee")
 public class Attendee {
 
     @Id
