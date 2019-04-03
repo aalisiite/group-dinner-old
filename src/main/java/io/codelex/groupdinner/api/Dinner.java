@@ -13,15 +13,15 @@ public class Dinner {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    @OneToMany
+    @ManyToOne
     private User creator;
     private int maxGuests;
     private int currentGuests;
     private String description;
-    private Location location;
+    private String location;
     private LocalDateTime dateTime;
 
-    public Dinner(Long id, String title, User creator, int maxGuests, String description, Location location, LocalDateTime dateTime) {
+    public Dinner(Long id, String title, User creator, int maxGuests, String description, String location, LocalDateTime dateTime) {
         this.id = id;
         this.title = title;
         this.creator = creator;
@@ -32,10 +32,10 @@ public class Dinner {
         this.dateTime = dateTime;
     }
 
-    public boolean shouldAcceptRequest () {
+    public boolean shouldAcceptRequest() {
         return maxGuests > currentGuests;
     }
-    
+
     public void incrementCurrentGuests() {
         currentGuests++;
     }
@@ -88,11 +88,11 @@ public class Dinner {
         this.description = description;
     }
 
-    public Location getLocation() {
+    public String getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(String location) {
         this.location = location;
     }
 

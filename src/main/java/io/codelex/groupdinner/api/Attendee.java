@@ -3,7 +3,7 @@ package io.codelex.groupdinner.api;
 import javax.persistence.*;
 
 @Table
-@Entity (name = "attendee")
+@Entity(name = "attendee")
 public class Attendee {
 
     @Id
@@ -11,7 +11,7 @@ public class Attendee {
     private Long id;
     @ManyToOne
     private Dinner dinner;
-    @OneToMany
+    @ManyToOne
     private User user;
     private boolean status;
 
