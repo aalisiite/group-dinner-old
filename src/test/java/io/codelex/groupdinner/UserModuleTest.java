@@ -17,7 +17,7 @@ public class UserModuleTest {
     private UserModule userModule = new UserModule(attendeeService, dinnerService);
     private LocalDateTime localDateTime = LocalDateTime.of(2019,1,1,0,0);
     private User user = createUser();
-    private Location location = createLocation();
+    private String location = createLocation();
     private Dinner dinner = createDinner();
     private CreateDinnerRequest dinnerRequest = createDinnerRequest();
     private Attendee attendee = createAcceptedAttendee();
@@ -126,11 +126,8 @@ public class UserModuleTest {
         );
     }
 
-    private Location createLocation() {
-        return new Location(
-                "Jurmalas Gatve",
-                76
-        );
+    private String createLocation() {
+        return "Jurmalas Gatve 76";
     }
 
 }

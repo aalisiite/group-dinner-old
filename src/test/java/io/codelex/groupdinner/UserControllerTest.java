@@ -16,7 +16,7 @@ public class UserControllerTest {
     private DinnerService dinnerService = Mockito.mock(DinnerService.class);
     private UserModule userModule = new UserModule(attendeeService, dinnerService);
     private User user = createUser();
-    private Location location = createLocation();
+    private String location = createLocation();
     private LocalDateTime localDateTime = LocalDateTime.of(2019,1,1,0,0);
     CreateDinnerRequest request = createDinnerRequest(user, location, localDateTime);
     
@@ -39,7 +39,7 @@ public class UserControllerTest {
         );
     }
     
-    private CreateDinnerRequest createDinnerRequest (User user, Location location, LocalDateTime localDateTime) {
+    private CreateDinnerRequest createDinnerRequest (User user, String location, LocalDateTime localDateTime) {
         return new CreateDinnerRequest(
                 "This is a title",
                 user,
@@ -50,11 +50,8 @@ public class UserControllerTest {
         );
     }
     
-    private Location createLocation() {
-        return new Location(
-                "Jurmalas Gatve",
-                76
-        );
+    private String createLocation() {
+        return "Jurmalas Gatve 76";
     }
     
 }

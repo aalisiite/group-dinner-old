@@ -1,5 +1,6 @@
 package io.codelex.groupdinner.api;
 
+
 public class Location {
 
     private String addressLine;

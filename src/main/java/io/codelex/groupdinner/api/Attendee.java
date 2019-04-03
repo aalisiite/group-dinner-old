@@ -11,7 +11,7 @@ public class Attendee {
     private Long id;
     @ManyToOne
     private Dinner dinner;
-    @OneToMany
+    @ManyToOne
     private User user;
     private boolean status;
 
