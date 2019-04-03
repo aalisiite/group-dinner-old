@@ -5,9 +5,9 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
-    <changeSet id="create user table" author="alise">
+    <changeSet id="create users table" author="alise">
         <createSequence sequenceName="user_seq"/>
-        <createTable tableName="user">
+        <createTable tableName="users">
             <column name="id" type="bigint" defaultValueSequenceNext="user_seq">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user"/>
             </column>
@@ -24,9 +24,9 @@
 
     </changeSet>
 
-    <changeSet id="create dinner table" author="alise">
+    <changeSet id="create dinners table" author="alise">
         <createSequence sequenceName="dinner_seq"/>
-        <createTable tableName="dinner">
+        <createTable tableName="dinners">
             <column name="id" type="bigint" defaultValueSequenceNext="dinner_seq">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_dinner"/>
             </column>
@@ -52,14 +52,14 @@
                 <constraints nullable="true"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseTableName="dinner"
+        <addForeignKeyConstraint baseTableName="dinners"
                                  baseColumnNames="creator"
-                                 constraintName="fk_dinner_creator_user_id"
-                                 referencedTableName="user"
+                                 constraintName="fk_dinners_creator_users_id"
+                                 referencedTableName="users"
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"
         />
-        <createIndex tableName="dinner" indexName="idx_dinner_creator">
+        <createIndex tableName="dinners" indexName="idx_dinners_creator">
             <column name="creator"/>
         </createIndex>
     </changeSet>
@@ -82,8 +82,8 @@
         </createTable>
         <addForeignKeyConstraint baseTableName="attendee"
                                  baseColumnNames="dinner"
-                                 constraintName="fk_attendee_dinner_dinner_id"
-                                 referencedTableName="dinner"
+                                 constraintName="fk_attendee_dinner_dinners_id"
+                                 referencedTableName="dinners"
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"
         />
@@ -92,8 +92,8 @@
         </createIndex>
         <addForeignKeyConstraint baseTableName="attendee"
                                  baseColumnNames="user"
-                                 constraintName="fk_attendee_dinner_user_id"
-                                 referencedTableName="user"
+                                 constraintName="fk_attendee_dinner_users_id"
+                                 referencedTableName="users"
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"
         />
