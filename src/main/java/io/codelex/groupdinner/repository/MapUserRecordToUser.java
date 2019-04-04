@@ -1,6 +1,5 @@
 package io.codelex.groupdinner.repository;
 
-import io.codelex.groupdinner.api.Dinner;
 import io.codelex.groupdinner.api.User;
 import io.codelex.groupdinner.repository.model.UserRecord;
 

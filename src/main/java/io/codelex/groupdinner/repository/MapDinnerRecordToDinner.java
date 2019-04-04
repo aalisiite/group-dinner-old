@@ -1,8 +1,6 @@
 package io.codelex.groupdinner.repository;
 
-import io.codelex.groupdinner.api.Attendee;
 import io.codelex.groupdinner.api.Dinner;
-import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 
 import java.util.function.Function;
