@@ -10,31 +10,31 @@ public class JoinDinnerRequest {
 
 
     @NotNull
-    private UserRecord user;
-    
+    private User user;
+
     @NotNull
-    private DinnerRecord dinner;
+    private Dinner dinner;
 
     public JoinDinnerRequest(
-            @JsonProperty("user") @NotNull UserRecord user,
-            @JsonProperty("dinner") @NotNull DinnerRecord dinner) {
+            @JsonProperty("user") @NotNull User user,
+            @JsonProperty("dinner") @NotNull Dinner dinner) {
         this.user = user;
         this.dinner = dinner;
     }
 
-    public UserRecord getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(UserRecord user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
-    public DinnerRecord getDinner() {
+    public Dinner getDinner() {
         return dinner;
     }
 
-    public void setDinner(DinnerRecord dinner) {
+    public void setDinner(Dinner dinner) {
         this.dinner = dinner;
     }
 }
