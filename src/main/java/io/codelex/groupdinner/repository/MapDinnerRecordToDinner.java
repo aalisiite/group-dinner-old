@@ -8,12 +8,14 @@ import io.codelex.groupdinner.repository.model.DinnerRecord;
 import java.util.function.Function;
 
 public class MapDinnerRecordToDinner implements Function<DinnerRecord, Dinner> {
+    private MapUserRecordToUser toUser = new MapUserRecordToUser();
+
     @Override
     public Dinner apply(DinnerRecord dinnerRecord) {
         return new Dinner(
                 dinnerRecord.getId(),
                 dinnerRecord.getTitle(),
-                dinnerRecord.getCreator(),
+                toUser.apply(dinnerRecord.getCreator()),
                 dinnerRecord.getMaxGuests(),
                 dinnerRecord.getDescription(),
                 dinnerRecord.getLocation(),

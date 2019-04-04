@@ -1,18 +1,24 @@
 package io.codelex.groupdinner.repository;
 
 import io.codelex.groupdinner.api.Attendee;
+import io.codelex.groupdinner.api.Dinner;
+import io.codelex.groupdinner.api.User;
 import io.codelex.groupdinner.repository.model.AttendeeRecord;
+import io.codelex.groupdinner.repository.model.UserRecord;
 
 import java.util.function.Function;
 
 public class MapAttendeeRecordToAttendee implements Function<AttendeeRecord, Attendee> {
+    private MapDinnerRecordToDinner toDinner = new MapDinnerRecordToDinner();
+    private MapUserRecordToUser toUser = new MapUserRecordToUser();
+
     @Override
     public Attendee apply(AttendeeRecord attendeeRecord) {
+        User user = new User(attendeeRecord.getUser().getId(), attendeeRecord.getDinner().getCreator().getFirstName(), attendeeRecord.getDinner().getCreator().getLastName(), attendeeRecord.getDinner().getCreator().getEmail());
         return new Attendee(
                 attendeeRecord.getId(),
-                attendeeRecord.getDinner(),
-                attendeeRecord.getUser(),
-                attendeeRecord.getStatus()
-        );
+                toDinner.apply(attendeeRecord.getDinner()),
+                user,
+                attendeeRecord.getStatus());
     }
 }

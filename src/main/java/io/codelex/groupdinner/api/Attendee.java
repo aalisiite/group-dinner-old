@@ -1,8 +1,5 @@
 package io.codelex.groupdinner.api;
 
-import io.codelex.groupdinner.repository.model.DinnerRecord;
-import io.codelex.groupdinner.repository.model.UserRecord;
-
 public class Attendee {
 
     private Long id;

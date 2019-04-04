@@ -1,6 +1,7 @@
 package io.codelex.groupdinner;
 
 import io.codelex.groupdinner.InMemory.InMemoryUserModule;
+import io.codelex.groupdinner.repository.AttendeeRecordRepository;
 import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.api.CreateDinnerRequest;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
