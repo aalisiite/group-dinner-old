@@ -1,5 +1,6 @@
 package io.codelex.groupdinner;
 
+import io.codelex.groupdinner.InMemory.InMemoryUserModule;
 import io.codelex.groupdinner.api.*;
 import io.codelex.groupdinner.repository.model.Attendee;
 import io.codelex.groupdinner.repository.model.Dinner;
@@ -17,7 +18,7 @@ public class UserModuleTest {
 
     private AttendeeService attendeeService = Mockito.mock(AttendeeService.class);
     private DinnerService dinnerService = Mockito.mock(DinnerService.class);
-    private UserModule userModule = new UserModule(attendeeService, dinnerService);
+    private UserModule userModule = new InMemoryUserModule(attendeeService, dinnerService);
     private LocalDateTime localDateTime = LocalDateTime.of(2019,1,1,0,0);
     private User user = createUser();
     private String location = createLocation();

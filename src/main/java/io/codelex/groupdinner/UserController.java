@@ -23,12 +23,12 @@ public class UserController {
     private DinnerService dinnerService = new DinnerService(dinners);
     private InMemoryUserModule userModule = new InMemoryUserModule(attendeeService, dinnerService);
 
-    @PostMapping("/events")
+    @PostMapping("/dinners")
     public ResponseEntity<Dinner> createDinner(@Valid @RequestBody CreateDinnerRequest request) {
         return new ResponseEntity<>(userModule.createDinner(request), HttpStatus.CREATED);
     }
 
-    @PostMapping("/events/{id}")
+    @PostMapping("/dinners/{id}")
     //if we pass {id} here, does JoinDinnerRequest need to include dinner info too or just user
     public ResponseEntity<Boolean> joinDinner(
             @PathVariable Long id,
