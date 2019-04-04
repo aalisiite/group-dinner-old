@@ -2,9 +2,9 @@ package io.codelex.groupdinner;
 
 import io.codelex.groupdinner.InMemory.InMemoryUserModule;
 import io.codelex.groupdinner.api.*;
-import io.codelex.groupdinner.repository.model.Attendee;
-import io.codelex.groupdinner.repository.model.Dinner;
-import io.codelex.groupdinner.repository.model.User;
+import io.codelex.groupdinner.repository.model.AttendeeRecord;
+import io.codelex.groupdinner.repository.model.DinnerRecord;
+import io.codelex.groupdinner.repository.model.UserRecord;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -18,14 +18,14 @@ public class UserModuleTest {
 
     private AttendeeService attendeeService = Mockito.mock(AttendeeService.class);
     private DinnerService dinnerService = Mockito.mock(DinnerService.class);
-    private UserModule userModule = new InMemoryUserModule(attendeeService, dinnerService);
-    private LocalDateTime localDateTime = LocalDateTime.of(2019,1,1,0,0);
-    private User user = createUser();
+    private InMemoryUserModule userModule = new InMemoryUserModule(attendeeService, dinnerService);
+    private LocalDateTime localDateTime = LocalDateTime.of(2019, 1, 1, 0, 0);
+    private UserRecord user = createUser();
     private String location = createLocation();
-    private Dinner dinner = createDinner();
+    private DinnerRecord dinner = createDinner();
     private CreateDinnerRequest dinnerRequest = createDinnerRequest();
-    private Attendee attendee = createAcceptedAttendee();
-    
+    private AttendeeRecord attendee = createAcceptedAttendee();
+
     @Test
     public void should_be_able_to_create_dinner() {
         //given
@@ -35,71 +35,67 @@ public class UserModuleTest {
                 .thenReturn(dinner);
         Mockito.when(attendeeService.addAttendee(any()))
                 .thenReturn(attendee);
-        
-        Dinner result = userModule.createDinner(dinnerRequest);
-        
+
+        DinnerRecord result = userModule.createDinner(dinnerRequest);
+
         //then
         assertEquals(dinner, result);
     }
-    
-    
+
+
     @Test
-    public void should_be_able_to_join_event_with_accepted_status () {
+    public void should_be_able_to_join_event_with_accepted_status() {
         //given
         JoinDinnerRequest request = new JoinDinnerRequest(
                 user,
                 dinner
         );
         int initialGuestCount = dinner.getCurrentGuests();
-        
+
         //when
         Mockito.when(dinnerService.getDinner(any()))
                 .thenReturn(Optional.of(dinner));
-        
+
         Boolean result = userModule.joinDinner(request);
-        
+
         //then
         assertEquals(initialGuestCount + 1, dinner.getCurrentGuests());
         assertTrue(result);
     }
-    
-    
+
+
     @Test
-    public void should_be_able_to_join_event_with_pending_status () {
+    public void should_be_able_to_join_event_with_pending_status() {
         //given
-        dinner.setCurrentGuests(dinner.getMaxGuests()+1);
+        dinner.setCurrentGuests(dinner.getMaxGuests() + 1);
         int initialGuestCount = dinner.getCurrentGuests();
         JoinDinnerRequest request = new JoinDinnerRequest(
                 user,
                 dinner
         );
-        
+
         //when
         Mockito.when(dinnerService.getDinner(any()))
                 .thenReturn(Optional.of(dinner));
 
         Boolean result = userModule.joinDinner(request);
-        
+
         //then
         assertEquals(initialGuestCount + 1, dinner.getCurrentGuests());
         assertFalse(result);
     }
-    
-    
-    
-    
-    
-    
-    private Attendee createAcceptedAttendee() {
-        return new Attendee(
-                    dinner,
-                    user,
-                    true
-            );
+
+
+    private AttendeeRecord createAcceptedAttendee() {
+        return new AttendeeRecord(
+                dinner,
+                user,
+                true
+        );
     }
 
-    private User createUser () {
-        return new User(
+    private UserRecord createUser() {
+        return new UserRecord(
                 1L,
                 "Janis",
                 "Berzins",
@@ -107,7 +103,7 @@ public class UserModuleTest {
         );
     }
 
-    private CreateDinnerRequest createDinnerRequest () {
+    private CreateDinnerRequest createDinnerRequest() {
         return new CreateDinnerRequest(
                 "This is a title",
                 user,
@@ -117,9 +113,9 @@ public class UserModuleTest {
                 localDateTime
         );
     }
-    
-    private Dinner createDinner () {
-        return new Dinner(
+
+    private DinnerRecord createDinner() {
+        return new DinnerRecord(
                 1L,
                 "This is a title",
                 user,

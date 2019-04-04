@@ -1,8 +1,8 @@
 package io.codelex.groupdinner.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.codelex.groupdinner.repository.model.Dinner;
-import io.codelex.groupdinner.repository.model.User;
+import io.codelex.groupdinner.repository.model.DinnerRecord;
+import io.codelex.groupdinner.repository.model.UserRecord;
 
 import javax.validation.constraints.NotNull;
 
@@ -10,31 +10,31 @@ public class JoinDinnerRequest {
 
 
     @NotNull
-    private User user;
+    private UserRecord user;
     
     @NotNull
-    private Dinner dinner;
+    private DinnerRecord dinner;
 
     public JoinDinnerRequest(
-            @JsonProperty("user") @NotNull User user,
-            @JsonProperty("dinner") @NotNull Dinner dinner) {
+            @JsonProperty("user") @NotNull UserRecord user,
+            @JsonProperty("dinner") @NotNull DinnerRecord dinner) {
         this.user = user;
         this.dinner = dinner;
     }
 
-    public User getUser() {
+    public UserRecord getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserRecord user) {
         this.user = user;
     }
 
-    public Dinner getDinner() {
+    public DinnerRecord getDinner() {
         return dinner;
     }
 
-    public void setDinner(Dinner dinner) {
+    public void setDinner(DinnerRecord dinner) {
         this.dinner = dinner;
     }
 }

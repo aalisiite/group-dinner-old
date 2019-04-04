@@ -1,20 +1,14 @@
-package io.codelex.groupdinner.repository.model;
+package io.codelex.groupdinner.api;
 
+import io.codelex.groupdinner.repository.model.UserRecord;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
-@Table
-@Entity(name = "dinners")
 public class Dinner {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    @ManyToOne
-    private User creator;
+    private UserRecord creator;
     private int maxGuests;
     private int currentGuests;
     private String description;
@@ -24,7 +18,7 @@ public class Dinner {
     public Dinner() {
     }
 
-    public Dinner(Long id, String title, User creator, int maxGuests, String description, String location, LocalDateTime dateTime) {
+    public Dinner(Long id, String title, UserRecord creator, int maxGuests, String description, String location, LocalDateTime dateTime) {
         this.id = id;
         this.title = title;
         this.creator = creator;
@@ -59,11 +53,11 @@ public class Dinner {
         this.title = title;
     }
 
-    public User getCreator() {
+    public UserRecord getCreator() {
         return creator;
     }
 
-    public void setCreator(User creator) {
+    public void setCreator(UserRecord creator) {
         this.creator = creator;
     }
 
@@ -107,23 +101,4 @@ public class Dinner {
         this.dateTime = dateTime;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Dinner dinner = (Dinner) o;
-        return maxGuests == dinner.maxGuests &&
-                currentGuests == dinner.currentGuests &&
-                id.equals(dinner.id) &&
-                title.equals(dinner.title) &&
-                creator.equals(dinner.creator) &&
-                description.equals(dinner.description) &&
-                Objects.equals(location, dinner.location) &&
-                Objects.equals(dateTime, dinner.dateTime);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, title, creator, maxGuests, currentGuests, description, location, dateTime);
-    }
 }

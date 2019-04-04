@@ -1,21 +1,16 @@
-package io.codelex.groupdinner.repository.model;
+package io.codelex.groupdinner.api;
 
-import javax.persistence.*;
+import io.codelex.groupdinner.repository.model.DinnerRecord;
+import io.codelex.groupdinner.repository.model.UserRecord;
 
-@Table
-@Entity(name = "attendee")
 public class Attendee {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    private Dinner dinner;
-    @ManyToOne
-    private User user;
+    private DinnerRecord dinner;
+    private UserRecord user;
     private boolean status;
 
-    public Attendee(Dinner dinner, User user, boolean status) {
+    public Attendee(DinnerRecord dinner, UserRecord user, boolean status) {
         this.dinner = dinner;
         this.user = user;
         this.status = status;
@@ -29,19 +24,19 @@ public class Attendee {
         this.id = id;
     }
 
-    public Dinner getDinner() {
+    public DinnerRecord getDinner() {
         return dinner;
     }
 
-    public void setDinner(Dinner dinner) {
+    public void setDinner(DinnerRecord dinner) {
         this.dinner = dinner;
     }
 
-    public User getUser() {
+    public UserRecord getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserRecord user) {
         this.user = user;
     }
 

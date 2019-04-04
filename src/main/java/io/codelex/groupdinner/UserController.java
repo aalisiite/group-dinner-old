@@ -1,9 +1,9 @@
 package io.codelex.groupdinner;
 
 import io.codelex.groupdinner.InMemory.InMemoryUserModule;
-import io.codelex.groupdinner.repository.model.Attendee;
+import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.api.CreateDinnerRequest;
-import io.codelex.groupdinner.repository.model.Dinner;
+import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.api.JoinDinnerRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +17,14 @@ import java.util.List;
 @RequestMapping("/api")
 public class UserController {
 
-    private List<Attendee> attendees = new ArrayList<>();
+    private List<AttendeeRecord> attendees = new ArrayList<>();
     private AttendeeService attendeeService = new AttendeeService(attendees);
-    private List<Dinner> dinners = new ArrayList<>();
+    private List<DinnerRecord> dinners = new ArrayList<>();
     private DinnerService dinnerService = new DinnerService(dinners);
     private InMemoryUserModule userModule = new InMemoryUserModule(attendeeService, dinnerService);
 
     @PostMapping("/dinners")
-    public ResponseEntity<Dinner> createDinner(@Valid @RequestBody CreateDinnerRequest request) {
+    public ResponseEntity<DinnerRecord> createDinner(@Valid @RequestBody CreateDinnerRequest request) {
         return new ResponseEntity<>(userModule.createDinner(request), HttpStatus.CREATED);
     }
 

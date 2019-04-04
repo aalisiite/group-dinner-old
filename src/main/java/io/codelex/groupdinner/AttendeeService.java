@@ -1,6 +1,6 @@
 package io.codelex.groupdinner;
 
-import io.codelex.groupdinner.repository.model.Attendee;
+import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -8,13 +8,13 @@ import java.util.List;
 @Component
 public class AttendeeService {
 
-    List<Attendee> attendees;
+    List<AttendeeRecord> attendees;
 
-    AttendeeService(List<Attendee> attendees) {
+    AttendeeService(List<AttendeeRecord> attendees) {
         this.attendees = attendees;
     }
 
-    public Attendee addAttendee(Attendee attendee) {
+    public AttendeeRecord addAttendee(AttendeeRecord attendee) {
         attendees.add(attendee);
         return attendee;
     }

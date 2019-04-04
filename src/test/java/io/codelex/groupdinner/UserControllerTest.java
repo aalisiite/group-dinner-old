@@ -8,8 +8,8 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.codelex.groupdinner.api.CreateDinnerRequest;
-import io.codelex.groupdinner.repository.model.Dinner;
-import io.codelex.groupdinner.repository.model.User;
+import io.codelex.groupdinner.repository.model.DinnerRecord;
+import io.codelex.groupdinner.repository.model.UserRecord;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -43,11 +43,11 @@ public class UserControllerTest {
     private MockMvc mockMvc;
 
     private UserModule userModule = Mockito.mock(UserModule.class);
-    private User user = createUser();
+    private UserRecord user = createUser();
     private String location = createLocation();
     private LocalDateTime localDateTime = LocalDateTime.of(2019, 1, 1, 0, 0);
     private CreateDinnerRequest request = createDinnerRequest(user, location, localDateTime);
-    private Dinner dinner = createDinner();
+    private DinnerRecord dinner = createDinner();
 
 
     static {
@@ -101,8 +101,8 @@ public class UserControllerTest {
                 .getResponse()
                 .getContentAsString();
 
-        Dinner result = MAPPER.readValue(
-                jsonResponse, new TypeReference<Dinner>() {
+        DinnerRecord result = MAPPER.readValue(
+                jsonResponse, new TypeReference<DinnerRecord>() {
                 }
         );
 
@@ -113,8 +113,8 @@ public class UserControllerTest {
     }
     
 
-    private User createUser() {
-        return new User(
+    private UserRecord createUser() {
+        return new UserRecord(
                 1L,
                 "Janis",
                 "Berzins",
@@ -122,7 +122,7 @@ public class UserControllerTest {
         );
     }
 
-    private CreateDinnerRequest createDinnerRequest(User user, String location, LocalDateTime localDateTime) {
+    private CreateDinnerRequest createDinnerRequest(UserRecord user, String location, LocalDateTime localDateTime) {
         return new CreateDinnerRequest(
                 "This is a title",
                 user,
@@ -133,8 +133,8 @@ public class UserControllerTest {
         );
     }
 
-    private Dinner createDinner() {
-        return new Dinner(
+    private DinnerRecord createDinner() {
+        return new DinnerRecord(
                 1L,
                 "This is a title",
                 user,

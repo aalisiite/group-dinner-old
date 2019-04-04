@@ -1,18 +1,8 @@
-package io.codelex.groupdinner.repository.model;
+package io.codelex.groupdinner.api;
 
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.util.Objects;
-
-@Table
-@Entity(name = "users")
 public class User {
 
-    @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-            Long id;
+    Long id;
     private String firstName;
     private String lastName;
     private String email;
@@ -57,21 +47,5 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id.equals(user.id) &&
-                firstName.equals(user.firstName) &&
-                lastName.equals(user.lastName) &&
-                email.equals(user.email);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, firstName, lastName, email);
     }
 }

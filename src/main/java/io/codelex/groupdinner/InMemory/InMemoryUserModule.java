@@ -6,15 +6,15 @@ import io.codelex.groupdinner.DinnerService;
 import io.codelex.groupdinner.UserModule;
 import io.codelex.groupdinner.api.CreateDinnerRequest;
 import io.codelex.groupdinner.api.JoinDinnerRequest;
-import io.codelex.groupdinner.repository.model.Attendee;
-import io.codelex.groupdinner.repository.model.Dinner;
-import io.codelex.groupdinner.repository.model.User;
+import io.codelex.groupdinner.repository.model.AttendeeRecord;
+import io.codelex.groupdinner.repository.model.DinnerRecord;
+import io.codelex.groupdinner.repository.model.UserRecord;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class InMemoryUserModule implements UserModule {
-    private User user;
+    private UserRecord user;
     private AttendeeService attendeeService;
     private DinnerService dinnerService;
     private AtomicLong attendeeSequence = new AtomicLong(1L);
@@ -25,9 +25,9 @@ public class InMemoryUserModule implements UserModule {
     }
 
     @Override
-    public Dinner createDinner(CreateDinnerRequest request
+    public DinnerRecord createDinner(CreateDinnerRequest request
     ) {
-        Dinner dinner = new Dinner(
+        DinnerRecord dinner = new DinnerRecord(
                 attendeeSequence.getAndIncrement(),
                 request.getTitle(),
                 request.getCreator(),
@@ -37,18 +37,18 @@ public class InMemoryUserModule implements UserModule {
                 request.getDateTime()
         );
         dinnerService.addDinner(dinner);
-        attendeeService.addAttendee(new Attendee(dinner, user, true));
+        attendeeService.addAttendee(new AttendeeRecord(dinner, user, true));
         return dinner;
     }
 
     @Override
     public Boolean joinDinner(JoinDinnerRequest request) {
-        Optional<Dinner> dinner = dinnerService.getDinner(request);
+        Optional<DinnerRecord> dinner = dinnerService.getDinner(request);
         //???? need to check or not? because can join only existing dinner anyway
         //if (dinner.isPresent()) {
         if (dinner.get().shouldAcceptRequest()) {
             attendeeService.addAttendee(
-                    new Attendee(
+                    new AttendeeRecord(
                             dinner.get(),
                             user,
                             true
@@ -58,7 +58,7 @@ public class InMemoryUserModule implements UserModule {
             return true;
         } else {
             attendeeService.addAttendee(
-                    new Attendee(
+                    new AttendeeRecord(
                             dinner.get(),
                             user,
                             false

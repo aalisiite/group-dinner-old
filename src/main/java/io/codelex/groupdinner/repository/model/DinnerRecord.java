@@ -1,43 +1,54 @@
-package io.codelex.groupdinner.api;
+package io.codelex.groupdinner.repository.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.codelex.groupdinner.repository.model.UserRecord;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Table
+@Entity(name = "dinners")
+public class DinnerRecord {
 
-public class CreateDinnerRequest {
-
-    @NotEmpty
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String title;
-    
-    @NotNull
+    @ManyToOne
     private UserRecord creator;
-    @NotNull
     private int maxGuests;
-    @NotEmpty
+    private int currentGuests;
     private String description;
     private String location;
     private LocalDateTime dateTime;
 
-    @JsonCreator
-    public CreateDinnerRequest(
-            @JsonProperty("title") @NotEmpty String title,
-            @JsonProperty("creator") @NotNull UserRecord creator,
-            @JsonProperty("maxGuests") @NotNull int maxGuests,
-            @JsonProperty("description") @NotEmpty String description,
-            @JsonProperty("location") String location,
-            @JsonProperty("dateTime") LocalDateTime dateTime) {
+    public DinnerRecord() {
+    }
+
+    public DinnerRecord(Long id, String title, UserRecord creator, int maxGuests, String description, String location, LocalDateTime dateTime) {
+        this.id = id;
         this.title = title;
         this.creator = creator;
         this.maxGuests = maxGuests;
+        this.currentGuests = 1;
         this.description = description;
         this.location = location;
         this.dateTime = dateTime;
+    }
+
+    public boolean shouldAcceptRequest() {
+        return maxGuests > currentGuests;
+    }
+
+    public void incrementCurrentGuests() {
+        currentGuests++;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -64,6 +75,14 @@ public class CreateDinnerRequest {
         this.maxGuests = maxGuests;
     }
 
+    public int getCurrentGuests() {
+        return currentGuests;
+    }
+
+    public void setCurrentGuests(int currentGuests) {
+        this.currentGuests = currentGuests;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -88,22 +107,23 @@ public class CreateDinnerRequest {
         this.dateTime = dateTime;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CreateDinnerRequest request = (CreateDinnerRequest) o;
-        return maxGuests == request.maxGuests &&
-                title.equals(request.title) &&
-                creator.equals(request.creator) &&
-                description.equals(request.description) &&
-                Objects.equals(location, request.location) &&
-                Objects.equals(dateTime, request.dateTime);
+        DinnerRecord dinner = (DinnerRecord) o;
+        return maxGuests == dinner.maxGuests &&
+                currentGuests == dinner.currentGuests &&
+                id.equals(dinner.id) &&
+                title.equals(dinner.title) &&
+                creator.equals(dinner.creator) &&
+                description.equals(dinner.description) &&
+                Objects.equals(location, dinner.location) &&
+                Objects.equals(dateTime, dinner.dateTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, creator, maxGuests, description, location, dateTime);
+        return Objects.hash(id, title, creator, maxGuests, currentGuests, description, location, dateTime);
     }
 }
