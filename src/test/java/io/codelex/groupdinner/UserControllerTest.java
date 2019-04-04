@@ -107,7 +107,9 @@ public class UserControllerTest {
         );
 
         //then
-        assertEquals(dinner, result);
+        assertEquals(dinner.getCreator(), result.getCreator());
+        assertEquals(dinner.getCurrentGuests(), result.getCurrentGuests());
+        assertEquals(dinner.getDateTime(), result.getDateTime());
     }
     
 
