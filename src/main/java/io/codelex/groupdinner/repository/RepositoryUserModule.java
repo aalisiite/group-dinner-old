@@ -4,12 +4,14 @@ import io.codelex.groupdinner.UserModule;
 import io.codelex.groupdinner.api.CreateDinnerRequest;
 import io.codelex.groupdinner.api.Dinner;
 import io.codelex.groupdinner.api.JoinDinnerRequest;
+import io.codelex.groupdinner.api.User;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
+import io.codelex.groupdinner.repository.model.UserRecord;
 
 import java.util.concurrent.atomic.AtomicLong;
 
 public class RepositoryUserModule implements UserModule {
-    
+
     private final DinnerRecordRepository dinnerRecordRepository;
     private final UserRecordRepository userRecordRepository;
     private final AttendeeRecordRepository attendeeRecordRepository;
@@ -49,7 +51,7 @@ public class RepositoryUserModule implements UserModule {
     private DinnerRecord createDinnerRecordFromRequest(CreateDinnerRequest request) {
         DinnerRecord dinnerRecord = new DinnerRecord();
         dinnerRecord.setId(id.incrementAndGet());
-        dinnerRecord.setCreator(request.getCreator());
+        dinnerRecord.setCreator(getUser(request.getCreator()));
         dinnerRecord.setMaxGuests(request.getMaxGuests());
         dinnerRecord.setCurrentGuests(1);
         dinnerRecord.setDescription(request.getDescription());
@@ -57,5 +59,18 @@ public class RepositoryUserModule implements UserModule {
         dinnerRecord.setDateTime(request.getDateTime());
         return dinnerRecord;
     }
-    
+
+    private UserRecord getUser(User user) {
+        return userRecordRepository.findById(user.getId())
+                .orElseGet(() -> {
+                    UserRecord created = new UserRecord(
+                            user.getId(),
+                            user.getFirstName(),
+                            user.getLastName(),
+                            user.getEmail()
+                    );
+                    return userRecordRepository.save(created);
+                });
+    }
+
 }

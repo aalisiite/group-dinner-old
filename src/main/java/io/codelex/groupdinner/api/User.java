@@ -2,7 +2,7 @@ package io.codelex.groupdinner.api;
 
 public class User {
 
-    Long id;
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;
@@ -48,6 +48,6 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-    
-    
+
+
 }
