@@ -22,7 +22,7 @@ public interface DinnerRecordRepository extends JpaRepository<DinnerRecord, Long
             + " and dinner.dateTime = :dateTime")
     boolean isDinnerPresent (
             @Param("title") String title,
-            @Param("creator") UserRecord creator,
+            @Param("creator") Long creator,
             @Param("maxGuests") int maxGuests,
             @Param("description") String description,
             @Param("location") String location,

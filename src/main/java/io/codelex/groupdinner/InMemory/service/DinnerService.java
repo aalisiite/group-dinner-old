@@ -11,7 +11,7 @@ public class DinnerService {
 
     private List<Dinner> dinners;
 
-    DinnerService(List<Dinner> dinners) {
+    public DinnerService(List<Dinner> dinners) {
         this.dinners = dinners;
     }
 

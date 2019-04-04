@@ -10,7 +10,7 @@ public class AttendeeService {
 
     List<Attendee> attendees;
 
-    AttendeeService(List<Attendee> attendees) {
+    public AttendeeService(List<Attendee> attendees) {
         this.attendees = attendees;
     }
 
