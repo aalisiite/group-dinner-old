@@ -10,7 +10,8 @@ public class Attendee {
     private UserRecord user;
     private boolean status;
 
-    public Attendee(DinnerRecord dinner, UserRecord user, boolean status) {
+    public Attendee(Long id, DinnerRecord dinner, UserRecord user, boolean status) {
+        this.id = id;
         this.dinner = dinner;
         this.user = user;
         this.status = status;
