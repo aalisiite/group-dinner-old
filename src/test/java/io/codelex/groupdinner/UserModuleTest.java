@@ -1,6 +1,9 @@
 package io.codelex.groupdinner;
 
 import io.codelex.groupdinner.api.*;
+import io.codelex.groupdinner.repository.model.Attendee;
+import io.codelex.groupdinner.repository.model.Dinner;
+import io.codelex.groupdinner.repository.model.User;
 import org.junit.Test;
 import org.mockito.Mockito;
 

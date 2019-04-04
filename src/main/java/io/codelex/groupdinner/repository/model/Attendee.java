@@ -1,4 +1,4 @@
-package io.codelex.groupdinner.api;
+package io.codelex.groupdinner.repository.model;
 
 import javax.persistence.*;
 

@@ -1,7 +1,6 @@
 package io.codelex.groupdinner.api;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import io.codelex.groupdinner.repository.model.User;
 
 //@Table
 //@Entity

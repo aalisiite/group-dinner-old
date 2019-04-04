@@ -1,14 +1,11 @@
 package io.codelex.groupdinner;
 
 import io.codelex.groupdinner.api.*;
+import io.codelex.groupdinner.repository.model.User;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class UserControllerTest {
 

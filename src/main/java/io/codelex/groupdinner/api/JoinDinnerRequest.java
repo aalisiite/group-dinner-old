@@ -1,9 +1,9 @@
 package io.codelex.groupdinner.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.codelex.groupdinner.repository.model.Dinner;
+import io.codelex.groupdinner.repository.model.User;
 
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 public class JoinDinnerRequest {
