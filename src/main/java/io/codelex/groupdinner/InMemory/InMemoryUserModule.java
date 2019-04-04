@@ -33,7 +33,7 @@ public class InMemoryUserModule implements UserModule {
                 request.getDateTime()
         );
         dinnerService.addDinner(dinner);
-        attendeeService.addAttendee(new Attendee(dinner, user, true));
+        attendeeService.addAttendee(new Attendee( dinner, user, true));
         return dinner;
     }
 
