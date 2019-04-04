@@ -5,6 +5,8 @@ import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.api.CreateDinnerRequest;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.api.JoinDinnerRequest;
+import io.codelex.groupdinner.InMemory.service.AttendeeService;
+import io.codelex.groupdinner.InMemory.service.DinnerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

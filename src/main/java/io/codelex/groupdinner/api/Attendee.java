@@ -6,11 +6,11 @@ import io.codelex.groupdinner.repository.model.UserRecord;
 public class Attendee {
 
     private Long id;
-    private DinnerRecord dinner;
-    private UserRecord user;
+    private Dinner dinner;
+    private User user;
     private boolean status;
 
-    public Attendee(Long id, DinnerRecord dinner, UserRecord user, boolean status) {
+    public Attendee(Long id, Dinner dinner, User user, boolean status) {
         this.id = id;
         this.dinner = dinner;
         this.user = user;
@@ -25,19 +25,19 @@ public class Attendee {
         this.id = id;
     }
 
-    public DinnerRecord getDinner() {
+    public Dinner getDinner() {
         return dinner;
     }
 
-    public void setDinner(DinnerRecord dinner) {
+    public void setDinner(Dinner dinner) {
         this.dinner = dinner;
     }
 
-    public UserRecord getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(UserRecord user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

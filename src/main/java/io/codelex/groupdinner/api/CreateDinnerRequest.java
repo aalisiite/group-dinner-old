@@ -16,7 +16,7 @@ public class CreateDinnerRequest {
     private String title;
     
     @NotNull
-    private UserRecord creator;
+    private User creator;
     @NotNull
     private int maxGuests;
     @NotEmpty
@@ -27,7 +27,7 @@ public class CreateDinnerRequest {
     @JsonCreator
     public CreateDinnerRequest(
             @JsonProperty("title") @NotEmpty String title,
-            @JsonProperty("creator") @NotNull UserRecord creator,
+            @JsonProperty("creator") @NotNull User creator,
             @JsonProperty("maxGuests") @NotNull int maxGuests,
             @JsonProperty("description") @NotEmpty String description,
             @JsonProperty("location") String location,
@@ -48,11 +48,11 @@ public class CreateDinnerRequest {
         this.title = title;
     }
 
-    public UserRecord getCreator() {
+    public User getCreator() {
         return creator;
     }
 
-    public void setCreator(UserRecord creator) {
+    public void setCreator(User creator) {
         this.creator = creator;
     }
 

@@ -1,8 +1,8 @@
 package io.codelex.groupdinner.InMemory;
 
 
-import io.codelex.groupdinner.AttendeeService;
-import io.codelex.groupdinner.DinnerService;
+import io.codelex.groupdinner.InMemory.service.AttendeeService;
+import io.codelex.groupdinner.InMemory.service.DinnerService;
 import io.codelex.groupdinner.UserModule;
 import io.codelex.groupdinner.api.*;
 
@@ -14,6 +14,7 @@ public class InMemoryUserModule implements UserModule {
     private AttendeeService attendeeService;
     private DinnerService dinnerService;
     private AtomicLong attendeeSequence = new AtomicLong(1L);
+    private Long id;
 
     public InMemoryUserModule(AttendeeService attendeeService, DinnerService dinnerService) {
         this.attendeeService = attendeeService;
@@ -33,7 +34,7 @@ public class InMemoryUserModule implements UserModule {
                 request.getDateTime()
         );
         dinnerService.addDinner(dinner);
-        attendeeService.addAttendee(new Attendee( dinner, user, true));
+        attendeeService.addAttendee(new Attendee(id, dinner, user, true));
         return dinner;
     }
 
@@ -45,6 +46,7 @@ public class InMemoryUserModule implements UserModule {
         if (dinner.get().shouldAcceptRequest()) {
             attendeeService.addAttendee(
                     new Attendee(
+                            id,
                             dinner.get(),
                             user,
                             true
@@ -55,6 +57,7 @@ public class InMemoryUserModule implements UserModule {
         } else {
             attendeeService.addAttendee(
                     new Attendee(
+                            id,
                             dinner.get(),
                             user,
                             false

@@ -1,24 +1,20 @@
 package io.codelex.groupdinner.api;
 
-import io.codelex.groupdinner.repository.model.UserRecord;
-
 import java.time.LocalDateTime;
 
 public class Dinner {
 
     private Long id;
     private String title;
-    private UserRecord creator;
+    private User creator;
     private int maxGuests;
     private int currentGuests;
     private String description;
     private String location;
     private LocalDateTime dateTime;
+    
 
-    public Dinner() {
-    }
-
-    public Dinner(Long id, String title, UserRecord creator, int maxGuests, String description, String location, LocalDateTime dateTime) {
+    public Dinner(Long id, String title, User creator, int maxGuests, String description, String location, LocalDateTime dateTime) {
         this.id = id;
         this.title = title;
         this.creator = creator;
@@ -53,11 +49,11 @@ public class Dinner {
         this.title = title;
     }
 
-    public UserRecord getCreator() {
+    public User getCreator() {
         return creator;
     }
 
-    public void setCreator(UserRecord creator) {
+    public void setCreator(User creator) {
         this.creator = creator;
     }
 

@@ -1,5 +1,6 @@
-package io.codelex.groupdinner;
+package io.codelex.groupdinner.InMemory.service;
 
+import io.codelex.groupdinner.api.Dinner;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.api.JoinDinnerRequest;
 
@@ -8,18 +9,18 @@ import java.util.Optional;
 
 public class DinnerService {
 
-    private List<DinnerRecord> dinners;
+    private List<Dinner> dinners;
 
-    DinnerService(List<DinnerRecord> dinners) {
+    DinnerService(List<Dinner> dinners) {
         this.dinners = dinners;
     }
 
-   public DinnerRecord addDinner(DinnerRecord dinner) {
+   public Dinner addDinner(Dinner dinner) {
         dinners.add(dinner);
         return dinner;
     }
 
-    public Optional<DinnerRecord> getDinner(JoinDinnerRequest request) {
+    public Optional<Dinner> getDinner(JoinDinnerRequest request) {
         return dinners.stream()
                 .filter(it -> it.equals(request.getDinner()))
                 .findFirst();
