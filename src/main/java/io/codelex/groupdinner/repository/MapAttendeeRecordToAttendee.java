@@ -8,14 +8,14 @@ import java.util.function.Function;
 
 public class MapAttendeeRecordToAttendee implements Function<AttendeeRecord, Attendee> {
     private MapDinnerRecordToDinner toDinner = new MapDinnerRecordToDinner();
+    private MapUserRecordToUser toUser = new MapUserRecordToUser();
 
     @Override
     public Attendee apply(AttendeeRecord attendeeRecord) {
-        User user = new User(attendeeRecord.getUser().getId(), attendeeRecord.getDinner().getCreator().getFirstName(), attendeeRecord.getDinner().getCreator().getLastName(), attendeeRecord.getDinner().getCreator().getEmail());
         return new Attendee(
                 attendeeRecord.getId(),
                 toDinner.apply(attendeeRecord.getDinner()),
-                user,
+                toUser.apply(attendeeRecord.getUser()),
                 attendeeRecord.getStatus());
     }
 }

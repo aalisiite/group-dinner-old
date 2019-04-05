@@ -37,4 +37,6 @@ public class JoinDinnerRequest {
     public void setDinner(Dinner dinner) {
         this.dinner = dinner;
     }
+    
+    
 }
