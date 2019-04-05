@@ -8,7 +8,6 @@ import java.util.function.Function;
 
 public class MapAttendeeRecordToAttendee implements Function<AttendeeRecord, Attendee> {
     private MapDinnerRecordToDinner toDinner = new MapDinnerRecordToDinner();
-    private MapUserRecordToUser toUser = new MapUserRecordToUser();
 
     @Override
     public Attendee apply(AttendeeRecord attendeeRecord) {
