@@ -1,13 +1,10 @@
 package io.codelex.groupdinner.repository;
 
 import io.codelex.groupdinner.repository.model.DinnerRecord;
-import io.codelex.groupdinner.repository.model.UserRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public interface DinnerRecordRepository extends JpaRepository<DinnerRecord, Long> {
@@ -20,7 +17,7 @@ public interface DinnerRecordRepository extends JpaRepository<DinnerRecord, Long
             + " and dinner.description = :description"
             + " and dinner.location = :location"
             + " and dinner.dateTime = :dateTime")
-    boolean isDinnerPresent (
+    boolean isDinnerPresent(
             @Param("title") String title,
             @Param("creator") Long creator,
             @Param("maxGuests") int maxGuests,
