@@ -39,33 +39,20 @@ public class InMemoryUserModule implements UserModule {
     }
 
     @Override
-    public Boolean joinDinner(JoinDinnerRequest request) {
+    public Attendee joinDinner(JoinDinnerRequest request) {
         Optional<Dinner> dinner = dinnerService.getDinner(request);
         //???? need to check or not? because can join only existing dinner anyway
         //if (dinner.isPresent()) {
-        if (dinner.get().shouldAcceptRequest()) {
-            attendeeService.addAttendee(
-                    new Attendee(
-                            id,
-                            dinner.get(),
-                            user,
-                            true
-                    )
-            );
-            dinner.get().incrementCurrentGuests();
-            return true;
-        } else {
-            attendeeService.addAttendee(
-                    new Attendee(
-                            id,
-                            dinner.get(),
-                            user,
-                            false
-                    )
-            );
-            dinner.get().incrementCurrentGuests();
-            return false;
-        }
+        boolean status = dinner.get().shouldAcceptRequest();
+        Attendee attendee = new Attendee(
+                id,
+                dinner.get(),
+                user,
+                status
+        );
+        attendeeService.addAttendee(attendee);
+        dinner.get().incrementCurrentGuests();
+        return attendee;
         //}
     }
 }

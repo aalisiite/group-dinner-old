@@ -15,4 +15,12 @@ public interface AttendeeRecordRepository extends JpaRepository<AttendeeRecord, 
             + " and attendee.status = :status ")
     List<AttendeeRecord> findDinnerAttendees(@Param("dinner") Long id,
                                              @Param("status") boolean status);
+    
+    @Query("select attendee.status from AttendeeRecord attendee"
+            + " where attendee.dinner = :dinner_id "
+            + " and attendee.user = :user_id ")
+    boolean getAttendeeStatus (
+            @Param("dinner") Long dinner_id,
+            @Param("user") Long user_id
+    );
 }

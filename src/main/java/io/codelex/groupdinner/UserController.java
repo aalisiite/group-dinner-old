@@ -1,6 +1,8 @@
 package io.codelex.groupdinner;
 
 import io.codelex.groupdinner.InMemory.InMemoryUserModule;
+import io.codelex.groupdinner.api.Attendee;
+import io.codelex.groupdinner.api.Dinner;
 import io.codelex.groupdinner.repository.AttendeeRecordRepository;
 import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.api.CreateDinnerRequest;
@@ -24,13 +26,13 @@ public class UserController {
     private UserModule userModule;
 
     @PostMapping("/dinners")
-    public ResponseEntity<DinnerRecord> createDinner(@Valid @RequestBody CreateDinnerRequest request) {
+    public ResponseEntity<Dinner> createDinner(@Valid @RequestBody CreateDinnerRequest request) {
         return new ResponseEntity<>(userModule.createDinner(request), HttpStatus.CREATED);
     }
 
     @PostMapping("/dinners/{id}")
     //if we pass {id} here, does JoinDinnerRequest need to include dinner info too or just user
-    public ResponseEntity<Boolean> joinDinner(
+    public ResponseEntity<Attendee> joinDinner(
             @PathVariable Long id,
             @Valid @RequestBody JoinDinnerRequest request) {
         return new ResponseEntity<>(userModule.joinDinner(request), HttpStatus.OK);

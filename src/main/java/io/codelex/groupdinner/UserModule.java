@@ -6,5 +6,5 @@ public interface UserModule {
 
     Dinner createDinner(CreateDinnerRequest request);
 
-    Boolean joinDinner(JoinDinnerRequest request);
+    Attendee joinDinner(JoinDinnerRequest request);
 }

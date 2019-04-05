@@ -1,20 +1,23 @@
 package io.codelex.groupdinner.repository;
 
 import io.codelex.groupdinner.UserModule;
-import io.codelex.groupdinner.api.CreateDinnerRequest;
-import io.codelex.groupdinner.api.Dinner;
-import io.codelex.groupdinner.api.JoinDinnerRequest;
-import io.codelex.groupdinner.api.User;
+import io.codelex.groupdinner.api.*;
+import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.UserRecord;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 public class RepositoryUserModule implements UserModule {
 
     private final DinnerRecordRepository dinnerRecordRepository;
     private final UserRecordRepository userRecordRepository;
     private final AttendeeRecordRepository attendeeRecordRepository;
+    private final MapUserRecordToUser toUser = new MapUserRecordToUser();
     private final MapDinnerRecordToDinner toDinner = new MapDinnerRecordToDinner();
     private final MapAttendeeRecordToAttendee toAttendee = new MapAttendeeRecordToAttendee();
     private final AtomicLong id = new AtomicLong();
@@ -39,19 +42,51 @@ public class RepositoryUserModule implements UserModule {
             dinnerRecord = dinnerRecordRepository.save(dinnerRecord);
             return toDinner.apply(dinnerRecord);
         } else {
-            throw new IllegalStateException();
+            throw new IllegalStateException("Dinner already present");
         }
     }
 
+    
+    
     @Override
-    public Boolean joinDinner(JoinDinnerRequest request) {
-        return null;
+    public Attendee joinDinner(JoinDinnerRequest request) {
+        Optional<DinnerRecord> dinnerRecord = dinnerRecordRepository.findById(request.getDinner().getId());
+        if (dinnerRecord.isPresent()){
+            boolean status = dinnerRecord.get().shouldAcceptRequest();
+            AttendeeRecord attendeeRecord = new AttendeeRecord(
+                    dinnerRecord.get(),
+                    createOrgetUser(request.getUser()),
+                    status
+            );
+            attendeeRecordRepository.save(attendeeRecord);
+            dinnerRecord.get().incrementCurrentGuests();
+            dinnerRecordRepository.incrementCurrentGuests(dinnerRecord.get().getId());
+            return toAttendee.apply(attendeeRecord);
+        } else {
+            throw new IllegalArgumentException("No such dinner present");
+        }
     }
 
+    public Dinner findDinnerById(Long id) {
+        Optional<DinnerRecord> dinnerRecord = dinnerRecordRepository.findById(id);
+        return dinnerRecord.map(toDinner).orElse(null);
+    }
+    
+    public List<User> findUsersWithStatus (Long dinnerId, boolean status) {
+        List<AttendeeRecord> attendees = attendeeRecordRepository.findDinnerAttendees(dinnerId, status);
+        List<UserRecord> users = Collections.emptyList();
+        for (AttendeeRecord attendee : attendees ) {
+            Optional<UserRecord> userRecord = userRecordRepository.findById(attendee.getUser().getId());
+            userRecord.ifPresent(users::add);
+        }
+        return users.stream().map(toUser).collect(Collectors.toList());
+    }
+    
+    
     private DinnerRecord createDinnerRecordFromRequest(CreateDinnerRequest request) {
         DinnerRecord dinnerRecord = new DinnerRecord();
         dinnerRecord.setId(id.incrementAndGet());
-        dinnerRecord.setCreator(getUser(request.getCreator()));
+        dinnerRecord.setCreator(createOrgetUser(request.getCreator()));
         dinnerRecord.setMaxGuests(request.getMaxGuests());
         dinnerRecord.setCurrentGuests(1);
         dinnerRecord.setDescription(request.getDescription());
@@ -59,8 +94,8 @@ public class RepositoryUserModule implements UserModule {
         dinnerRecord.setDateTime(request.getDateTime());
         return dinnerRecord;
     }
-
-    private UserRecord getUser(User user) {
+    
+    private UserRecord createOrgetUser(User user) {
         return userRecordRepository.findById(user.getId())
                 .orElseGet(() -> {
                     UserRecord created = new UserRecord(

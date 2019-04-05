@@ -1,6 +1,7 @@
 package io.codelex.groupdinner.repository.model;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Table
 @Entity(name = "attendee")
@@ -51,5 +52,21 @@ public class AttendeeRecord {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AttendeeRecord that = (AttendeeRecord) o;
+        return status == that.status &&
+                id.equals(that.id) &&
+                dinner.equals(that.dinner) &&
+                user.equals(that.user);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, dinner, user, status);
     }
 }
