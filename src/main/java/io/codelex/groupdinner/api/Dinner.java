@@ -1,0 +1,126 @@
+package io.codelex.groupdinner.api;
+
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Objects;
+
+@Table
+@Entity(name = "Dinner")
+public class Dinner {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String title;
+    @OneToMany
+    private User creator;
+    private int maxGuests;
+    private int currentGuests;
+    private String description;
+    private Location location;
+    private LocalDateTime dateTime;
+
+    public Dinner(Long id, String title, User creator, int maxGuests, String description, Location location, LocalDateTime dateTime) {
+        this.id = id;
+        this.title = title;
+        this.creator = creator;
+        this.maxGuests = maxGuests;
+        this.currentGuests = 1;
+        this.description = description;
+        this.location = location;
+        this.dateTime = dateTime;
+    }
+
+    public boolean shouldAcceptRequest () {
+        return maxGuests > currentGuests;
+    }
+    
+    public void incrementCurrentGuests() {
+        currentGuests++;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
+
+    public int getMaxGuests() {
+        return maxGuests;
+    }
+
+    public void setMaxGuests(int maxGuests) {
+        this.maxGuests = maxGuests;
+    }
+
+    public int getCurrentGuests() {
+        return currentGuests;
+    }
+
+    public void setCurrentGuests(int currentGuests) {
+        this.currentGuests = currentGuests;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Dinner dinner = (Dinner) o;
+        return maxGuests == dinner.maxGuests &&
+                currentGuests == dinner.currentGuests &&
+                id.equals(dinner.id) &&
+                title.equals(dinner.title) &&
+                creator.equals(dinner.creator) &&
+                description.equals(dinner.description) &&
+                Objects.equals(location, dinner.location) &&
+                Objects.equals(dateTime, dinner.dateTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, creator, maxGuests, currentGuests, description, location, dateTime);
+    }
+}
