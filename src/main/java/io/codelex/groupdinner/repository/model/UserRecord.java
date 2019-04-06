@@ -10,7 +10,7 @@ import java.util.Objects;
 @Table(name = "users")
 public class UserRecord {
 
-    @Id
+    @Id//todo google postgres hibernate sequence
     //@GeneratedValue(strategy = GenerationType.IDENTITY)
             Long id;
     private String firstName;
@@ -63,15 +63,12 @@ public class UserRecord {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserRecord user = (UserRecord) o;
-        return id.equals(user.id) &&
-                firstName.equals(user.firstName) &&
-                lastName.equals(user.lastName) &&
-                email.equals(user.email);
+        UserRecord that = (UserRecord) o;
+        return id.equals(that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, email);
+        return Objects.hash(id);
     }
 }

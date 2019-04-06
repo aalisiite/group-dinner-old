@@ -14,7 +14,6 @@ public class CreateDinnerRequest {
 
     @NotEmpty
     private String title;
-    
     @NotNull
     private User creator;
     @NotNull

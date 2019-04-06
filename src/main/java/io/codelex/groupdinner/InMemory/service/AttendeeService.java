@@ -8,7 +8,7 @@ import java.util.List;
 @Component
 public class AttendeeService {
 
-    List<Attendee> attendees;
+    List<Attendee> attendees;//todo
 
     public AttendeeService(List<Attendee> attendees) {
         this.attendees = attendees;

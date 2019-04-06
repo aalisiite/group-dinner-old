@@ -9,7 +9,7 @@ import io.codelex.groupdinner.api.*;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class InMemoryUserModule implements UserModule {
+public class InMemoryUserModule implements UserModule {//todo
     private User user;
     private AttendeeService attendeeService;
     private DinnerService dinnerService;
@@ -43,12 +43,12 @@ public class InMemoryUserModule implements UserModule {
         Optional<Dinner> dinner = dinnerService.getDinner(request);
         //???? need to check or not? because can join only existing dinner anyway
         //if (dinner.isPresent()) {
-        boolean status = dinner.get().shouldAcceptRequest();
+        boolean isAccepted = dinner.get().shouldAcceptRequest();
         Attendee attendee = new Attendee(
                 id,
                 dinner.get(),
                 user,
-                status
+                isAccepted
         );
         attendeeService.addAttendee(attendee);
         dinner.get().incrementCurrentGuests();

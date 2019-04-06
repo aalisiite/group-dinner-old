@@ -8,20 +8,19 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface AttendeeRecordRepository extends JpaRepository<AttendeeRecord, Long> {
 
 
     @Query("select attendee from AttendeeRecord attendee"
             + " where attendee.dinner.id = :dinner "
-            + " and attendee.status = :status ")
+            + " and attendee.isAccepted = :isAccepted ")
     List<AttendeeRecord> findDinnerAttendees(@Param("dinner") Long id,
-                                             @Param("status") boolean status);
+                                             @Param("isAccepted") boolean isAccepted);
     
-    @Query("select attendee.status from AttendeeRecord attendee"
+    @Query("select attendee.isAccepted from AttendeeRecord attendee"
             + " where attendee.dinner.id = :dinner "
             + " and attendee.user.id = :user ")
-    boolean getAttendeeStatus (
+    boolean getAttendeeIsAccepted (
             @Param("dinner") Long dinner_id,
             @Param("user") Long user_id
     );

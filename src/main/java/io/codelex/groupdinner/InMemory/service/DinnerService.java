@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public class DinnerService {
 
-    private List<Dinner> dinners;
+    private List<Dinner> dinners;//todo
 
     public DinnerService(List<Dinner> dinners) {
         this.dinners = dinners;

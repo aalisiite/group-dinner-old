@@ -63,7 +63,7 @@ public class InMemoryUserModuleTest {
 
         //then
         assertEquals(initialGuestCount + 1, dinner.getCurrentGuests());
-        assertTrue(result.getStatus());
+        assertTrue(result.getIsAccepted());
     }
 
 
@@ -85,7 +85,7 @@ public class InMemoryUserModuleTest {
 
         //then
         assertEquals(initialGuestCount + 1, dinner.getCurrentGuests());
-        assertFalse(result.getStatus());
+        assertFalse(result.getIsAccepted());
     }
 
 

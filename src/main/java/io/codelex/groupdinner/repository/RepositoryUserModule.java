@@ -22,7 +22,7 @@ public class RepositoryUserModule implements UserModule {
     private final MapUserRecordToUser toUser = new MapUserRecordToUser();
     private final MapDinnerRecordToDinner toDinner = new MapDinnerRecordToDinner();
     private final MapAttendeeRecordToAttendee toAttendee = new MapAttendeeRecordToAttendee();
-    private final AtomicLong id = new AtomicLong();
+    private final AtomicLong id = new AtomicLong();//todo
 
     public RepositoryUserModule(DinnerRecordRepository dinnerRecordRepository, UserRecordRepository userRecordRepository, AttendeeRecordRepository attendeeRecordRepository) {
         this.dinnerRecordRepository = dinnerRecordRepository;
@@ -42,6 +42,12 @@ public class RepositoryUserModule implements UserModule {
         )) {
             DinnerRecord dinnerRecord = createDinnerRecordFromRequest(request);
             dinnerRecord = dinnerRecordRepository.save(dinnerRecord);
+            AttendeeRecord attendeeRecord = new AttendeeRecord(
+                    dinnerRecord,
+                    dinnerRecord.getCreator(),
+                    true
+            );
+            attendeeRecordRepository.save(attendeeRecord);
             return toDinner.apply(dinnerRecord);
         } else {
             throw new IllegalStateException("Dinner already present");
@@ -54,11 +60,11 @@ public class RepositoryUserModule implements UserModule {
     public Attendee joinDinner(JoinDinnerRequest request) {
         Optional<DinnerRecord> dinnerRecord = dinnerRecordRepository.findById(request.getDinner().getId());
         if (dinnerRecord.isPresent()){
-            boolean status = dinnerRecord.get().shouldAcceptRequest();
+            boolean isAccepted = dinnerRecord.get().shouldAcceptRequest();
             AttendeeRecord attendeeRecord = new AttendeeRecord(
                     dinnerRecord.get(),
                     createOrGetUser(request.getUser()),
-                    status
+                    isAccepted
             );
             attendeeRecordRepository.save(attendeeRecord);
             dinnerRecord.get().incrementCurrentGuests();
@@ -74,8 +80,8 @@ public class RepositoryUserModule implements UserModule {
         return dinnerRecord.map(toDinner).orElse(null);
     }
     
-    public List<User> findUsersWithStatus (Long dinnerId, boolean status) {
-        List<AttendeeRecord> attendees = attendeeRecordRepository.findDinnerAttendees(dinnerId, status);
+    public List<User> findUsersWithAcceptedStatus (Long dinnerId, boolean isAccepted) {
+        List<AttendeeRecord> attendees = attendeeRecordRepository.findDinnerAttendees(dinnerId, isAccepted);
         List<UserRecord> users = Collections.emptyList();
         for (AttendeeRecord attendee : attendees ) {
             Optional<UserRecord> userRecord = userRecordRepository.findById(attendee.getUser().getId());

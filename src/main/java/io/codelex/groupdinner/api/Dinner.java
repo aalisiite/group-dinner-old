@@ -1,6 +1,7 @@
 package io.codelex.groupdinner.api;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Dinner {
 
@@ -97,4 +98,23 @@ public class Dinner {
         this.dateTime = dateTime;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Dinner dinner = (Dinner) o;
+        return maxGuests == dinner.maxGuests &&
+                currentGuests == dinner.currentGuests &&
+                id.equals(dinner.id) &&
+                title.equals(dinner.title) &&
+                creator.equals(dinner.creator) &&
+                description.equals(dinner.description) &&
+                Objects.equals(location, dinner.location) &&
+                Objects.equals(dateTime, dinner.dateTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, creator, maxGuests, currentGuests, description, location, dateTime);
+    }
 }

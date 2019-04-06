@@ -62,21 +62,25 @@
         <createIndex tableName="dinners" indexName="idx_dinners_creator">
             <column name="creator"/>
         </createIndex>
+        <!--todo what is index?-->
     </changeSet>
 
     <changeSet id="create attendee table" author="alise">
         <createSequence sequenceName="attendee_seq"/>
         <createTable tableName="attendee">
+            <!--table names are plural-->
             <column name="id" type="bigint" defaultValueSequenceNext="attendee_seq">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_attendee"/>
             </column>
+            <!--dinner_id-->
             <column name="dinner" type="bigint">
                 <constraints nullable="false"/>
             </column>
+            <!--user_id-->
             <column name="user" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="status" type="boolean">
+            <column name="isAccepted" type="boolean">
                 <constraints nullable="false"/>
             </column>
         </createTable>

@@ -111,19 +111,12 @@ public class DinnerRecord {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DinnerRecord dinner = (DinnerRecord) o;
-        return maxGuests == dinner.maxGuests &&
-                currentGuests == dinner.currentGuests &&
-                id.equals(dinner.id) &&
-                title.equals(dinner.title) &&
-                creator.equals(dinner.creator) &&
-                description.equals(dinner.description) &&
-                Objects.equals(location, dinner.location) &&
-                Objects.equals(dateTime, dinner.dateTime);
+        DinnerRecord that = (DinnerRecord) o;
+        return id.equals(that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, creator, maxGuests, currentGuests, description, location, dateTime);
+        return Objects.hash(id);
     }
 }

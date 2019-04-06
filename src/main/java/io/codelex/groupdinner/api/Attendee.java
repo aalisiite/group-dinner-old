@@ -5,13 +5,13 @@ public class Attendee {
     private Long id;
     private Dinner dinner;
     private User user;
-    private boolean status;
+    private boolean isAccepted;
 
-    public Attendee(Long id, Dinner dinner, User user, boolean status) {
+    public Attendee(Long id, Dinner dinner, User user, boolean isAccepted) {
         this.id = id;
         this.dinner = dinner;
         this.user = user;
-        this.status = status;
+        this.isAccepted = isAccepted;
     }
 
     public Long getId() {
@@ -38,11 +38,11 @@ public class Attendee {
         this.user = user;
     }
 
-    public boolean getStatus() {
-        return status;
+    public boolean getIsAccepted () {
+        return isAccepted;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setIsAccepted(boolean isAccepted) {
+        this.isAccepted = isAccepted;
     }
 }

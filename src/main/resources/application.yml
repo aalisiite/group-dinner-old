@@ -5,6 +5,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/group-dinner
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
   liquibase:
     change-log: classpath:/liquibase/updates.xml
