@@ -10,14 +10,8 @@ import java.util.List;
 public interface UserRecordRepository extends JpaRepository<UserRecord, Long> {
 
     @Query("select user from UserRecord user"
-            + " where user.id = :id "
-            + " and user.firstName = :firstName"
-            + " and user.lastName = :lastName "
-            + " and user.email = :email ")
-    List<UserRecord> findUserRecord(@Param("id") Long id,
-                                    @Param("firstName") String firstName,
-                                    @Param("lastName") String lastName,
-                                    @Param("email") String email);
+            + " where user.id = :id ")
+    List<UserRecord> findUserRecord(@Param("id") Long id);
 }
 
 

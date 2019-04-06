@@ -101,8 +101,7 @@ public class RepositoryUserModule implements UserModule {
                     UserRecord created = new UserRecord(
                             user.getId(),
                             user.getFirstName(),
-                            user.getLastName(),
-                            user.getEmail()
+                            user.getLastName()
                     );
                     return userRecordRepository.save(created);
                 });
