@@ -5,8 +5,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@Table
-@Entity(name = "dinners")
+@Entity
+@Table(name = "dinners")
 public class DinnerRecord {
 
     @Id

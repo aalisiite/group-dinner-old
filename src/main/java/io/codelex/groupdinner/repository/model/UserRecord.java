@@ -6,8 +6,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Objects;
 
-@Table
-@Entity(name = "users")
+@Entity
+@Table(name = "users")
 public class UserRecord {
 
     @Id
