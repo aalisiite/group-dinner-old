@@ -2,8 +2,8 @@ package io.codelex.groupdinner.repository.model;
 
 import javax.persistence.*;
 
-@Table
-@Entity(name = "Users")
+@Entity
+@Table(name = "users")
 public class UserRecord {
 
     @Id

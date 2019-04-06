@@ -3,8 +3,8 @@ package io.codelex.groupdinner.repository.model;
 import javax.persistence.*;
 import java.util.Objects;
 
-@Table
-@Entity(name = "attendee")
+@Entity
+@Table(name = "attendee")
 public class AttendeeRecord {
 
     @Id

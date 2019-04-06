@@ -1,33 +1,33 @@
-package io.codelex.groupdinner;
+package io.codelex.groupdinner.InMemory;
 
-import io.codelex.groupdinner.InMemory.InMemoryUserModule;
-import io.codelex.groupdinner.InMemory.service.AttendeeService;
-import io.codelex.groupdinner.InMemory.service.DinnerService;
-import io.codelex.groupdinner.api.CreateDinnerRequest;
-import io.codelex.groupdinner.api.JoinDinnerRequest;
-import io.codelex.groupdinner.repository.model.AttendeeRecord;
-import io.codelex.groupdinner.repository.model.DinnerRecord;
-import io.codelex.groupdinner.repository.model.UserRecord;
-import org.junit.Test;
-import org.mockito.Mockito;
+        import io.codelex.groupdinner.InMemory.service.AttendeeService;
+        import io.codelex.groupdinner.InMemory.service.DinnerService;
+        import io.codelex.groupdinner.api.*;
+        import io.codelex.groupdinner.repository.model.AttendeeRecord;
+        import io.codelex.groupdinner.repository.model.DinnerRecord;
+        import org.junit.Test;
+        import org.mockito.Mockito;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
+        import java.time.LocalDateTime;
+        import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+        import static org.junit.jupiter.api.Assertions.*;
+        import static org.mockito.ArgumentMatchers.any;
+        
+        import io.codelex.groupdinner.api.CreateDinnerRequest;
+        import io.codelex.groupdinner.api.JoinDinnerRequest;
 
-public class UserModuleTest {
-/*
+public class InMemoryUserModuleTest {
+
     private AttendeeService attendeeService = Mockito.mock(AttendeeService.class);
     private DinnerService dinnerService = Mockito.mock(DinnerService.class);
     private InMemoryUserModule userModule = new InMemoryUserModule(attendeeService, dinnerService);
     private LocalDateTime localDateTime = LocalDateTime.of(2019, 1, 1, 0, 0);
-    private UserRecord user = createUser();
+    private User user = createUser();
     private String location = createLocation();
-    private DinnerRecord dinner = createDinner();
+    private Dinner dinner = createDinner();
     private CreateDinnerRequest dinnerRequest = createDinnerRequest();
-    private AttendeeRecord attendee = createAcceptedAttendee();
+    private Attendee attendee = createAcceptedAttendee();
 
     @Test
     public void should_be_able_to_create_dinner() {
@@ -39,7 +39,7 @@ public class UserModuleTest {
         Mockito.when(attendeeService.addAttendee(any()))
                 .thenReturn(attendee);
 
-        DinnerRecord result = userModule.createDinner(dinnerRequest);
+        Dinner result = userModule.createDinner(dinnerRequest);
 
         //then
         assertEquals(dinner, result);
@@ -59,11 +59,11 @@ public class UserModuleTest {
         Mockito.when(dinnerService.getDinner(any()))
                 .thenReturn(Optional.of(dinner));
 
-        Boolean result = userModule.joinDinner(request);
+        Attendee result = userModule.joinDinner(request);
 
         //then
         assertEquals(initialGuestCount + 1, dinner.getCurrentGuests());
-        assertTrue(result);
+        assertTrue(result.getStatus());
     }
 
 
@@ -81,24 +81,25 @@ public class UserModuleTest {
         Mockito.when(dinnerService.getDinner(any()))
                 .thenReturn(Optional.of(dinner));
 
-        Boolean result = userModule.joinDinner(request);
+        Attendee result = userModule.joinDinner(request);
 
         //then
         assertEquals(initialGuestCount + 1, dinner.getCurrentGuests());
-        assertFalse(result);
+        assertFalse(result.getStatus());
     }
 
 
-    private AttendeeRecord createAcceptedAttendee() {
-        return new AttendeeRecord(
+    private Attendee createAcceptedAttendee() {
+        return new Attendee(
+                1L,
                 dinner,
                 user,
                 true
         );
     }
 
-    private UserRecord createUser() {
-        return new UserRecord(
+    private User createUser() {
+        return new User(
                 1L,
                 "Janis",
                 "Berzins",
@@ -117,8 +118,8 @@ public class UserModuleTest {
         );
     }
 
-    private DinnerRecord createDinner() {
-        return new DinnerRecord(
+    private Dinner createDinner() {
+        return new Dinner(
                 1L,
                 "This is a title",
                 user,
@@ -132,5 +133,5 @@ public class UserModuleTest {
     private String createLocation() {
         return "Jurmalas Gatve 76";
     }
-*/
+
 }
