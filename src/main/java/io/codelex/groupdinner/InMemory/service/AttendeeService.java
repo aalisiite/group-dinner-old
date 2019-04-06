@@ -1,4 +1,4 @@
-package io.codelex.groupdinner;
+package io.codelex.groupdinner.InMemory.service;
 
 import io.codelex.groupdinner.api.Attendee;
 import org.springframework.stereotype.Component;
@@ -6,14 +6,15 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-class AttendeeService {
+public class AttendeeService {
 
     List<Attendee> attendees;
-    AttendeeService(List<Attendee> attendees) {
+
+    public AttendeeService(List<Attendee> attendees) {
         this.attendees = attendees;
     }
 
-    Attendee addAttendee(Attendee attendee) {
+    public Attendee addAttendee(Attendee attendee) {
         attendees.add(attendee);
         return attendee;
     }

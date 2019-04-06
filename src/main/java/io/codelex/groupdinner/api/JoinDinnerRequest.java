@@ -1,17 +1,17 @@
 package io.codelex.groupdinner.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.codelex.groupdinner.repository.model.DinnerRecord;
+import io.codelex.groupdinner.repository.model.UserRecord;
 
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 public class JoinDinnerRequest {
 
-    @OneToMany
+
     @NotNull
     private User user;
-    @ManyToOne
+
     @NotNull
     private Dinner dinner;
 
@@ -37,4 +37,6 @@ public class JoinDinnerRequest {
     public void setDinner(Dinner dinner) {
         this.dinner = dinner;
     }
+    
+    
 }

@@ -2,8 +2,8 @@ package io.codelex.groupdinner.api;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.codelex.groupdinner.repository.model.UserRecord;
 
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -11,26 +11,26 @@ import java.util.Objects;
 
 
 public class CreateDinnerRequest {
-    
+
     @NotEmpty
     private String title;
-    @OneToMany
+    
     @NotNull
     private User creator;
     @NotNull
     private int maxGuests;
     @NotEmpty
     private String description;
-    private Location location;
+    private String location;
     private LocalDateTime dateTime;
-    
+
     @JsonCreator
     public CreateDinnerRequest(
             @JsonProperty("title") @NotEmpty String title,
             @JsonProperty("creator") @NotNull User creator,
             @JsonProperty("maxGuests") @NotNull int maxGuests,
             @JsonProperty("description") @NotEmpty String description,
-            @JsonProperty("location") Location location,
+            @JsonProperty("location") String location,
             @JsonProperty("dateTime") LocalDateTime dateTime) {
         this.title = title;
         this.creator = creator;
@@ -72,11 +72,11 @@ public class CreateDinnerRequest {
         this.description = description;
     }
 
-    public Location getLocation() {
+    public String getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(String location) {
         this.location = location;
     }
 
@@ -88,17 +88,18 @@ public class CreateDinnerRequest {
         this.dateTime = dateTime;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CreateDinnerRequest that = (CreateDinnerRequest) o;
-        return maxGuests == that.maxGuests &&
-                title.equals(that.title) &&
-                creator.equals(that.creator) &&
-                description.equals(that.description) &&
-                Objects.equals(location, that.location) &&
-                Objects.equals(dateTime, that.dateTime);
+        CreateDinnerRequest request = (CreateDinnerRequest) o;
+        return maxGuests == request.maxGuests &&
+                title.equals(request.title) &&
+                creator.equals(request.creator) &&
+                description.equals(request.description) &&
+                Objects.equals(location, request.location) &&
+                Objects.equals(dateTime, request.dateTime);
     }
 
     @Override

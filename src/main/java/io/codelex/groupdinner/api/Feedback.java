@@ -1,12 +1,11 @@
 package io.codelex.groupdinner.api;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import io.codelex.groupdinner.repository.model.UserRecord;
 
-@Table
-@Entity(name = "Feedback")
+//@Table
+//@Entity
 public class Feedback {
-    
+
     private User provider;
     private User receiver;
     private boolean rating;

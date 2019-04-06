@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet id="create users table" author="alise">
+        <createSequence sequenceName="user_seq"/>
+        <createTable tableName="users">
+            <column name="id" type="bigint" defaultValueSequenceNext="user_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user"/>
+            </column>
+            <column name="first_name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+    </changeSet>
+
+    <changeSet id="create dinners table" author="alise">
+        <createSequence sequenceName="dinner_seq"/>
+        <createTable tableName="dinners">
+            <column name="id" type="bigint" defaultValueSequenceNext="dinner_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_dinner"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creator" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="max_guests" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="accepted_requests" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="pending_requests" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="location" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="dateTime" type="timestamp without timezone">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="dinners"
+                                 baseColumnNames="creator"
+                                 constraintName="fk_dinners_creator_users_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"
+        />
+        <createIndex tableName="dinners" indexName="idx_dinners_creator">
+            <column name="creator"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="create attendee table" author="alise">
+        <createSequence sequenceName="attendee_seq"/>
+        <createTable tableName="attendee">
+            <column name="id" type="bigint" defaultValueSequenceNext="attendee_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_attendee"/>
+            </column>
+            <column name="dinner" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="attendee"
+                                 baseColumnNames="dinner"
+                                 constraintName="fk_attendee_dinner_dinners_id"
+                                 referencedTableName="dinners"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"
+        />
+        <createIndex tableName="attendee" indexName="idx_attendee_dinner">
+            <column name="dinner"/>
+        </createIndex>
+        <addForeignKeyConstraint baseTableName="attendee"
+                                 baseColumnNames="user"
+                                 constraintName="fk_attendee_dinner_users_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"
+        />
+        <createIndex tableName="attendee" indexName="idx_attendee_user">
+            <column name="user"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

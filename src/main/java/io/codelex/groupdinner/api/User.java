@@ -1,20 +1,14 @@
 package io.codelex.groupdinner.api;
 
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Table
-@Entity(name = "User")
 public class User {
 
-    @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-            Long id;
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;
+
+    public User() {
+    }
 
     public User(Long id, String firstName, String lastName, String email) {
         this.id = id;
@@ -54,4 +48,6 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+    
+    
 }

@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    username: codelex
+    password: codelex
+    url: jdbc:postgresql://localhost:5432/group-dinner
+  jpa:
+    hibernate:
+      ddl-auto: create
+  liquibase:
+    change-log: classpath:/liquibase/updates.xml
