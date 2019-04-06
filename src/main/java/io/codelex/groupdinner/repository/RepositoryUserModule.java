@@ -55,7 +55,7 @@ public class RepositoryUserModule implements UserModule {
             boolean status = dinnerRecord.get().shouldAcceptRequest();
             AttendeeRecord attendeeRecord = new AttendeeRecord(
                     dinnerRecord.get(),
-                    createOrgetUser(request.getUser()),
+                    createOrGetUser(request.getUser()),
                     status
             );
             attendeeRecordRepository.save(attendeeRecord);
@@ -86,7 +86,7 @@ public class RepositoryUserModule implements UserModule {
     private DinnerRecord createDinnerRecordFromRequest(CreateDinnerRequest request) {
         DinnerRecord dinnerRecord = new DinnerRecord();
         dinnerRecord.setId(id.incrementAndGet());
-        dinnerRecord.setCreator(createOrgetUser(request.getCreator()));
+        dinnerRecord.setCreator(createOrGetUser(request.getCreator()));
         dinnerRecord.setMaxGuests(request.getMaxGuests());
         dinnerRecord.setCurrentGuests(1);
         dinnerRecord.setDescription(request.getDescription());
@@ -95,7 +95,7 @@ public class RepositoryUserModule implements UserModule {
         return dinnerRecord;
     }
     
-    private UserRecord createOrgetUser(User user) {
+    private UserRecord createOrGetUser(User user) {
         return userRecordRepository.findById(user.getId())
                 .orElseGet(() -> {
                     UserRecord created = new UserRecord(
