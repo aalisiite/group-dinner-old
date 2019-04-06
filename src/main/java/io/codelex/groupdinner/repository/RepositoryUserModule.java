@@ -48,12 +48,11 @@ public class RepositoryUserModule implements UserModule {
         }
     }
 
-    
-    
+
     @Override
     public Attendee joinDinner(JoinDinnerRequest request) {
         Optional<DinnerRecord> dinnerRecord = dinnerRecordRepository.findById(request.getDinner().getId());
-        if (dinnerRecord.isPresent()){
+        if (dinnerRecord.isPresent()) {
             boolean status = dinnerRecord.get().shouldAcceptRequest();
             AttendeeRecord attendeeRecord = new AttendeeRecord(
                     dinnerRecord.get(),
@@ -73,18 +72,18 @@ public class RepositoryUserModule implements UserModule {
         Optional<DinnerRecord> dinnerRecord = dinnerRecordRepository.findById(id);
         return dinnerRecord.map(toDinner).orElse(null);
     }
-    
-    public List<User> findUsersWithStatus (Long dinnerId, boolean status) {
+
+    public List<User> findUsersWithStatus(Long dinnerId, boolean status) {
         List<AttendeeRecord> attendees = attendeeRecordRepository.findDinnerAttendees(dinnerId, status);
         List<UserRecord> users = Collections.emptyList();
-        for (AttendeeRecord attendee : attendees ) {
+        for (AttendeeRecord attendee : attendees) {
             Optional<UserRecord> userRecord = userRecordRepository.findById(attendee.getUser().getId());
             userRecord.ifPresent(users::add);
         }
         return users.stream().map(toUser).collect(Collectors.toList());
     }
-    
-    
+
+
     private DinnerRecord createDinnerRecordFromRequest(CreateDinnerRequest request) {
         DinnerRecord dinnerRecord = new DinnerRecord();
         dinnerRecord.setId(id.incrementAndGet());
@@ -96,7 +95,7 @@ public class RepositoryUserModule implements UserModule {
         dinnerRecord.setDateTime(request.getDateTime());
         return dinnerRecord;
     }
-    
+
     private UserRecord createOrGetUser(User user) {
         return userRecordRepository.findById(user.getId())
                 .orElseGet(() -> {

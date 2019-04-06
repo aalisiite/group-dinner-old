@@ -8,3 +8,8 @@ spring:
       ddl-auto: create
   liquibase:
     change-log: classpath:/liquibase/updates.xml
+  queries:
+    
+
+security:
+  basic: enabled=false
