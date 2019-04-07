@@ -3,8 +3,6 @@ package io.codelex.groupdinner.InMemory;
         import io.codelex.groupdinner.InMemory.service.AttendeeService;
         import io.codelex.groupdinner.InMemory.service.DinnerService;
         import io.codelex.groupdinner.api.*;
-        import io.codelex.groupdinner.repository.model.AttendeeRecord;
-        import io.codelex.groupdinner.repository.model.DinnerRecord;
         import org.junit.Test;
         import org.mockito.Mockito;
 
@@ -17,11 +15,11 @@ package io.codelex.groupdinner.InMemory;
         import io.codelex.groupdinner.api.CreateDinnerRequest;
         import io.codelex.groupdinner.api.JoinDinnerRequest;
 
-public class InMemoryUserModuleTest {
+public class InMemoryUserServiceTest {
 
     private AttendeeService attendeeService = Mockito.mock(AttendeeService.class);
     private DinnerService dinnerService = Mockito.mock(DinnerService.class);
-    private InMemoryUserModule userModule = new InMemoryUserModule(attendeeService, dinnerService);
+    private InMemoryUserService userModule = new InMemoryUserService(attendeeService, dinnerService);
     private LocalDateTime localDateTime = LocalDateTime.of(2019, 1, 1, 0, 0);
     private User user = createUser();
     private String location = createLocation();
