@@ -2,7 +2,7 @@ package io.codelex.groupdinner;
 
 import io.codelex.groupdinner.api.*;
 
-public interface UserModule {
+public interface UserService {
 
     Dinner createDinner(CreateDinnerRequest request);
 

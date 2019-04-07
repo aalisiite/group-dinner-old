@@ -1,6 +1,6 @@
 package io.codelex.groupdinner.repository;
 
-import io.codelex.groupdinner.UserModule;
+import io.codelex.groupdinner.UserService;
 import io.codelex.groupdinner.api.*;
 import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
@@ -10,11 +10,10 @@ import org.springframework.stereotype.Component;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @Component
-public class RepositoryUserModule implements UserModule {
+public class RepositoryUserService implements UserService {
 
     private final DinnerRecordRepository dinnerRecordRepository;
     private final UserRecordRepository userRecordRepository;
@@ -23,7 +22,7 @@ public class RepositoryUserModule implements UserModule {
     private final MapDinnerRecordToDinner toDinner = new MapDinnerRecordToDinner();
     private final MapAttendeeRecordToAttendee toAttendee = new MapAttendeeRecordToAttendee();
 
-    public RepositoryUserModule(DinnerRecordRepository dinnerRecordRepository, UserRecordRepository userRecordRepository, AttendeeRecordRepository attendeeRecordRepository) {
+    public RepositoryUserService(DinnerRecordRepository dinnerRecordRepository, UserRecordRepository userRecordRepository, AttendeeRecordRepository attendeeRecordRepository) {
         this.dinnerRecordRepository = dinnerRecordRepository;
         this.userRecordRepository = userRecordRepository;
         this.attendeeRecordRepository = attendeeRecordRepository;

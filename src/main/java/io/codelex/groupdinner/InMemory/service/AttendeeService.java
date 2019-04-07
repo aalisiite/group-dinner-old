@@ -3,15 +3,15 @@ package io.codelex.groupdinner.InMemory.service;
 import io.codelex.groupdinner.api.Attendee;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class AttendeeService {
 
-    List<Attendee> attendees;//todo
+    private List<Attendee> attendees = new ArrayList<>();
 
-    public AttendeeService(List<Attendee> attendees) {
-        this.attendees = attendees;
+    public AttendeeService() {
     }
 
     public Attendee addAttendee(Attendee attendee) {
