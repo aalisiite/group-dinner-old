@@ -13,14 +13,14 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 
-public class RepositoryUserModuleTest {
+public class RepositoryUserServiceTest {
 
     private MapAttendeeRecordToAttendee toAttendee = Mockito.mock(MapAttendeeRecordToAttendee.class);
     private MapDinnerRecordToDinner toDinner = Mockito.mock(MapDinnerRecordToDinner.class);
     private DinnerRecordRepository dinnerRecordRepository = Mockito.mock(DinnerRecordRepository.class);
     private UserRecordRepository userRecordRepository = Mockito.mock(UserRecordRepository.class);
     private AttendeeRecordRepository attendeeRecordRepository = Mockito.mock(AttendeeRecordRepository.class);
-    private RepositoryUserModule userModule = new RepositoryUserModule(dinnerRecordRepository, userRecordRepository, attendeeRecordRepository);
+    private RepositoryUserService userModule = new RepositoryUserService(dinnerRecordRepository, userRecordRepository, attendeeRecordRepository);
     private LocalDateTime localDateTime = LocalDateTime.of(2019, 1, 1, 0, 0);
     private UserRecord userRecord = createUserRecord();
     private String location = createLocation();
@@ -111,7 +111,6 @@ public class RepositoryUserModuleTest {
 
     private UserRecord createUserRecord() {
         return new UserRecord(
-                1L,
                 "Janis",
                 "Berzins",
                 "berzins@gmai.com"
@@ -131,7 +130,6 @@ public class RepositoryUserModuleTest {
 
     private DinnerRecord createDinnerRecord() {
         return new DinnerRecord(
-                1L,
                 "This is a title",
                 userRecord,
                 2,

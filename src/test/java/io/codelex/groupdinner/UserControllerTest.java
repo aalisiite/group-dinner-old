@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
-@Import(WebConfiguration.class)
+//@Import(WebConfiguration.class)
 public class UserControllerTest {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -44,7 +44,7 @@ public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private UserModule userModule = Mockito.mock(UserModule.class);
+    private UserService userService = Mockito.mock(UserService.class);
     private UserRecord userRecord = createUserRecord();
     private User user = createUser();
     private String location = createLocation();
@@ -90,7 +90,7 @@ public class UserControllerTest {
 
 
         //when
-        Mockito.when(userModule.createDinner(any()))
+        Mockito.when(userService.createDinner(any()))
                 .thenReturn(dinner);
 
         //expect
@@ -111,7 +111,7 @@ public class UserControllerTest {
         );
 
         //then
-        assertEquals(dinner.getCreator(), result.getCreator());
+        assertEquals(dinner.getCreator().getId(), result.getCreator().getId());
         assertEquals(dinner.getCurrentGuests(), result.getCurrentGuests());
         assertEquals(dinner.getDateTime(), result.getDateTime());
     }
@@ -119,7 +119,6 @@ public class UserControllerTest {
 
     private UserRecord createUserRecord() {
         return new UserRecord(
-                1L,
                 "Janis",
                 "Berzins",
                 "berzins@gmai.com"
@@ -145,23 +144,23 @@ public class UserControllerTest {
                 localDateTime
         );
     }
-
-    private DinnerRecord createDinnerRecord() {
-        return new DinnerRecord(
+    
+    private Dinner createDinner() {
+        return new Dinner(
                 1L,
                 "This is a title",
-                userRecord,
+                user,
                 2,
                 "This is a description",
                 location,
                 localDateTime
         );
     }
-    private Dinner createDinner() {
-        return new Dinner(
-                1L,
+    
+    private DinnerRecord createDinnerRecord() {
+        return new DinnerRecord(
                 "This is a title",
-                user,
+                userRecord,
                 2,
                 "This is a description",
                 location,
