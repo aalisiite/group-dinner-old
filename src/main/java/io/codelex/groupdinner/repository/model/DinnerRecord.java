@@ -10,7 +10,8 @@ import java.util.Objects;
 public class DinnerRecord {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "dinner_seq_generator", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "dinner_seq_generator", sequenceName = "dinner_seq", allocationSize = 1)
     private Long id;
     private String title;
     @ManyToOne
@@ -24,8 +25,7 @@ public class DinnerRecord {
     public DinnerRecord() {
     }
 
-    public DinnerRecord(Long id, String title, UserRecord creator, int maxGuests, String description, String location, LocalDateTime dateTime) {
-        this.id = id;
+    public DinnerRecord(String title, UserRecord creator, int maxGuests, String description, String location, LocalDateTime dateTime) {
         this.title = title;
         this.creator = creator;
         this.maxGuests = maxGuests;

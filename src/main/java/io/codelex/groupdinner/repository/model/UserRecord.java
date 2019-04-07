@@ -1,18 +1,17 @@
 package io.codelex.groupdinner.repository.model;
 
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "users")
 public class UserRecord {
 
-    @Id//todo google postgres hibernate sequence
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-            Long id;
+    @Id
+    @GeneratedValue(generator = "user_seq_generator", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "user_seq_generator", sequenceName = "user_seq", allocationSize = 1)
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;
@@ -20,8 +19,7 @@ public class UserRecord {
     public UserRecord() {
     }
 
-    public UserRecord(Long id, String firstName, String lastName, String email) {
-        this.id = id;
+    public UserRecord(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

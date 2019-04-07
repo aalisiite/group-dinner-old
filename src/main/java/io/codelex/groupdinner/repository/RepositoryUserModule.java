@@ -22,7 +22,6 @@ public class RepositoryUserModule implements UserModule {
     private final MapUserRecordToUser toUser = new MapUserRecordToUser();
     private final MapDinnerRecordToDinner toDinner = new MapDinnerRecordToDinner();
     private final MapAttendeeRecordToAttendee toAttendee = new MapAttendeeRecordToAttendee();
-    private final AtomicLong id = new AtomicLong();//todo
 
     public RepositoryUserModule(DinnerRecordRepository dinnerRecordRepository, UserRecordRepository userRecordRepository, AttendeeRecordRepository attendeeRecordRepository) {
         this.dinnerRecordRepository = dinnerRecordRepository;
@@ -93,7 +92,6 @@ public class RepositoryUserModule implements UserModule {
     
     private DinnerRecord createDinnerRecordFromRequest(CreateDinnerRequest request) {
         DinnerRecord dinnerRecord = new DinnerRecord();
-        dinnerRecord.setId(id.incrementAndGet());
         dinnerRecord.setCreator(createOrGetUser(request.getCreator()));
         dinnerRecord.setMaxGuests(request.getMaxGuests());
         dinnerRecord.setCurrentGuests(1);
@@ -107,9 +105,9 @@ public class RepositoryUserModule implements UserModule {
         return userRecordRepository.findById(user.getId())
                 .orElseGet(() -> {
                     UserRecord created = new UserRecord(
-                            user.getId(),
                             user.getFirstName(),
-                            user.getLastName()
+                            user.getLastName(),
+                            user.getEmail()
                     );
                     return userRecordRepository.save(created);
                 });

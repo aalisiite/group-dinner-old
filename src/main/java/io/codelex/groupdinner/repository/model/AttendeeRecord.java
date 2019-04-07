@@ -8,7 +8,8 @@ import java.util.Objects;
 public class AttendeeRecord {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "attendee_seq_generator", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "attendee_seq_generator", sequenceName = "attendee_seq", allocationSize = 1)
     private Long id;
     @ManyToOne
     private DinnerRecord dinner;
