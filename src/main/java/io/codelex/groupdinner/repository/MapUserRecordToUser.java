@@ -12,7 +12,8 @@ public class MapUserRecordToUser implements Function<UserRecord, User> {
         return new User(
                 userRecord.getId(),
                 userRecord.getFirstName(),
-                userRecord.getLastName()
+                userRecord.getLastName(),
+                userRecord.getEmail()
         );
     }
 }

@@ -10,7 +10,8 @@ import java.util.Objects;
 public class DinnerRecord {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "dinner_seq_generator", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "dinner_seq_generator", sequenceName = "dinner_seq", allocationSize = 1)
     private Long id;
     private String title;
     @ManyToOne
@@ -24,8 +25,7 @@ public class DinnerRecord {
     public DinnerRecord() {
     }
 
-    public DinnerRecord(Long id, String title, UserRecord creator, int maxGuests, String description, String location, LocalDateTime dateTime) {
-        this.id = id;
+    public DinnerRecord(String title, UserRecord creator, int maxGuests, String description, String location, LocalDateTime dateTime) {
         this.title = title;
         this.creator = creator;
         this.maxGuests = maxGuests;
@@ -111,19 +111,12 @@ public class DinnerRecord {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DinnerRecord dinner = (DinnerRecord) o;
-        return maxGuests == dinner.maxGuests &&
-                currentGuests == dinner.currentGuests &&
-                id.equals(dinner.id) &&
-                title.equals(dinner.title) &&
-                creator.equals(dinner.creator) &&
-                description.equals(dinner.description) &&
-                Objects.equals(location, dinner.location) &&
-                Objects.equals(dateTime, dinner.dateTime);
+        DinnerRecord that = (DinnerRecord) o;
+        return id.equals(that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, creator, maxGuests, currentGuests, description, location, dateTime);
+        return Objects.hash(id);
     }
 }

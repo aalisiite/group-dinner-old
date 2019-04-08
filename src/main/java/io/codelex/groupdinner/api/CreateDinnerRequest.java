@@ -14,7 +14,6 @@ public class CreateDinnerRequest {
 
     @NotEmpty
     private String title;
-    
     @NotNull
     private User creator;
     @NotNull
@@ -28,7 +27,7 @@ public class CreateDinnerRequest {
     public CreateDinnerRequest(
             @JsonProperty("title") @NotEmpty String title,
             @JsonProperty("creator") @NotNull User creator,
-            @JsonProperty("maxGuests") @NotNull int maxGuests,
+            @JsonProperty("maxGuests") @NotNull Integer maxGuests,
             @JsonProperty("description") @NotEmpty String description,
             @JsonProperty("location") String location,
             @JsonProperty("dateTime") LocalDateTime dateTime) {

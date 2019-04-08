@@ -4,22 +4,23 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "attendee")
+@Table(name = "attendees")
 public class AttendeeRecord {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "attendee_seq_generator", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "attendee_seq_generator", sequenceName = "attendee_seq", allocationSize = 1)
     private Long id;
     @ManyToOne
     private DinnerRecord dinner;
     @ManyToOne
     private UserRecord user;
-    private boolean status;
+    private boolean isAccepted;
 
-    public AttendeeRecord(DinnerRecord dinner, UserRecord user, boolean status) {
+    public AttendeeRecord(DinnerRecord dinner, UserRecord user, boolean isAccepted) {
         this.dinner = dinner;
         this.user = user;
-        this.status = status;
+        this.isAccepted = isAccepted;
     }
 
     public Long getId() {
@@ -46,12 +47,12 @@ public class AttendeeRecord {
         this.user = user;
     }
 
-    public boolean getStatus() {
-        return status;
+    public boolean getIsAccepted() {
+        return isAccepted;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setIsAccepted (boolean isAccepted) {
+        this.isAccepted = isAccepted;
     }
 
     @Override
@@ -59,14 +60,11 @@ public class AttendeeRecord {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AttendeeRecord that = (AttendeeRecord) o;
-        return status == that.status &&
-                id.equals(that.id) &&
-                dinner.equals(that.dinner) &&
-                user.equals(that.user);
+        return id.equals(that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, dinner, user, status);
+        return Objects.hash(id);
     }
 }

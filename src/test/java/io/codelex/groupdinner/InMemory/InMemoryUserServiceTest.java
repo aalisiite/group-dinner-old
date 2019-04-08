@@ -1,33 +1,32 @@
-package io.codelex.groupdinner;
+package io.codelex.groupdinner.InMemory;
 
-import io.codelex.groupdinner.InMemory.InMemoryUserModule;
 import io.codelex.groupdinner.InMemory.service.AttendeeService;
 import io.codelex.groupdinner.InMemory.service.DinnerService;
-import io.codelex.groupdinner.api.CreateDinnerRequest;
-import io.codelex.groupdinner.api.JoinDinnerRequest;
-import io.codelex.groupdinner.repository.model.AttendeeRecord;
-import io.codelex.groupdinner.repository.model.DinnerRecord;
-import io.codelex.groupdinner.repository.model.UserRecord;
+import io.codelex.groupdinner.InMemory.service.UsersService;
+import io.codelex.groupdinner.api.*;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 
-public class UserModuleTest {
-/*
+public class InMemoryUserServiceTest {
+
     private AttendeeService attendeeService = Mockito.mock(AttendeeService.class);
     private DinnerService dinnerService = Mockito.mock(DinnerService.class);
-    private InMemoryUserModule userModule = new InMemoryUserModule(attendeeService, dinnerService);
+    private UsersService usersService = Mockito.mock(UsersService.class);
+    private InMemoryUserService userModule = new InMemoryUserService(attendeeService, dinnerService, usersService);
     private LocalDateTime localDateTime = LocalDateTime.of(2019, 1, 1, 0, 0);
-    private UserRecord user = createUser();
+    private User user = createUser();
     private String location = createLocation();
-    private DinnerRecord dinner = createDinner();
+    private Dinner dinner = createDinner();
     private CreateDinnerRequest dinnerRequest = createDinnerRequest();
-    private AttendeeRecord attendee = createAcceptedAttendee();
+    private Attendee attendee = createAcceptedAttendee();
+    private Principal principal = () -> "1";
 
     @Test
     public void should_be_able_to_create_dinner() {
@@ -39,7 +38,7 @@ public class UserModuleTest {
         Mockito.when(attendeeService.addAttendee(any()))
                 .thenReturn(attendee);
 
-        DinnerRecord result = userModule.createDinner(dinnerRequest);
+        Dinner result = userModule.createDinner(dinnerRequest);
 
         //then
         assertEquals(dinner, result);
@@ -49,21 +48,20 @@ public class UserModuleTest {
     @Test
     public void should_be_able_to_join_event_with_accepted_status() {
         //given
-        JoinDinnerRequest request = new JoinDinnerRequest(
-                user,
-                dinner
-        );
         int initialGuestCount = dinner.getCurrentGuests();
 
         //when
         Mockito.when(dinnerService.getDinner(any()))
                 .thenReturn(Optional.of(dinner));
-
-        Boolean result = userModule.joinDinner(request);
+        Mockito.when(usersService.getUser(any()))
+                .thenReturn(Optional.of(user));
+        Mockito.when(attendeeService.addAttendee(any()))
+                .thenReturn(attendee);
+        Attendee result = userModule.joinDinner(principal.getName(), dinner.getId());
 
         //then
         assertEquals(initialGuestCount + 1, dinner.getCurrentGuests());
-        assertTrue(result);
+        assertTrue(result.getIsAccepted());
     }
 
 
@@ -72,33 +70,33 @@ public class UserModuleTest {
         //given
         dinner.setCurrentGuests(dinner.getMaxGuests() + 1);
         int initialGuestCount = dinner.getCurrentGuests();
-        JoinDinnerRequest request = new JoinDinnerRequest(
-                user,
-                dinner
-        );
 
         //when
         Mockito.when(dinnerService.getDinner(any()))
                 .thenReturn(Optional.of(dinner));
-
-        Boolean result = userModule.joinDinner(request);
-
+        Mockito.when(usersService.getUser(any()))
+                .thenReturn(Optional.of(user));
+        Mockito.when(attendeeService.addAttendee(any()))
+                .thenReturn(attendee);
+        Attendee result = userModule.joinDinner(principal.getName(), dinner.getId());
+        
         //then
         assertEquals(initialGuestCount + 1, dinner.getCurrentGuests());
-        assertFalse(result);
+        assertFalse(result.getIsAccepted());
     }
 
 
-    private AttendeeRecord createAcceptedAttendee() {
-        return new AttendeeRecord(
+    private Attendee createAcceptedAttendee() {
+        return new Attendee(
+                1L,
                 dinner,
                 user,
                 true
         );
     }
 
-    private UserRecord createUser() {
-        return new UserRecord(
+    private User createUser() {
+        return new User(
                 1L,
                 "Janis",
                 "Berzins",
@@ -117,8 +115,8 @@ public class UserModuleTest {
         );
     }
 
-    private DinnerRecord createDinner() {
-        return new DinnerRecord(
+    private Dinner createDinner() {
+        return new Dinner(
                 1L,
                 "This is a title",
                 user,
@@ -132,5 +130,5 @@ public class UserModuleTest {
     private String createLocation() {
         return "Jurmalas Gatve 76";
     }
-*/
+
 }

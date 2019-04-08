@@ -1,22 +1,28 @@
 package io.codelex.groupdinner.repository.model;
 
+
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
 public class UserRecord {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "user_seq_generator", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "user_seq_generator", sequenceName = "user_seq", allocationSize = 1)
     private Long id;
     private String firstName;
     private String lastName;
+    private String email;
 
+    public UserRecord() {
+    }
 
-    public UserRecord(Long id, String firstName, String lastName) {
-        this.id = id;
+    public UserRecord(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.email = email;
     }
 
     public Long getId() {
@@ -43,5 +49,24 @@ public class UserRecord {
         this.lastName = lastName;
     }
 
+    public String getEmail() {
+        return email;
+    }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserRecord that = (UserRecord) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

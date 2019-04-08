@@ -16,6 +16,6 @@ public class MapAttendeeRecordToAttendee implements Function<AttendeeRecord, Att
                 attendeeRecord.getId(),
                 toDinner.apply(attendeeRecord.getDinner()),
                 toUser.apply(attendeeRecord.getUser()),
-                attendeeRecord.getStatus());
+                attendeeRecord.getIsAccepted());
     }
 }

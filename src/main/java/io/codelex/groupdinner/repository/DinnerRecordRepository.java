@@ -8,13 +8,12 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 
-@Repository
 public interface DinnerRecordRepository extends JpaRepository<DinnerRecord, Long> {
 
 
     @Query("select count(dinner) > 0 from DinnerRecord dinner where"
             + " dinner.title = :title"
-            + " and dinner.creator = :creator"
+            + " and dinner.creator.id = :creator"
             + " and dinner.maxGuests = :maxGuests"
             + " and dinner.description = :description"
             + " and dinner.location = :location"
