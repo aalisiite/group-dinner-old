@@ -55,13 +55,14 @@ public class RepositoryUserService implements UserService {
     
     
     @Override
-    public Attendee joinDinner(JoinDinnerRequest request) {
-        Optional<DinnerRecord> dinnerRecord = dinnerRecordRepository.findById(request.getDinner().getId());
+    public Attendee joinDinner(String userId, Long dinnerId) {
+        Optional<DinnerRecord> dinnerRecord = dinnerRecordRepository.findById(dinnerId);
+        Long userIdLong = Long.parseLong(userId);
         if (dinnerRecord.isPresent()){
             boolean isAccepted = dinnerRecord.get().shouldAcceptRequest();
             AttendeeRecord attendeeRecord = new AttendeeRecord(
                     dinnerRecord.get(),
-                    createOrGetUser(request.getUser()),
+                    userRecordRepository.findById(userIdLong).get(),
                     isAccepted
             );
             attendeeRecordRepository.save(attendeeRecord);

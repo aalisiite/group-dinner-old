@@ -6,5 +6,5 @@ public interface UserService {
 
     Dinner createDinner(CreateDinnerRequest request);
 
-    Attendee joinDinner(JoinDinnerRequest request);
+    Attendee joinDinner(String userId, Long dinnerId);
 }

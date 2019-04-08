@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api")
@@ -23,12 +24,16 @@ public class UserController {
         return new ResponseEntity<>(userService.createDinner(request), HttpStatus.CREATED);
     }
 
-    @PostMapping("/dinners/{id}")
-    //if we pass {id} here, does JoinDinnerRequest need to include dinner info too or just user
+    @PostMapping("/dinners/{id}/join")
     public ResponseEntity<Attendee> joinDinner(
-            @PathVariable Long id,
-            @Valid @RequestBody JoinDinnerRequest request) {
-        return new ResponseEntity<>(userService.joinDinner(request), HttpStatus.OK);
+            Principal principal,
+            @PathVariable Long id) {
+        return new ResponseEntity<>(userService.joinDinner(principal.getName(), id), HttpStatus.OK);
+    }
+    
+    @GetMapping("/dinners/{id}")
+    public ResponseEntity<Attendee> findDinner() {
+        return null;
     }
 
 

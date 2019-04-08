@@ -33,34 +33,40 @@
             <column name="title" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="creator" type="bigint">
+            <column name="creator_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
             <column name="max_guests" type="int">
                 <constraints nullable="false"/>
             </column>
+            <column name="current_guests" type="int">
+                <constraints nullable="true"/>
+            </column><!--
             <column name="accepted_requests" type="bigint">
                 <constraints nullable="true"/>
             </column>
             <column name="pending_requests" type="bigint">
                 <constraints nullable="true"/>
+            </column>-->
+            <column name="description" type="varchar(255)">
+                <constraints nullable="false"/>
             </column>
             <column name="location" type="varchar(255)">
                 <constraints nullable="true"/>
             </column>
-            <column name="dateTime" type="timestamp without timezone">
+            <column name="date_time" type="timestamp without timezone">
                 <constraints nullable="true"/>
             </column>
         </createTable>
         <addForeignKeyConstraint baseTableName="dinners"
-                                 baseColumnNames="creator"
-                                 constraintName="fk_dinners_creator_users_id"
+                                 baseColumnNames="creator_id"
+                                 constraintName="fk_dinners_creator_id_users_id"
                                  referencedTableName="users"
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"
         />
-        <createIndex tableName="dinners" indexName="idx_dinners_creator">
-            <column name="creator"/>
+        <createIndex tableName="dinners" indexName="idx_dinners_creator_id">
+            <column name="creator_id"/>
         </createIndex>
         <!--todo what is index?-->
     </changeSet>
@@ -77,29 +83,29 @@
             <column name="user_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="isAccepted" type="boolean">
+            <column name="is_accepted" type="boolean">
                 <constraints nullable="false"/>
             </column>
         </createTable>
         <addForeignKeyConstraint baseTableName="attendees"
-                                 baseColumnNames="dinner"
-                                 constraintName="fk_attendees_dinner_dinners_id"
+                                 baseColumnNames="dinner_id"
+                                 constraintName="fk_attendees_dinner_id_dinners_id"
                                  referencedTableName="dinners"
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"
         />
-        <createIndex tableName="attendees" indexName="idx_attendees_dinner">
-            <column name="dinner"/>
+        <createIndex tableName="attendees" indexName="idx_attendees_dinner_id">
+            <column name="dinner_id"/>
         </createIndex>
         <addForeignKeyConstraint baseTableName="attendees"
-                                 baseColumnNames="user"
-                                 constraintName="fk_attendees_dinner_users_id"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_attendees_user_id_users_id"
                                  referencedTableName="users"
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"
         />
-        <createIndex tableName="attendees" indexName="idx_attendee_user">
-            <column name="user"/>
+        <createIndex tableName="attendees" indexName="idx_attendee_user_id">
+            <column name="user_id"/>
         </createIndex>
     </changeSet>
 

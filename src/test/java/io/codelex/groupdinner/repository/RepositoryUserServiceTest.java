@@ -7,10 +7,12 @@ import io.codelex.groupdinner.repository.model.UserRecord;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 
 public class RepositoryUserServiceTest {
@@ -28,13 +30,17 @@ public class RepositoryUserServiceTest {
     private CreateDinnerRequest dinnerRequest = createDinnerRequest();
     private AttendeeRecord attendeeRecord = createAcceptedAttendeeRecord();
     private User user = createUser();
+    private CreateDinnerRequest request = createDinnerRequest();
 
     @Test
     public void should_be_able_to_create_dinner() {
         //given
         Dinner dinner = createDinner();
-        
+
+
         //when
+        Mockito.when(dinnerRecordRepository.isDinnerPresent(any(), any(), any(), any(), any(), any()))
+                .thenReturn(false);
         Mockito.when(dinnerRecordRepository.save(any()))
                 .thenReturn(dinnerRecord);
         Mockito.when(attendeeRecordRepository.save(any()))
@@ -54,7 +60,9 @@ public class RepositoryUserServiceTest {
         //given
         JoinDinnerRequest request = createJoinDinnerRequest();
         Attendee attendee = createAcceptedAttendee();
-        
+        Principal principal = () -> "1";
+
+
         //when
         Mockito.when(dinnerRecordRepository.findById(any()))
                 .thenReturn(Optional.of(dinnerRecord));
@@ -63,7 +71,8 @@ public class RepositoryUserServiceTest {
         Mockito.when(toAttendee.apply(any()))
                 .thenReturn(attendee);
 
-        Attendee result = userModule.joinDinner(request);
+
+        Attendee result = userModule.joinDinner(principal.getName(), dinnerRecord.getId());
 
         //then
         assertTrue(result.getIsAccepted());
@@ -99,7 +108,7 @@ public class RepositoryUserServiceTest {
                 true
         );
     }
-    
+
     private Attendee createAcceptedAttendee() {
         return new Attendee(
                 1L,
@@ -143,7 +152,7 @@ public class RepositoryUserServiceTest {
         return "Jurmalas Gatve 76";
     }
 
-    private User createUser () {
+    private User createUser() {
         return new User(
                 1L,
                 "Janis",
@@ -151,7 +160,7 @@ public class RepositoryUserServiceTest {
                 "berzins@gmai.com"
         );
     }
-    
+
     private Dinner createDinner() {
         return new Dinner(
                 1L,
@@ -163,8 +172,8 @@ public class RepositoryUserServiceTest {
                 localDateTime
         );
     }
-    
-    private JoinDinnerRequest createJoinDinnerRequest () {
+
+    private JoinDinnerRequest createJoinDinnerRequest() {
         Dinner dinner = createDinner();
         return new JoinDinnerRequest(
                 user,

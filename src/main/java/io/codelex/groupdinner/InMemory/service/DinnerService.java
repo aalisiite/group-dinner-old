@@ -1,8 +1,6 @@
 package io.codelex.groupdinner.InMemory.service;
 
 import io.codelex.groupdinner.api.Dinner;
-import io.codelex.groupdinner.repository.model.DinnerRecord;
-import io.codelex.groupdinner.api.JoinDinnerRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +18,9 @@ public class DinnerService {
         return dinner;
     }
 
-    public Optional<Dinner> getDinner(JoinDinnerRequest request) {
+    public Optional<Dinner> getDinner(Long id) {
         return dinners.stream()
-                .filter(it -> it.equals(request.getDinner()))
+                .filter(it -> it.getId().equals(id))
                 .findFirst();
     }
 
