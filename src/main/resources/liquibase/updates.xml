@@ -65,43 +65,40 @@
         <!--todo what is index?-->
     </changeSet>
 
-    <changeSet id="create attendee table" author="alise">
+    <changeSet id="create attendees table" author="alise">
         <createSequence sequenceName="attendee_seq"/>
-        <createTable tableName="attendee">
-            <!--table names are plural-->
+        <createTable tableName="attendees">
             <column name="id" type="bigint" defaultValueSequenceNext="attendee_seq">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_attendee"/>
             </column>
-            <!--dinner_id-->
-            <column name="dinner" type="bigint">
+            <column name="dinner_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <!--user_id-->
-            <column name="user" type="bigint">
+            <column name="user_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
             <column name="isAccepted" type="boolean">
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseTableName="attendee"
+        <addForeignKeyConstraint baseTableName="attendees"
                                  baseColumnNames="dinner"
-                                 constraintName="fk_attendee_dinner_dinners_id"
+                                 constraintName="fk_attendees_dinner_dinners_id"
                                  referencedTableName="dinners"
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"
         />
-        <createIndex tableName="attendee" indexName="idx_attendee_dinner">
+        <createIndex tableName="attendees" indexName="idx_attendees_dinner">
             <column name="dinner"/>
         </createIndex>
-        <addForeignKeyConstraint baseTableName="attendee"
+        <addForeignKeyConstraint baseTableName="attendees"
                                  baseColumnNames="user"
-                                 constraintName="fk_attendee_dinner_users_id"
+                                 constraintName="fk_attendees_dinner_users_id"
                                  referencedTableName="users"
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"
         />
-        <createIndex tableName="attendee" indexName="idx_attendee_user">
+        <createIndex tableName="attendees" indexName="idx_attendee_user">
             <column name="user"/>
         </createIndex>
     </changeSet>
