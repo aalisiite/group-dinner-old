@@ -12,6 +12,7 @@ public class UserRecord {
     private String firstName;
     private String lastName;
 
+
     public UserRecord(Long id, String firstName, String lastName) {
         this.id = id;
         this.firstName = firstName;
@@ -42,7 +43,5 @@ public class UserRecord {
         this.lastName = lastName;
     }
 
-    
 
-    
 }
