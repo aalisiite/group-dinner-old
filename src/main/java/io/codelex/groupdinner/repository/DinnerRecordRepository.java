@@ -32,6 +32,4 @@ public interface DinnerRecordRepository extends JpaRepository<DinnerRecord, Long
     void incrementCurrentGuests(
             @Param("id") Long id
     );
-    
-    
 }
