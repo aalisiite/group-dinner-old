@@ -62,14 +62,13 @@ public class RepositoryUserService implements UserService {
         Long userIdLong = Long.parseLong(userId);
         if (dinnerRecord.isPresent()) {
             boolean isAccepted = dinnerRecord.get().shouldAcceptRequest();
+            dinnerRecordRepository.incrementCurrentGuests(dinnerRecord.get().getId());
             AttendeeRecord attendeeRecord = new AttendeeRecord(
                     dinnerRecord.get(),
                     userRecordRepository.findById(userIdLong).get(),
                     isAccepted
             );
             attendeeRecordRepository.save(attendeeRecord);
-            dinnerRecord.get().incrementCurrentGuests();
-            dinnerRecordRepository.incrementCurrentGuests(dinnerRecord.get().getId());
             return toAttendee.apply(attendeeRecord);
         } else {
             throw new IllegalArgumentException("No such dinner present");
@@ -94,9 +93,9 @@ public class RepositoryUserService implements UserService {
 
     private DinnerRecord createDinnerRecordFromRequest(CreateDinnerRequest request) {
         DinnerRecord dinnerRecord = new DinnerRecord();
+        dinnerRecord.setTitle(request.getTitle());
         dinnerRecord.setCreator(createOrGetUser(request.getCreator()));
         dinnerRecord.setMaxGuests(request.getMaxGuests());
-        dinnerRecord.setCurrentGuests(1);
         dinnerRecord.setDescription(request.getDescription());
         dinnerRecord.setLocation(request.getLocation());
         dinnerRecord.setDateTime(request.getDateTime());
