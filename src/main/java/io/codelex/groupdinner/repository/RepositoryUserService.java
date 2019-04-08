@@ -1,7 +1,10 @@
 package io.codelex.groupdinner.repository;
 
 import io.codelex.groupdinner.UserService;
-import io.codelex.groupdinner.api.*;
+import io.codelex.groupdinner.api.Attendee;
+import io.codelex.groupdinner.api.CreateDinnerRequest;
+import io.codelex.groupdinner.api.Dinner;
+import io.codelex.groupdinner.api.User;
 import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.UserRecord;
@@ -52,13 +55,12 @@ public class RepositoryUserService implements UserService {
         }
     }
 
-    
-    
+
     @Override
     public Attendee joinDinner(String userId, Long dinnerId) {
         Optional<DinnerRecord> dinnerRecord = dinnerRecordRepository.findById(dinnerId);
         Long userIdLong = Long.parseLong(userId);
-        if (dinnerRecord.isPresent()){
+        if (dinnerRecord.isPresent()) {
             boolean isAccepted = dinnerRecord.get().shouldAcceptRequest();
             AttendeeRecord attendeeRecord = new AttendeeRecord(
                     dinnerRecord.get(),
@@ -78,18 +80,18 @@ public class RepositoryUserService implements UserService {
         Optional<DinnerRecord> dinnerRecord = dinnerRecordRepository.findById(id);
         return dinnerRecord.map(toDinner).orElse(null);
     }
-    
-    public List<User> findUsersWithAcceptedStatus (Long dinnerId, boolean isAccepted) {
+
+    public List<User> findUsersWithAcceptedStatus(Long dinnerId, boolean isAccepted) {
         List<AttendeeRecord> attendees = attendeeRecordRepository.findDinnerAttendees(dinnerId, isAccepted);
         List<UserRecord> users = Collections.emptyList();
-        for (AttendeeRecord attendee : attendees ) {
+        for (AttendeeRecord attendee : attendees) {
             Optional<UserRecord> userRecord = userRecordRepository.findById(attendee.getUser().getId());
             userRecord.ifPresent(users::add);
         }
         return users.stream().map(toUser).collect(Collectors.toList());
     }
-    
-    
+
+
     private DinnerRecord createDinnerRecordFromRequest(CreateDinnerRequest request) {
         DinnerRecord dinnerRecord = new DinnerRecord();
         dinnerRecord.setCreator(createOrGetUser(request.getCreator()));
@@ -100,7 +102,7 @@ public class RepositoryUserService implements UserService {
         dinnerRecord.setDateTime(request.getDateTime());
         return dinnerRecord;
     }
-    
+
     private UserRecord createOrGetUser(User user) {
         return userRecordRepository.findById(user.getId())
                 .orElseGet(() -> {

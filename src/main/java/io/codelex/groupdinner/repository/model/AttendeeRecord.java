@@ -51,7 +51,7 @@ public class AttendeeRecord {
         return isAccepted;
     }
 
-    public void setIsAccepted (boolean isAccepted) {
+    public void setIsAccepted(boolean isAccepted) {
         this.isAccepted = isAccepted;
     }
 

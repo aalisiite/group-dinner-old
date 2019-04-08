@@ -13,7 +13,7 @@ public class UsersService {
     public UsersService() {
     }
 
-    public User addUser (User user) {
+    public User addUser(User user) {
         users.add(user);
         return user;
     }
@@ -23,5 +23,5 @@ public class UsersService {
                 .filter(it -> it.getId().equals(id))
                 .findFirst();
     }
-    
+
 }

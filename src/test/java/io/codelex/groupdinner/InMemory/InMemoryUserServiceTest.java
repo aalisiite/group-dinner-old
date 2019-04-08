@@ -3,7 +3,10 @@ package io.codelex.groupdinner.InMemory;
 import io.codelex.groupdinner.InMemory.service.AttendeeService;
 import io.codelex.groupdinner.InMemory.service.DinnerService;
 import io.codelex.groupdinner.InMemory.service.UsersService;
-import io.codelex.groupdinner.api.*;
+import io.codelex.groupdinner.api.Attendee;
+import io.codelex.groupdinner.api.CreateDinnerRequest;
+import io.codelex.groupdinner.api.Dinner;
+import io.codelex.groupdinner.api.User;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -79,7 +82,7 @@ public class InMemoryUserServiceTest {
         Mockito.when(attendeeService.addAttendee(any()))
                 .thenReturn(attendee);
         Attendee result = userModule.joinDinner(principal.getName(), dinner.getId());
-        
+
         //then
         assertEquals(initialGuestCount + 1, dinner.getCurrentGuests());
         assertFalse(result.getIsAccepted());

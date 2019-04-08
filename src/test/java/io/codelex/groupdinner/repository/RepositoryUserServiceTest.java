@@ -27,9 +27,9 @@ public class RepositoryUserServiceTest {
     private UserRecord userRecord = createUserRecord();
     private String location = createLocation();
     private DinnerRecord dinnerRecord = createDinnerRecord();
-    private CreateDinnerRequest dinnerRequest = createDinnerRequest();
     private AttendeeRecord attendeeRecord = createAcceptedAttendeeRecord();
     private User user = createUser();
+    private CreateDinnerRequest dinnerRequest = createDinnerRequest();
     private CreateDinnerRequest request = createDinnerRequest();
 
     @Test

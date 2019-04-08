@@ -17,7 +17,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -40,19 +39,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    private UserService userService = Mockito.mock(UserService.class);
-    private UserRecord userRecord = createUserRecord();
-    private User user = createUser();
-    private String location = createLocation();
-    private LocalDateTime localDateTime = LocalDateTime.of(2019, 1, 1, 0, 0);
-    private CreateDinnerRequest request = createDinnerRequest(user, location, localDateTime);
-    private DinnerRecord dinnerRecord = createDinnerRecord();
-    private Dinner dinner = createDinner();
-
 
     static {
         Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
@@ -82,6 +68,16 @@ public class UserControllerTest {
         MAPPER.registerModule(javaTimeModule);
     }
 
+    @Autowired
+    private MockMvc mockMvc;
+    private UserService userService = Mockito.mock(UserService.class);
+    private UserRecord userRecord = createUserRecord();
+    private User user = createUser();
+    private String location = createLocation();
+    private LocalDateTime localDateTime = LocalDateTime.of(2019, 1, 1, 0, 0);
+    private CreateDinnerRequest request = createDinnerRequest(user, location, localDateTime);
+    private DinnerRecord dinnerRecord = createDinnerRecord();
+    private Dinner dinner = createDinner();
 
     @Test
     public void should_return_dinner_and_status_created() throws Exception {
@@ -144,7 +140,7 @@ public class UserControllerTest {
                 localDateTime
         );
     }
-    
+
     private Dinner createDinner() {
         return new Dinner(
                 1L,
@@ -156,7 +152,7 @@ public class UserControllerTest {
                 localDateTime
         );
     }
-    
+
     private DinnerRecord createDinnerRecord() {
         return new DinnerRecord(
                 "This is a title",

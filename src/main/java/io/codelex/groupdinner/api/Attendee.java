@@ -38,7 +38,7 @@ public class Attendee {
         this.user = user;
     }
 
-    public boolean getIsAccepted () {
+    public boolean getIsAccepted() {
         return isAccepted;
     }
 

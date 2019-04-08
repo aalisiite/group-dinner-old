@@ -9,7 +9,7 @@ spring:
   liquibase:
     change-log: classpath:/liquibase/updates.xml
   queries:
-    
+
 
 security:
   basic: enabled=false

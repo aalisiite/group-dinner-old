@@ -1,7 +1,5 @@
 package io.codelex.groupdinner.api;
 
-import io.codelex.groupdinner.repository.model.UserRecord;
-
 //@Table
 //@Entity
 public class Feedback {
