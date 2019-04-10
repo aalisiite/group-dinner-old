@@ -12,8 +12,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class DinnerRecordRepositoryTest extends Assertions {
@@ -23,22 +21,22 @@ class DinnerRecordRepositoryTest extends Assertions {
 
     @Autowired
     AttendeeRecordRepository attendeeRecordRepository;
-    
+
     @Autowired
     UserRecordRepository userRecordRepository;
-    
+
     private LocalDateTime localDateTime = LocalDateTime.of(2019, 1, 1, 0, 0);
     private UserRecord userRecord = createUserRecord();
     private String location = createLocation();
     private DinnerRecord dinnerRecord = createDinnerRecord();
-    
+
     @BeforeEach
     void setUp() {
         attendeeRecordRepository.deleteAll();
         dinnerRecordRepository.deleteAll();
         userRecordRepository.deleteAll();
     }
-    
+
 
     @Test
     void is_dinner_present_should_return_true_when_match_found() {
@@ -46,7 +44,7 @@ class DinnerRecordRepositoryTest extends Assertions {
         //given
         userRecordRepository.save(userRecord);
         DinnerRecord dinnerRecord = dinnerRecordRepository.save(this.dinnerRecord);
-        
+
         //when
         boolean isDinnerPresent = dinnerRecordRepository.isDinnerPresent(
                 dinnerRecord.getTitle(),
@@ -63,7 +61,7 @@ class DinnerRecordRepositoryTest extends Assertions {
 
     @Test
     void is_dinner_present_should_return_false_when_no_match_found() {
-        
+
         //when
         boolean isDinnerPresent = dinnerRecordRepository.isDinnerPresent(
                 dinnerRecord.getTitle(),
@@ -77,22 +75,22 @@ class DinnerRecordRepositoryTest extends Assertions {
         //then
         assertFalse(isDinnerPresent);
     }
-    
+
     @Test
-    void should_increment_current_guests_by_one () {
+    void should_increment_current_guests_by_one() {
         //given
         userRecordRepository.save(userRecord);
         DinnerRecord dinnerRecord = dinnerRecordRepository.save(this.dinnerRecord);
-        
+
         Integer initialGuests = dinnerRecord.getCurrentGuests();
-        
+
         //when
         dinnerRecordRepository.incrementCurrentGuests(dinnerRecord.getId());
         dinnerRecordRepository.incrementCurrentGuests(dinnerRecord.getId());
-        
+
         //then
         Optional<DinnerRecord> result = dinnerRecordRepository.findById(dinnerRecord.getId());
-        assertEquals(initialGuests+1, result.get().getCurrentGuests());
+        assertEquals(initialGuests + 1, result.get().getCurrentGuests());
     }
 
     private DinnerRecord createDinnerRecord() {
@@ -113,7 +111,7 @@ class DinnerRecordRepositoryTest extends Assertions {
                 "berzins@gmai.com"
         );
     }
-    
+
     private String createLocation() {
         return "Jurmalas Gatve 76";
     }

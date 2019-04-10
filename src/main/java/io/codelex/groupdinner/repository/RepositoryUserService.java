@@ -1,12 +1,10 @@
 package io.codelex.groupdinner.repository;
 
 import io.codelex.groupdinner.UserService;
-import io.codelex.groupdinner.api.Attendee;
-import io.codelex.groupdinner.api.CreateDinnerRequest;
-import io.codelex.groupdinner.api.Dinner;
-import io.codelex.groupdinner.api.User;
+import io.codelex.groupdinner.api.*;
 import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
+import io.codelex.groupdinner.repository.model.FeedbackRecord;
 import io.codelex.groupdinner.repository.model.UserRecord;
 import org.springframework.stereotype.Component;
 
@@ -21,14 +19,17 @@ public class RepositoryUserService implements UserService {
     private final DinnerRecordRepository dinnerRecordRepository;
     private final UserRecordRepository userRecordRepository;
     private final AttendeeRecordRepository attendeeRecordRepository;
+    private final FeedbackRecordRepository feedbackRecordRepository;
     private final MapUserRecordToUser toUser = new MapUserRecordToUser();
     private final MapDinnerRecordToDinner toDinner = new MapDinnerRecordToDinner();
     private final MapAttendeeRecordToAttendee toAttendee = new MapAttendeeRecordToAttendee();
+    private final MapFeedbackRecordToFeedback toFeedback = new MapFeedbackRecordToFeedback();
 
-    public RepositoryUserService(DinnerRecordRepository dinnerRecordRepository, UserRecordRepository userRecordRepository, AttendeeRecordRepository attendeeRecordRepository) {
+    public RepositoryUserService(DinnerRecordRepository dinnerRecordRepository, UserRecordRepository userRecordRepository, AttendeeRecordRepository attendeeRecordRepository, FeedbackRecordRepository feedbackRecordRepository) {
         this.dinnerRecordRepository = dinnerRecordRepository;
         this.userRecordRepository = userRecordRepository;
         this.attendeeRecordRepository = attendeeRecordRepository;
+        this.feedbackRecordRepository = feedbackRecordRepository;
     }
 
     @Override
@@ -72,6 +73,24 @@ public class RepositoryUserService implements UserService {
             return toAttendee.apply(attendeeRecord);
         } else {
             throw new IllegalArgumentException("No such dinner present");
+        }
+    }
+
+    @Override
+    public Feedback leaveFeedback(String provider, Long dinnerId, LeaveFeedbackRequest request) {
+        Long providerId = Long.parseLong(provider);
+        if (feedbackRecordRepository.isFeedbackPresent(providerId, request.getReceiver().getId())) {
+            throw new IllegalStateException("Feedback for users already exist");
+        } else {
+            Optional<UserRecord> providerRecord = userRecordRepository.findById(providerId);
+            Optional<UserRecord> receiverRecord = userRecordRepository.findById(request.getReceiver().getId());
+            FeedbackRecord feedbackRecord = new FeedbackRecord(
+                    providerRecord.get(),
+                    receiverRecord.get(),
+                    request.getFeedback()
+            );
+            feedbackRecordRepository.save(feedbackRecord);
+            return toFeedback.apply(feedbackRecord);
         }
     }
 

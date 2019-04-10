@@ -109,4 +109,43 @@
         </createIndex>
     </changeSet>
 
+
+    <changeSet id="create feedbacks table" author="nikola">
+        <createSequence sequenceName="feedback_seq"/>
+        <createTable tableName="feedbacks">
+            <column name="id" type="bigint" defaultValueSequenceNext="feedback_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_feedback"/>
+            </column>
+            <column name="provider_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="receiver_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rating" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="feedbacks"
+                                 baseColumnNames="provider_id"
+                                 constraintName="fk_feedbacks_provider_id_users_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"
+        />
+        <createIndex tableName="feedbacks" indexName="idx_feedbacks_provider_id">
+            <column name="provider_id"/>
+        </createIndex>
+        <addForeignKeyConstraint baseTableName="feedbacks"
+                                 baseColumnNames="receiver_id"
+                                 constraintName="fk_feedbacks_receiver_id_users_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"
+        />
+        <createIndex tableName="feedbacks" indexName="idx_feedbacks_receiver_id">
+            <column name="receiver_id"/>
+        </createIndex>
+    </changeSet>
+
 </databaseChangeLog>

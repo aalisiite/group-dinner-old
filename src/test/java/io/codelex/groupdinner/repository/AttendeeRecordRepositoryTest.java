@@ -39,6 +39,7 @@ public class AttendeeRecordRepositoryTest extends Assertions {
         dinnerRecordRepository.deleteAll();
         userRecordRepository.deleteAll();
     }
+
     @Test
     public void should_return_all_accepted_attendees_to_given_dinner() {
 
@@ -95,7 +96,7 @@ public class AttendeeRecordRepositoryTest extends Assertions {
     }
 
     @Test
-    void should_return_attendee_status () {
+    void should_return_attendee_status() {
         //given
         userRecordRepository.save(userRecord);
         dinnerRecordRepository.save(dinnerRecord);
@@ -130,7 +131,7 @@ public class AttendeeRecordRepositoryTest extends Assertions {
         userRecord.setId(1L);
         return userRecord;
     }
-    
+
     private AttendeeRecord createAttendeeRecord() {
         AttendeeRecord attendeeRecord = new AttendeeRecord(
                 dinnerRecord,

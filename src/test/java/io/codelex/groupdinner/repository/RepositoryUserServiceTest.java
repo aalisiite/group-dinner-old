@@ -1,6 +1,9 @@
 package io.codelex.groupdinner.repository;
 
-import io.codelex.groupdinner.api.*;
+import io.codelex.groupdinner.api.Attendee;
+import io.codelex.groupdinner.api.CreateDinnerRequest;
+import io.codelex.groupdinner.api.Dinner;
+import io.codelex.groupdinner.api.User;
 import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.UserRecord;
@@ -22,7 +25,8 @@ public class RepositoryUserServiceTest {
     private DinnerRecordRepository dinnerRecordRepository = Mockito.mock(DinnerRecordRepository.class);
     private UserRecordRepository userRecordRepository = Mockito.mock(UserRecordRepository.class);
     private AttendeeRecordRepository attendeeRecordRepository = Mockito.mock(AttendeeRecordRepository.class);
-    private RepositoryUserService userModule = new RepositoryUserService(dinnerRecordRepository, userRecordRepository, attendeeRecordRepository);
+    private FeedbackRecordRepository feedbackRecordRepository = Mockito.mock(FeedbackRecordRepository.class);
+    private RepositoryUserService userModule = new RepositoryUserService(dinnerRecordRepository, userRecordRepository, attendeeRecordRepository, feedbackRecordRepository);
     private LocalDateTime localDateTime = LocalDateTime.of(2019, 1, 1, 0, 0);
     private UserRecord userRecord = createUserRecord();
     private String location = createLocation();
@@ -35,7 +39,7 @@ public class RepositoryUserServiceTest {
     public void should_be_able_to_create_dinner() {
         //given
         Dinner dinner = createDinner();
-        
+
         //when
         Mockito.when(dinnerRecordRepository.isDinnerPresent(any(), any(), any(), any(), any(), any()))
                 .thenReturn(false);
@@ -49,23 +53,23 @@ public class RepositoryUserServiceTest {
         Dinner result = userModule.createDinner(dinnerRequest);
         result.setId(dinner.getId());
         result.getCreator().setId(dinner.getCreator().getId());
-        
+
         //then
         assertEquals(dinner.getTitle(), result.getTitle());
         assertEquals(dinner.getCreator(), result.getCreator());
     }
-    
+
     @Test
     public void should_not_be_able_to_create_duplicate_dinner() {
         //when
         Mockito.when(dinnerRecordRepository.isDinnerPresent(any(), any(), any(), any(), any(), any()))
                 .thenReturn(true);
-        
+
         //then
         Executable executable = () -> userModule.createDinner(dinnerRequest);
         assertThrows(IllegalStateException.class, executable);
     }
-    
+
 
     @Test
     public void should_be_able_to_join_event_with_accepted_status() {
@@ -82,15 +86,14 @@ public class RepositoryUserServiceTest {
                 .thenReturn(attendeeRecord);
         Mockito.when(toAttendee.apply(any()))
                 .thenReturn(attendee);
-        
-        
+
+
         Attendee result = userModule.joinDinner(principal.getName(), dinnerRecord.getId());
 
         //then
         assertTrue(result.getIsAccepted());
     }
 
-    
 
     @Test
     public void should_be_able_to_join_event_with_pending_status() {
@@ -109,8 +112,8 @@ public class RepositoryUserServiceTest {
                 .thenReturn(attendeeRecord);
         Mockito.when(toAttendee.apply(any()))
                 .thenReturn(attendee);
-        
-        
+
+
         Attendee result = userModule.joinDinner(principal.getName(), dinnerRecord.getId());
 
         //then
