@@ -1,0 +1,147 @@
+package io.codelex.groupdinner.repository;
+
+
+import io.codelex.groupdinner.repository.model.AttendeeRecord;
+import io.codelex.groupdinner.repository.model.DinnerRecord;
+import io.codelex.groupdinner.repository.model.UserRecord;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+public class AttendeeRecordRepositoryTest extends Assertions {
+
+    @Autowired
+    DinnerRecordRepository dinnerRecordRepository;
+
+    @Autowired
+    AttendeeRecordRepository attendeeRecordRepository;
+
+    @Autowired
+    UserRecordRepository userRecordRepository;
+
+    private LocalDateTime localDateTime = LocalDateTime.of(2019, 1, 1, 0, 0);
+    private UserRecord userRecord = createUserRecord();
+    private String location = createLocation();
+    private DinnerRecord dinnerRecord = createDinnerRecord();
+    private AttendeeRecord attendeeRecord = createAttendeeRecord();
+
+    @BeforeEach
+    void setUp() {
+        attendeeRecordRepository.deleteAll();
+        dinnerRecordRepository.deleteAll();
+        userRecordRepository.deleteAll();
+    }
+    @Test
+    public void should_return_all_accepted_attendees_to_given_dinner() {
+
+        //given
+        userRecordRepository.save(userRecord);
+        dinnerRecordRepository.save(this.dinnerRecord);
+        UserRecord userRecord2 = new UserRecord(
+                "Anna",
+                "Kalniņa",
+                "a.kalnina@gmail.com"
+        );
+        userRecord2.setId(2L);
+        userRecordRepository.save(userRecord2);
+        AttendeeRecord attendeeRecord2 = new AttendeeRecord(
+                dinnerRecord,
+                userRecord2,
+                true
+        );
+        attendeeRecord2.setId(2L);
+        attendeeRecordRepository.save(attendeeRecord);
+        attendeeRecordRepository.save(attendeeRecord2);
+
+        //when
+        List<AttendeeRecord> attendeeRecords = attendeeRecordRepository.findDinnerAttendees(dinnerRecord.getId(), true);
+
+        //then
+        assertEquals(2, attendeeRecords.size());
+    }
+
+    @Test
+    public void should_return_all_pending_attendees_to_given_dinner() {
+
+        //given
+        userRecordRepository.save(userRecord);
+        dinnerRecordRepository.save(dinnerRecord);
+        UserRecord userRecord2 = new UserRecord(
+                "Anna",
+                "Kalniņa",
+                "a.kalnina@gmail.com"
+        );
+        userRecord2.setId(2L);
+        userRecordRepository.save(userRecord2);
+        attendeeRecordRepository.save(new AttendeeRecord(
+                dinnerRecord,
+                userRecord2,
+                false
+        ));
+
+        //when
+        List<AttendeeRecord> attendeeRecords = attendeeRecordRepository.findDinnerAttendees(dinnerRecord.getId(), true);
+
+        //then
+        assertEquals(1, attendeeRecords.size());
+    }
+
+    @Test
+    void should_return_attendee_status () {
+        //given
+        userRecordRepository.save(userRecord);
+        dinnerRecordRepository.save(dinnerRecord);
+        attendeeRecordRepository.save(attendeeRecord);
+
+        //when
+        boolean result = attendeeRecordRepository.getAttendeeIsAccepted(dinnerRecord.getId(), userRecord.getId());
+
+        //then
+        assertTrue(result);
+    }
+
+    private DinnerRecord createDinnerRecord() {
+        DinnerRecord dinnerRecord = new DinnerRecord(
+                "This is a title",
+                userRecord,
+                2,
+                "This is a description",
+                location,
+                localDateTime
+        );
+        dinnerRecord.setId(1L);
+        return dinnerRecord;
+    }
+
+    private UserRecord createUserRecord() {
+        UserRecord userRecord = new UserRecord(
+                "Janis",
+                "Berzins",
+                "berzins@gmai.com"
+        );
+        userRecord.setId(1L);
+        return userRecord;
+    }
+    
+    private AttendeeRecord createAttendeeRecord() {
+        AttendeeRecord attendeeRecord = new AttendeeRecord(
+                dinnerRecord,
+                userRecord,
+                true
+        );
+        attendeeRecord.setId(1L);
+        return attendeeRecord;
+    }
+
+    private String createLocation() {
+        return "Jurmalas Gatve 76";
+    }
+}

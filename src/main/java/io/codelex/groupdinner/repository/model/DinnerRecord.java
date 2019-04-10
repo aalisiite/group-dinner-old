@@ -17,7 +17,7 @@ public class DinnerRecord {
     @ManyToOne
     private UserRecord creator;
     private Integer maxGuests;
-    private Integer currentGuests;
+    private Integer currentGuests = 1;
     private String description;
     private String location;
     private LocalDateTime dateTime;
@@ -29,7 +29,6 @@ public class DinnerRecord {
         this.title = title;
         this.creator = creator;
         this.maxGuests = maxGuests;
-        this.currentGuests = 1;
         this.description = description;
         this.location = location;
         this.dateTime = dateTime;
