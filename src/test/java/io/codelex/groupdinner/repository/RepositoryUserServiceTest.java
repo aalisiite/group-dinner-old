@@ -119,6 +119,16 @@ public class RepositoryUserServiceTest {
         //then
         assertFalse(result.getIsAccepted());
     }
+    
+    @Test
+    void should_be_able_to_leave_feedback () {
+        //todo
+    }
+    
+    @Test
+    void should_not_be_able_to_leave_feedback_two_times_for_one_person () {
+        //todo
+    }
 
     private AttendeeRecord createAcceptedAttendeeRecord() {
         return new AttendeeRecord(

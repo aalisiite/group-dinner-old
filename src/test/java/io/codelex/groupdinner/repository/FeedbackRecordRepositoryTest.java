@@ -1,20 +1,20 @@
 package io.codelex.groupdinner.repository;
 
 import io.codelex.groupdinner.repository.model.DinnerRecord;
+import io.codelex.groupdinner.repository.model.FeedbackRecord;
 import io.codelex.groupdinner.repository.model.UserRecord;
+import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class DinnerRecordRepositoryTest extends Assertions {
+public class FeedbackRecordRepositoryTest extends Assertions {
 
     @Autowired
     DinnerRecordRepository dinnerRecordRepository;
@@ -24,7 +24,7 @@ class DinnerRecordRepositoryTest extends Assertions {
 
     @Autowired
     UserRecordRepository userRecordRepository;
-    
+
     @Autowired
     FeedbackRecordRepository feedbackRecordRepository;
 
@@ -33,6 +33,9 @@ class DinnerRecordRepositoryTest extends Assertions {
     private String location = createLocation();
     private DinnerRecord dinnerRecord = createDinnerRecord();
 
+    //todo 
+    //create separate class in tests that returns list of example UserRecords, DinnerRecords, AttendeeRecords, FeedbackRecords
+    
     @BeforeEach
     void setUp() {
         attendeeRecordRepository.deleteAll();
@@ -40,63 +43,66 @@ class DinnerRecordRepositoryTest extends Assertions {
         userRecordRepository.deleteAll();
         feedbackRecordRepository.deleteAll();
     }
-
-
+    
     @Test
-    void is_dinner_present_should_return_true_when_match_found() {
-
+    public void should_return_feedback_by_provider_receiver_ids () {
         //given
         userRecordRepository.save(userRecord);
-        DinnerRecord dinnerRecord = dinnerRecordRepository.save(this.dinnerRecord);
-
-        //when
-        boolean isDinnerPresent = dinnerRecordRepository.isDinnerPresent(
-                dinnerRecord.getTitle(),
-                dinnerRecord.getCreator().getId(),
-                dinnerRecord.getMaxGuests(),
-                dinnerRecord.getDescription(),
-                dinnerRecord.getLocation(),
-                dinnerRecord.getDateTime()
+        UserRecord userRecord2 = new UserRecord(
+                "Anna",
+                "Kalniņa",
+                "a.kalnina@gmail.com"
         );
-
+        userRecord2.setId(2L);
+        userRecordRepository.save(userRecord2);
+        FeedbackRecord feedbackRecord = new FeedbackRecord(
+                userRecord,
+                userRecord2,
+                true
+        );
+        feedbackRecordRepository.save(feedbackRecord);
+        
+        //when
+        FeedbackRecord result = feedbackRecordRepository.getFeedbackRecord(userRecord.getId(), userRecord2.getId());
+        
         //then
-        assertTrue(isDinnerPresent);
+        assertEquals(feedbackRecord, result);
+        assertTrue(result.isRating());
     }
 
     @Test
-    void is_dinner_present_should_return_false_when_no_match_found() {
-
-        //when
-        boolean isDinnerPresent = dinnerRecordRepository.isDinnerPresent(
-                dinnerRecord.getTitle(),
-                dinnerRecord.getCreator().getId(),
-                dinnerRecord.getMaxGuests(),
-                dinnerRecord.getDescription(),
-                dinnerRecord.getLocation(),
-                dinnerRecord.getDateTime()
-        );
-
-        //then
-        assertFalse(isDinnerPresent);
-    }
-
-    @Test //todo
-    void should_increment_current_guests_by_one() {
+    public void should_return_true_if_given_feedback_present () {
         //given
         userRecordRepository.save(userRecord);
-        DinnerRecord dinnerRecord = dinnerRecordRepository.save(this.dinnerRecord);
-
-        Integer initialGuests = dinnerRecord.getCurrentGuests();
+        UserRecord userRecord2 = new UserRecord(
+                "Anna",
+                "Kalniņa",
+                "a.kalnina@gmail.com"
+        );
+        userRecord2.setId(2L);
+        userRecordRepository.save(userRecord2);
+        FeedbackRecord feedbackRecord = new FeedbackRecord(
+                userRecord,
+                userRecord2,
+                true
+        );
+        feedbackRecordRepository.save(feedbackRecord);
 
         //when
-        dinnerRecordRepository.incrementCurrentGuests(dinnerRecord.getId());
-        dinnerRecordRepository.incrementCurrentGuests(dinnerRecord.getId());
+        boolean result = feedbackRecordRepository.isFeedbackPresent(userRecord.getId(), userRecord2.getId());
 
         //then
-        Optional<DinnerRecord> result = dinnerRecordRepository.findById(dinnerRecord.getId());
-        assertEquals(initialGuests + 1, result.get().getCurrentGuests());
+        assertTrue(result);
     }
 
+    @Test
+    public void should_return_false_if_given_feedback_not_present () {
+        //when
+        boolean result = feedbackRecordRepository.isFeedbackPresent(1L, 2L);
+
+        //then
+        assertFalse(result);
+    }
 
     private DinnerRecord createDinnerRecord() {
         DinnerRecord dinnerRecord = new DinnerRecord(
@@ -120,9 +126,9 @@ class DinnerRecordRepositoryTest extends Assertions {
         userRecord.setId(1L);
         return userRecord;
     }
-
+    
     private String createLocation() {
         return "Jurmalas Gatve 76";
     }
-
+    
 }

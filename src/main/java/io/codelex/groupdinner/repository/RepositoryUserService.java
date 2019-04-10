@@ -82,6 +82,8 @@ public class RepositoryUserService implements UserService {
         if (feedbackRecordRepository.isFeedbackPresent(providerId, request.getReceiver().getId())) {
             throw new IllegalStateException("Feedback for users already exist");
         } else {
+            //todo
+            //need to check if provider & receiver attended same dinner before leaving feedback?
             Optional<UserRecord> providerRecord = userRecordRepository.findById(providerId);
             Optional<UserRecord> receiverRecord = userRecordRepository.findById(request.getReceiver().getId());
             FeedbackRecord feedbackRecord = new FeedbackRecord(
