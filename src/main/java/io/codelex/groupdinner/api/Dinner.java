@@ -13,7 +13,7 @@ public class Dinner {
     private String description;
     private String location;
     private LocalDateTime dateTime;
-    
+
 
     public Dinner(Long id, String title, User creator, int maxGuests, String description, String location, LocalDateTime dateTime) {
         this.id = id;
@@ -103,18 +103,11 @@ public class Dinner {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Dinner dinner = (Dinner) o;
-        return maxGuests == dinner.maxGuests &&
-                currentGuests == dinner.currentGuests &&
-                id.equals(dinner.id) &&
-                title.equals(dinner.title) &&
-                creator.equals(dinner.creator) &&
-                description.equals(dinner.description) &&
-                Objects.equals(location, dinner.location) &&
-                Objects.equals(dateTime, dinner.dateTime);
+        return id.equals(dinner.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, creator, maxGuests, currentGuests, description, location, dateTime);
+        return Objects.hash(id);
     }
 }

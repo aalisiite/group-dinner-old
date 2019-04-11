@@ -16,8 +16,8 @@ public class DinnerRecord {
     private String title;
     @ManyToOne
     private UserRecord creator;
-    private int maxGuests;
-    private int currentGuests;
+    private Integer maxGuests;
+    private Integer currentGuests = 1;
     private String description;
     private String location;
     private LocalDateTime dateTime;
@@ -25,11 +25,10 @@ public class DinnerRecord {
     public DinnerRecord() {
     }
 
-    public DinnerRecord(String title, UserRecord creator, int maxGuests, String description, String location, LocalDateTime dateTime) {
+    public DinnerRecord(String title, UserRecord creator, Integer maxGuests, String description, String location, LocalDateTime dateTime) {
         this.title = title;
         this.creator = creator;
         this.maxGuests = maxGuests;
-        this.currentGuests = 1;
         this.description = description;
         this.location = location;
         this.dateTime = dateTime;
@@ -67,7 +66,7 @@ public class DinnerRecord {
         this.creator = creator;
     }
 
-    public int getMaxGuests() {
+    public Integer getMaxGuests() {
         return maxGuests;
     }
 
@@ -75,7 +74,7 @@ public class DinnerRecord {
         this.maxGuests = maxGuests;
     }
 
-    public int getCurrentGuests() {
+    public Integer getCurrentGuests() {
         return currentGuests;
     }
 

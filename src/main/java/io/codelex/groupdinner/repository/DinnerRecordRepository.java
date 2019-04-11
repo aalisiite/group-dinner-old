@@ -2,6 +2,7 @@ package io.codelex.groupdinner.repository;
 
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -20,12 +21,13 @@ public interface DinnerRecordRepository extends JpaRepository<DinnerRecord, Long
     boolean isDinnerPresent(
             @Param("title") String title,
             @Param("creator") Long creator,
-            @Param("maxGuests") int maxGuests,
+            @Param("maxGuests") Integer maxGuests,
             @Param("description") String description,
             @Param("location") String location,
             @Param("dateTime") LocalDateTime dateTime
     );
 
+    @Modifying
     @Query("UPDATE DinnerRecord dinner SET dinner.currentGuests = dinner.currentGuests + 1 " +
             "WHERE dinner.id = :id")
     void incrementCurrentGuests(

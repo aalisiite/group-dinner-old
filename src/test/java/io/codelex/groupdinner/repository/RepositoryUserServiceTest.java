@@ -1,18 +1,21 @@
 package io.codelex.groupdinner.repository;
 
-import io.codelex.groupdinner.api.*;
+import io.codelex.groupdinner.api.Attendee;
+import io.codelex.groupdinner.api.CreateDinnerRequest;
+import io.codelex.groupdinner.api.Dinner;
+import io.codelex.groupdinner.api.User;
 import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.UserRecord;
 import org.junit.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mockito;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 
 public class RepositoryUserServiceTest {
@@ -22,21 +25,20 @@ public class RepositoryUserServiceTest {
     private DinnerRecordRepository dinnerRecordRepository = Mockito.mock(DinnerRecordRepository.class);
     private UserRecordRepository userRecordRepository = Mockito.mock(UserRecordRepository.class);
     private AttendeeRecordRepository attendeeRecordRepository = Mockito.mock(AttendeeRecordRepository.class);
-    private RepositoryUserService userModule = new RepositoryUserService(dinnerRecordRepository, userRecordRepository, attendeeRecordRepository);
+    private FeedbackRecordRepository feedbackRecordRepository = Mockito.mock(FeedbackRecordRepository.class);
+    private RepositoryUserService userModule = new RepositoryUserService(dinnerRecordRepository, userRecordRepository, attendeeRecordRepository, feedbackRecordRepository);
     private LocalDateTime localDateTime = LocalDateTime.of(2019, 1, 1, 0, 0);
     private UserRecord userRecord = createUserRecord();
     private String location = createLocation();
     private DinnerRecord dinnerRecord = createDinnerRecord();
-    private CreateDinnerRequest dinnerRequest = createDinnerRequest();
     private AttendeeRecord attendeeRecord = createAcceptedAttendeeRecord();
     private User user = createUser();
-    private CreateDinnerRequest request = createDinnerRequest();
+    private CreateDinnerRequest dinnerRequest = createDinnerRequest();
 
     @Test
     public void should_be_able_to_create_dinner() {
         //given
         Dinner dinner = createDinner();
-
 
         //when
         Mockito.when(dinnerRecordRepository.isDinnerPresent(any(), any(), any(), any(), any(), any()))
@@ -49,23 +51,37 @@ public class RepositoryUserServiceTest {
                 .thenReturn(dinner);
 
         Dinner result = userModule.createDinner(dinnerRequest);
+        result.setId(dinner.getId());
+        result.getCreator().setId(dinner.getCreator().getId());
 
         //then
-        assertEquals(dinner.getId(), result.getId());
+        assertEquals(dinner.getTitle(), result.getTitle());
+        assertEquals(dinner.getCreator(), result.getCreator());
+    }
+
+    @Test
+    public void should_not_be_able_to_create_duplicate_dinner() {
+        //when
+        Mockito.when(dinnerRecordRepository.isDinnerPresent(any(), any(), any(), any(), any(), any()))
+                .thenReturn(true);
+
+        //then
+        Executable executable = () -> userModule.createDinner(dinnerRequest);
+        assertThrows(IllegalStateException.class, executable);
     }
 
 
     @Test
     public void should_be_able_to_join_event_with_accepted_status() {
         //given
-        JoinDinnerRequest request = createJoinDinnerRequest();
         Attendee attendee = createAcceptedAttendee();
         Principal principal = () -> "1";
-
 
         //when
         Mockito.when(dinnerRecordRepository.findById(any()))
                 .thenReturn(Optional.of(dinnerRecord));
+        Mockito.when(userRecordRepository.findById(any()))
+                .thenReturn(Optional.of(userRecord));
         Mockito.when(attendeeRecordRepository.save(any()))
                 .thenReturn(attendeeRecord);
         Mockito.when(toAttendee.apply(any()))
@@ -78,28 +94,41 @@ public class RepositoryUserServiceTest {
         assertTrue(result.getIsAccepted());
     }
 
-/*
+
     @Test
     public void should_be_able_to_join_event_with_pending_status() {
         //given
-        dinner.setCurrentGuests(dinner.getMaxGuests() + 1);
-        int initialGuestCount = dinner.getCurrentGuests();
-        JoinDinnerRequest request = new JoinDinnerRequest(
-                user,
-                dinner
-        );
+        dinnerRecord.setCurrentGuests(dinnerRecord.getMaxGuests());
+        int initialGuestCount = dinnerRecord.getCurrentGuests();
+        Attendee attendee = createAcceptedAttendee();
+        Principal principal = () -> "1";
 
         //when
-        Mockito.when(dinnerService.getDinner(any()))
-                .thenReturn(Optional.of(dinner));
+        Mockito.when(dinnerRecordRepository.findById(any()))
+                .thenReturn(Optional.of(dinnerRecord));
+        Mockito.when(userRecordRepository.findById(any()))
+                .thenReturn(Optional.of(userRecord));
+        Mockito.when(attendeeRecordRepository.save(any()))
+                .thenReturn(attendeeRecord);
+        Mockito.when(toAttendee.apply(any()))
+                .thenReturn(attendee);
 
-        Attendee result = userModule.joinDinner(request);
+
+        Attendee result = userModule.joinDinner(principal.getName(), dinnerRecord.getId());
 
         //then
-        assertEquals(initialGuestCount + 1, dinner.getCurrentGuests());
-        assertFalse(result.getIsAccepted);
+        assertFalse(result.getIsAccepted());
     }
-*/
+    
+    @Test
+    void should_be_able_to_leave_feedback () {
+        //todo
+    }
+    
+    @Test
+    void should_not_be_able_to_leave_feedback_two_times_for_one_person () {
+        //todo
+    }
 
     private AttendeeRecord createAcceptedAttendeeRecord() {
         return new AttendeeRecord(
@@ -170,14 +199,6 @@ public class RepositoryUserServiceTest {
                 "This is a description",
                 location,
                 localDateTime
-        );
-    }
-
-    private JoinDinnerRequest createJoinDinnerRequest() {
-        Dinner dinner = createDinner();
-        return new JoinDinnerRequest(
-                user,
-                dinner
         );
     }
 

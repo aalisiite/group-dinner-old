@@ -5,10 +5,7 @@ import io.codelex.groupdinner.InMemory.service.AttendeeService;
 import io.codelex.groupdinner.InMemory.service.DinnerService;
 import io.codelex.groupdinner.InMemory.service.UsersService;
 import io.codelex.groupdinner.UserService;
-import io.codelex.groupdinner.api.Attendee;
-import io.codelex.groupdinner.api.CreateDinnerRequest;
-import io.codelex.groupdinner.api.Dinner;
-import io.codelex.groupdinner.api.User;
+import io.codelex.groupdinner.api.*;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
@@ -60,6 +57,11 @@ public class InMemoryUserService implements UserService {
             dinner.get().incrementCurrentGuests();
             return attendee;
         }
+        return null;
+    }
+
+    @Override //todo
+    public Feedback leaveFeedback(String provider, Long dinnerId, LeaveFeedbackRequest request) {
         return null;
     }
 }

@@ -1,19 +1,28 @@
 package io.codelex.groupdinner.api;
 
-import io.codelex.groupdinner.repository.model.UserRecord;
-
-//@Table
-//@Entity
 public class Feedback {
 
+    private Long id;
     private User provider;
     private User receiver;
-    private boolean rating;
+    private Boolean rating;
 
-    public Feedback(User provider, User receiver, boolean rating) {
+    public Feedback(Long id, User provider, User receiver, Boolean rating) {
+        this.id = id;
         this.provider = provider;
         this.receiver = receiver;
         this.rating = rating;
+    }
+
+    public Feedback() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public User getProvider() {
@@ -32,11 +41,11 @@ public class Feedback {
         this.receiver = receiver;
     }
 
-    public boolean isRating() {
+    public Boolean isRating() {
         return rating;
     }
 
-    public void setRating(boolean rating) {
+    public void setRating(Boolean rating) {
         this.rating = rating;
     }
 }

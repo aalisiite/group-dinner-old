@@ -17,6 +17,9 @@ public class AttendeeRecord {
     private UserRecord user;
     private boolean isAccepted;
 
+    public AttendeeRecord() {
+    }
+
     public AttendeeRecord(DinnerRecord dinner, UserRecord user, boolean isAccepted) {
         this.dinner = dinner;
         this.user = user;
@@ -51,7 +54,7 @@ public class AttendeeRecord {
         return isAccepted;
     }
 
-    public void setIsAccepted (boolean isAccepted) {
+    public void setIsAccepted(boolean isAccepted) {
         this.isAccepted = isAccepted;
     }
 

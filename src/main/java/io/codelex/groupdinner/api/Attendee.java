@@ -1,5 +1,7 @@
 package io.codelex.groupdinner.api;
 
+import java.util.Objects;
+
 public class Attendee {
 
     private Long id;
@@ -38,11 +40,26 @@ public class Attendee {
         this.user = user;
     }
 
-    public boolean getIsAccepted () {
+    public boolean getIsAccepted() {
         return isAccepted;
     }
 
     public void setIsAccepted(boolean isAccepted) {
         this.isAccepted = isAccepted;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Attendee attendee = (Attendee) o;
+        return id.equals(attendee.id) &&
+                dinner.equals(attendee.dinner) &&
+                user.equals(attendee.user);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, dinner, user);
     }
 }
