@@ -121,12 +121,12 @@ public class RepositoryUserServiceTest {
     }
     
     @Test
-    void should_be_able_to_leave_feedback () {
+    public void should_be_able_to_leave_feedback () {
         //todo
     }
     
     @Test
-    void should_not_be_able_to_leave_feedback_two_times_for_one_person () {
+    public void should_not_be_able_to_leave_feedback_two_times_for_one_person () {
         //todo
     }
 

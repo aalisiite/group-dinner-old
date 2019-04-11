@@ -79,12 +79,12 @@ public class AttendeeRecordRepositoryTest extends Assertions {
                 "a.kalnina@gmail.com"
         );
         userRecord2 = userRecordRepository.save(userRecord2);
-        AttendeeRecord attendeeRecord = new AttendeeRecord(
+        AttendeeRecord attendeeRecord2 = new AttendeeRecord(
                 dinnerRecord,
                 userRecord2,
                 false
         );
-        attendeeRecordRepository.save(attendeeRecord);
+        attendeeRecordRepository.save(attendeeRecord2);
 
         //when
         List<AttendeeRecord> attendeeRecords = attendeeRecordRepository.findDinnerAttendees(dinnerRecord.getId(), true);
