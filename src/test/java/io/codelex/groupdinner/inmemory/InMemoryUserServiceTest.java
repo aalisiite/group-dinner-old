@@ -1,8 +1,8 @@
-package io.codelex.groupdinner.InMemory;
+package io.codelex.groupdinner.inmemory;
 
-import io.codelex.groupdinner.InMemory.service.AttendeeService;
-import io.codelex.groupdinner.InMemory.service.DinnerService;
-import io.codelex.groupdinner.InMemory.service.UsersService;
+import io.codelex.groupdinner.inmemory.service.AttendeeService;
+import io.codelex.groupdinner.inmemory.service.DinnerService;
+import io.codelex.groupdinner.inmemory.service.UsersService;
 import io.codelex.groupdinner.api.Attendee;
 import io.codelex.groupdinner.api.CreateDinnerRequest;
 import io.codelex.groupdinner.api.Dinner;

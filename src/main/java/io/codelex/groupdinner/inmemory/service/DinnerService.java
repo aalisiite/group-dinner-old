@@ -1,4 +1,4 @@
-package io.codelex.groupdinner.InMemory.service;
+package io.codelex.groupdinner.inmemory.service;
 
 import io.codelex.groupdinner.api.Dinner;
 

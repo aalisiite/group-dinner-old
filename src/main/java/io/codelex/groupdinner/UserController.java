@@ -13,8 +13,12 @@ import java.security.Principal;
 @RequestMapping("/api")
 public class UserController {
 
-    @Autowired
+
     private UserService userService;
+    
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping("/dinners")
     public ResponseEntity<Dinner> createDinner(@Valid @RequestBody CreateDinnerRequest request) {
