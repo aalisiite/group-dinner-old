@@ -3,7 +3,8 @@ package io.codelex.groupdinner.repository;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.FeedbackRecord;
 import io.codelex.groupdinner.repository.model.UserRecord;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;

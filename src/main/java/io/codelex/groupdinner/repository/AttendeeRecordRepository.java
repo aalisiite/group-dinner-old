@@ -20,7 +20,7 @@ public interface AttendeeRecordRepository extends JpaRepository<AttendeeRecord, 
             + " where attendee.dinner.id = :dinner_id "
             + " and attendee.user.id = :user_id ")
     boolean getAttendeeIsAccepted(
-            @Param("dinner_id") Long dinner_id,
-            @Param("user_id") Long user_id
+            @Param("dinner_id") Long dinnerId,
+            @Param("user_id") Long userId
     );
 }

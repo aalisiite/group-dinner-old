@@ -97,7 +97,6 @@ class DinnerRecordRepositoryTest extends Assertions {
         assertEquals(initialGuests + 1, result.get().getCurrentGuests());
     }
 
-
     private DinnerRecord createDinnerRecord() {
         DinnerRecord dinnerRecord = new DinnerRecord(
                 "This is a title",
