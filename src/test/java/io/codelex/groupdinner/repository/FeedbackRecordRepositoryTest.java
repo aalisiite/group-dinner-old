@@ -47,14 +47,13 @@ public class FeedbackRecordRepositoryTest extends Assertions {
     @Test
     public void should_return_feedback_by_provider_receiver_ids () {
         //given
-        userRecordRepository.save(userRecord);
+        userRecord = userRecordRepository.save(userRecord);
         UserRecord userRecord2 = new UserRecord(
                 "Anna",
                 "Kalniņa",
                 "a.kalnina@gmail.com"
         );
-        userRecord2.setId(2L);
-        userRecordRepository.save(userRecord2);
+        userRecord2 = userRecordRepository.save(userRecord2);
         FeedbackRecord feedbackRecord = new FeedbackRecord(
                 userRecord,
                 userRecord2,
@@ -73,14 +72,13 @@ public class FeedbackRecordRepositoryTest extends Assertions {
     @Test
     public void should_return_true_if_given_feedback_present () {
         //given
-        userRecordRepository.save(userRecord);
+        userRecord = userRecordRepository.save(userRecord);
         UserRecord userRecord2 = new UserRecord(
                 "Anna",
                 "Kalniņa",
                 "a.kalnina@gmail.com"
         );
-        userRecord2.setId(2L);
-        userRecordRepository.save(userRecord2);
+        userRecord2 = userRecordRepository.save(userRecord2);
         FeedbackRecord feedbackRecord = new FeedbackRecord(
                 userRecord,
                 userRecord2,
@@ -113,7 +111,6 @@ public class FeedbackRecordRepositoryTest extends Assertions {
                 location,
                 localDateTime
         );
-        dinnerRecord.setId(1L);
         return dinnerRecord;
     }
 
@@ -123,7 +120,6 @@ public class FeedbackRecordRepositoryTest extends Assertions {
                 "Berzins",
                 "berzins@gmai.com"
         );
-        userRecord.setId(1L);
         return userRecord;
     }
     

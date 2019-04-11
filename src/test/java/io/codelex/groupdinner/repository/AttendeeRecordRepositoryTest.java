@@ -44,23 +44,21 @@ public class AttendeeRecordRepositoryTest extends Assertions {
     public void should_return_all_accepted_attendees_to_given_dinner() {
 
         //given
-        userRecordRepository.save(userRecord);
-        dinnerRecordRepository.save(this.dinnerRecord);
+        userRecord = userRecordRepository.save(userRecord);
+        dinnerRecord = dinnerRecordRepository.save(dinnerRecord);
         UserRecord userRecord2 = new UserRecord(
                 "Anna",
                 "Kalniņa",
                 "a.kalnina@gmail.com"
         );
-        userRecord2.setId(2L);
-        userRecordRepository.save(userRecord2);
+        userRecord2 = userRecordRepository.save(userRecord2);
         AttendeeRecord attendeeRecord2 = new AttendeeRecord(
                 dinnerRecord,
                 userRecord2,
                 true
         );
-        attendeeRecord2.setId(2L);
-        attendeeRecordRepository.save(attendeeRecord);
-        attendeeRecordRepository.save(attendeeRecord2);
+        attendeeRecord = attendeeRecordRepository.save(attendeeRecord);
+        attendeeRecord2 = attendeeRecordRepository.save(attendeeRecord2);
 
         //when
         List<AttendeeRecord> attendeeRecords = attendeeRecordRepository.findDinnerAttendees(dinnerRecord.getId(), true);
@@ -73,20 +71,20 @@ public class AttendeeRecordRepositoryTest extends Assertions {
     public void should_return_all_pending_attendees_to_given_dinner() {
 
         //given
-        userRecordRepository.save(userRecord);
-        dinnerRecordRepository.save(dinnerRecord);
+        userRecord = userRecordRepository.save(userRecord);
+        dinnerRecord = dinnerRecordRepository.save(dinnerRecord);
         UserRecord userRecord2 = new UserRecord(
                 "Anna",
                 "Kalniņa",
                 "a.kalnina@gmail.com"
         );
-        userRecord2.setId(2L);
-        userRecordRepository.save(userRecord2);
-        attendeeRecordRepository.save(new AttendeeRecord(
+        userRecord2 = userRecordRepository.save(userRecord2);
+        AttendeeRecord attendeeRecord = new AttendeeRecord(
                 dinnerRecord,
                 userRecord2,
-                false
-        ));
+                false 
+        );
+        attendeeRecord = attendeeRecordRepository.save(attendeeRecord);
 
         //when
         List<AttendeeRecord> attendeeRecords = attendeeRecordRepository.findDinnerAttendees(dinnerRecord.getId(), true);
@@ -98,9 +96,9 @@ public class AttendeeRecordRepositoryTest extends Assertions {
     @Test
     void should_return_attendee_status() {
         //given
-        userRecordRepository.save(userRecord);
-        dinnerRecordRepository.save(dinnerRecord);
-        attendeeRecordRepository.save(attendeeRecord);
+        userRecord = userRecordRepository.save(userRecord);
+        dinnerRecord = dinnerRecordRepository.save(dinnerRecord);
+        attendeeRecord = attendeeRecordRepository.save(attendeeRecord);
 
         //when
         boolean result = attendeeRecordRepository.getAttendeeIsAccepted(dinnerRecord.getId(), userRecord.getId());
@@ -118,7 +116,6 @@ public class AttendeeRecordRepositoryTest extends Assertions {
                 location,
                 localDateTime
         );
-        dinnerRecord.setId(1L);
         return dinnerRecord;
     }
 
@@ -128,7 +125,6 @@ public class AttendeeRecordRepositoryTest extends Assertions {
                 "Berzins",
                 "berzins@gmai.com"
         );
-        userRecord.setId(1L);
         return userRecord;
     }
 
@@ -138,7 +134,6 @@ public class AttendeeRecordRepositoryTest extends Assertions {
                 userRecord,
                 true
         );
-        attendeeRecord.setId(1L);
         return attendeeRecord;
     }
 

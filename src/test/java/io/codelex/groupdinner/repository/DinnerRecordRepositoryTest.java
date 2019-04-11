@@ -46,8 +46,8 @@ class DinnerRecordRepositoryTest extends Assertions {
     void is_dinner_present_should_return_true_when_match_found() {
 
         //given
-        userRecordRepository.save(userRecord);
-        DinnerRecord dinnerRecord = dinnerRecordRepository.save(this.dinnerRecord);
+        userRecord = userRecordRepository.save(userRecord);
+        dinnerRecord = dinnerRecordRepository.save(this.dinnerRecord);
 
         //when
         boolean isDinnerPresent = dinnerRecordRepository.isDinnerPresent(
@@ -83,8 +83,8 @@ class DinnerRecordRepositoryTest extends Assertions {
     @Test //todo
     void should_increment_current_guests_by_one() {
         //given
-        userRecordRepository.save(userRecord);
-        DinnerRecord dinnerRecord = dinnerRecordRepository.save(this.dinnerRecord);
+        userRecord = userRecordRepository.save(userRecord);
+        dinnerRecord = dinnerRecordRepository.save(dinnerRecord);
 
         Integer initialGuests = dinnerRecord.getCurrentGuests();
 
@@ -107,7 +107,6 @@ class DinnerRecordRepositoryTest extends Assertions {
                 location,
                 localDateTime
         );
-        dinnerRecord.setId(1L);
         return dinnerRecord;
     }
 
@@ -117,7 +116,6 @@ class DinnerRecordRepositoryTest extends Assertions {
                 "Berzins",
                 "berzins@gmai.com"
         );
-        userRecord.setId(1L);
         return userRecord;
     }
 
