@@ -1,11 +1,11 @@
-package io.codelex.groupdinner.InMemory;
+package io.codelex.groupdinner.inMemory;
 
 
-import io.codelex.groupdinner.InMemory.service.AttendeeService;
-import io.codelex.groupdinner.InMemory.service.DinnerService;
-import io.codelex.groupdinner.InMemory.service.UsersService;
 import io.codelex.groupdinner.UserService;
 import io.codelex.groupdinner.api.*;
+import io.codelex.groupdinner.inMemory.service.AttendeeService;
+import io.codelex.groupdinner.inMemory.service.DinnerService;
+import io.codelex.groupdinner.inMemory.service.UsersService;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;

@@ -1,12 +1,12 @@
-package io.codelex.groupdinner.InMemory;
+package io.codelex.groupdinner.inMemory;
 
-import io.codelex.groupdinner.InMemory.service.AttendeeService;
-import io.codelex.groupdinner.InMemory.service.DinnerService;
-import io.codelex.groupdinner.InMemory.service.UsersService;
 import io.codelex.groupdinner.api.Attendee;
 import io.codelex.groupdinner.api.CreateDinnerRequest;
 import io.codelex.groupdinner.api.Dinner;
 import io.codelex.groupdinner.api.User;
+import io.codelex.groupdinner.inMemory.service.AttendeeService;
+import io.codelex.groupdinner.inMemory.service.DinnerService;
+import io.codelex.groupdinner.inMemory.service.UsersService;
 import org.junit.Test;
 import org.mockito.Mockito;
 

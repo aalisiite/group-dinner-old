@@ -49,7 +49,7 @@ public class RepositoryUserService implements UserService {
                     dinnerRecord.getCreator(),
                     true
             );
-            attendeeRecordRepository.save(attendeeRecord);
+            attendeeRecord = attendeeRecordRepository.save(attendeeRecord);
             return toDinner.apply(dinnerRecord);
         } else {
             throw new IllegalStateException("Dinner already present");
@@ -63,13 +63,13 @@ public class RepositoryUserService implements UserService {
         Long userIdLong = Long.parseLong(userId);
         if (dinnerRecord.isPresent()) {
             boolean isAccepted = dinnerRecord.get().shouldAcceptRequest();
-            dinnerRecordRepository.incrementCurrentGuests(dinnerRecord.get().getId());
+            dinnerRecord.get().incrementCurrentGuests();
             AttendeeRecord attendeeRecord = new AttendeeRecord(
                     dinnerRecord.get(),
                     userRecordRepository.findById(userIdLong).get(),
                     isAccepted
             );
-            attendeeRecordRepository.save(attendeeRecord);
+            attendeeRecord = attendeeRecordRepository.save(attendeeRecord);
             return toAttendee.apply(attendeeRecord);
         } else {
             throw new IllegalArgumentException("No such dinner present");
@@ -91,7 +91,7 @@ public class RepositoryUserService implements UserService {
                     receiverRecord.get(),
                     request.getFeedback()
             );
-            feedbackRecordRepository.save(feedbackRecord);
+            feedbackRecord = feedbackRecordRepository.save(feedbackRecord);
             return toFeedback.apply(feedbackRecord);
         }
     }

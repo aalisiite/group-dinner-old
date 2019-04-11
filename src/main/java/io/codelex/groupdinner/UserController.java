@@ -1,7 +1,6 @@
 package io.codelex.groupdinner;
 
 import io.codelex.groupdinner.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +12,11 @@ import java.security.Principal;
 @RequestMapping("/api")
 public class UserController {
 
-    @Autowired
     private UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping("/dinners")
     public ResponseEntity<Dinner> createDinner(@Valid @RequestBody CreateDinnerRequest request) {

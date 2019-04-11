@@ -1,4 +1,4 @@
-package io.codelex.groupdinner.InMemory.service;
+package io.codelex.groupdinner.inMemory.service;
 
 import io.codelex.groupdinner.api.Attendee;
 import org.springframework.stereotype.Component;

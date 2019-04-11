@@ -27,6 +27,9 @@ public interface DinnerRecordRepository extends JpaRepository<DinnerRecord, Long
             @Param("dateTime") LocalDateTime dateTime
     );
 
+
+    //todo
+    //not needed
     @Modifying
     @Query("UPDATE DinnerRecord dinner SET dinner.currentGuests = dinner.currentGuests + 1 " +
             "WHERE dinner.id = :id")

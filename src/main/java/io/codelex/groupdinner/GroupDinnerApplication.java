@@ -8,13 +8,13 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 @SpringBootApplication
 public class GroupDinnerApplication extends SpringBootServletInitializer {
 
+    public static void main(String[] args) {
+        SpringApplication.run(GroupDinnerApplication.class, args);
+    }
+
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(GroupDinnerApplication.class);
-    }
-
-    public static void main(String[] args) {
-        SpringApplication.run(GroupDinnerApplication.class, args);
     }
 }
 

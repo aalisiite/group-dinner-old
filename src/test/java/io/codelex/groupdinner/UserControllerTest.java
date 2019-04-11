@@ -17,6 +17,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -35,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
-//@Import(WebConfiguration.class)
+@Import(WebConfiguration.class)
 public class UserControllerTest {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -70,7 +72,8 @@ public class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-    private UserService userService = Mockito.mock(UserService.class);
+    @MockBean
+    private UserService userService;
     private UserRecord userRecord = createUserRecord();
     private User user = createUser();
     private String location = createLocation();
