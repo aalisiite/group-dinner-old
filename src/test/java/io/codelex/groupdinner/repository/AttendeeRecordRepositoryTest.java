@@ -82,9 +82,9 @@ public class AttendeeRecordRepositoryTest extends Assertions {
         AttendeeRecord attendeeRecord = new AttendeeRecord(
                 dinnerRecord,
                 userRecord2,
-                false 
+                false
         );
-        attendeeRecord = attendeeRecordRepository.save(attendeeRecord);
+        attendeeRecordRepository.save(attendeeRecord);
 
         //when
         List<AttendeeRecord> attendeeRecords = attendeeRecordRepository.findDinnerAttendees(dinnerRecord.getId(), true);
