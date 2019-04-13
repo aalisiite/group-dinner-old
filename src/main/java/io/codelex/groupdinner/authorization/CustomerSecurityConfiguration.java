@@ -14,6 +14,6 @@ class CustomerSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/api/sign-in", "/api/register").permitAll()
-                .anyRequest().hasRole("CUSTOMER");
+                .anyRequest().hasRole(Role.REGISTERED_CLIENT.name());
     }
 }

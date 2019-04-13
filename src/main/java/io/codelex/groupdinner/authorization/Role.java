@@ -1,5 +1,5 @@
 package io.codelex.groupdinner.authorization;
 
-enum  Role {
-   
+enum Role {
+    ADMIN, REGISTERED_CLIENT
 }

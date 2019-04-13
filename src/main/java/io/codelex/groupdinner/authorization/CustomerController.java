@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
+import static io.codelex.groupdinner.authorization.Role.*;
+
 @RestController
 @RequestMapping("/api")
 class CustomerController {
@@ -20,10 +22,10 @@ class CustomerController {
         this.authService = authService;
     }
 
-    @PostMapping("/log-in")
+    @PostMapping("/sign-in")
     public ResponseEntity<UserData> signIn(@RequestParam("email") String email,
                                            @RequestParam("password") String password) {
-        authService.authorise(email, password, "CUSTOMER");
+        authService.authorise(email, password, REGISTERED_CLIENT);
         return new ResponseEntity<>(service.findUser(email, password), HttpStatus.OK);
     }
 
@@ -31,7 +33,7 @@ class CustomerController {
     public void register(
             @RequestParam("email") String email,
             @RequestParam("password") String password) {
-        authService.authorise(email, password, "CUSTOMER");
+        authService.authorise(email, password, REGISTERED_CLIENT);
         service.addUser(new UserData(email, password));
     }
 

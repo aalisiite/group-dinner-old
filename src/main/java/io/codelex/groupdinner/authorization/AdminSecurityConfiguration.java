@@ -5,6 +5,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
+import static io.codelex.groupdinner.authorization.Role.*;
+
 @Order(200)
 @Configuration
 class AdminSecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -14,6 +16,6 @@ class AdminSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/api/sign-in").permitAll()
-                .anyRequest().hasRole("ADMIN");
+                .anyRequest().hasRole(ADMIN.name());
     }
 }
