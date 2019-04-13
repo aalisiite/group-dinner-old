@@ -1,4 +1,4 @@
-package io.codelex.groupdinner.repository;
+package io.codelex.groupdinner.repository.mapper;
 
 import io.codelex.groupdinner.api.User;
 import io.codelex.groupdinner.repository.model.UserRecord;

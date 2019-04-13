@@ -1,5 +1,13 @@
-package io.codelex.groupdinner.repository;
+package io.codelex.groupdinner.repository.service;
 
+import io.codelex.groupdinner.repository.AttendeeRecordRepository;
+import io.codelex.groupdinner.repository.DinnerRecordRepository;
+import io.codelex.groupdinner.repository.FeedbackRecordRepository;
+import io.codelex.groupdinner.repository.UserRecordRepository;
+import io.codelex.groupdinner.repository.mapper.MapAttendeeRecordToAttendee;
+import io.codelex.groupdinner.repository.mapper.MapDinnerRecordToDinner;
+import io.codelex.groupdinner.repository.mapper.MapFeedbackRecordToFeedback;
+import io.codelex.groupdinner.repository.mapper.MapUserRecordToUser;
 import io.codelex.groupdinner.UserService;
 import io.codelex.groupdinner.api.*;
 import io.codelex.groupdinner.repository.model.AttendeeRecord;

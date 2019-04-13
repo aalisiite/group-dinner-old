@@ -1,4 +1,4 @@
-package io.codelex.groupdinner.authorization;
+package io.codelex.groupdinner;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

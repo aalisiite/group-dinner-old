@@ -1,7 +1,7 @@
 package io.codelex.groupdinner.inmemory;
 
-import io.codelex.groupdinner.authorization.UserDataService;
-import io.codelex.groupdinner.authorization.api.UserData;
+import io.codelex.groupdinner.UserDataService;
+import io.codelex.groupdinner.api.UserData;
 
 import java.util.ArrayList;
 import java.util.List;

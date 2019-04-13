@@ -1,8 +1,7 @@
-package io.codelex.groupdinner.authorization;
+package io.codelex.groupdinner;
 
-import io.codelex.groupdinner.authorization.api.UserData;
-import io.codelex.groupdinner.inmemory.InMemoryUserDataService;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.codelex.groupdinner.api.UserData;
+import io.codelex.groupdinner.repository.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,16 +9,17 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.Optional;
 
-import static io.codelex.groupdinner.authorization.Role.*;
+import static io.codelex.groupdinner.repository.service.Role.*;
 
 @RestController
 @RequestMapping("/api")
-class CustomerController {
+public class CustomerController {
+    
     private final AuthService authService;
-    @Autowired
-    InMemoryUserDataService service;
+    private UserDataService service;
 
-    CustomerController(AuthService authService) {
+    CustomerController(UserDataService userDataService, AuthService authService) {
+        this.service = userDataService;
         this.authService = authService;
     }
 

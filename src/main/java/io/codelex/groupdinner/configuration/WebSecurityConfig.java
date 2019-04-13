@@ -1,4 +1,4 @@
-package io.codelex.groupdinner;
+package io.codelex.groupdinner.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

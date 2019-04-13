@@ -1,4 +1,4 @@
-package io.codelex.groupdinner.authorization.api;
+package io.codelex.groupdinner.api;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

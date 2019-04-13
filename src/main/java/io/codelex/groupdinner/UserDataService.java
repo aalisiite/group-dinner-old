@@ -1,6 +1,6 @@
-package io.codelex.groupdinner.authorization;
+package io.codelex.groupdinner;
 
-import io.codelex.groupdinner.authorization.api.UserData;
+import io.codelex.groupdinner.api.UserData;
 
 import java.util.Optional;
 

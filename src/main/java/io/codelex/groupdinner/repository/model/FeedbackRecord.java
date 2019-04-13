@@ -3,7 +3,6 @@ package io.codelex.groupdinner.repository.model;
 import javax.persistence.*;
 import java.util.Objects;
 
-
 @Entity
 @Table(name = "feedbacks")
 public class FeedbackRecord {

@@ -1,4 +1,4 @@
-package io.codelex.groupdinner.authorization.api;
+package io.codelex.groupdinner.api;
 
 public class UserData {
     private String email;
