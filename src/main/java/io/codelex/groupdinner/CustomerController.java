@@ -16,10 +16,10 @@ import static io.codelex.groupdinner.repository.service.Role.*;
 public class CustomerController {
     
     private final AuthService authService;
-    private UserDataService service;
+    private UserAuthorizationService service;
 
-    CustomerController(UserDataService userDataService, AuthService authService) {
-        this.service = userDataService;
+    CustomerController(UserAuthorizationService userAuthorizationService, AuthService authService) {
+        this.service = userAuthorizationService;
         this.authService = authService;
     }
 

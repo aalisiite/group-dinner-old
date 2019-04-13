@@ -1,13 +1,13 @@
 package io.codelex.groupdinner.repository.service;
 
-import io.codelex.groupdinner.UserDataService;
+import io.codelex.groupdinner.UserAuthorizationService;
 import io.codelex.groupdinner.api.UserAuthorization;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
-public class RepositoryUserDataService implements UserDataService {
+public class RepositoryUserAuthorizationService implements UserAuthorizationService {
     
     @Override
     public Optional<UserAuthorization> addUser(UserAuthorization userAuthorization) {

@@ -41,13 +41,7 @@
             </column>
             <column name="current_guests" type="int">
                 <constraints nullable="true"/>
-            </column><!--
-            <column name="accepted_requests" type="bigint">
-                <constraints nullable="true"/>
             </column>
-            <column name="pending_requests" type="bigint">
-                <constraints nullable="true"/>
-            </column>-->
             <column name="description" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
@@ -65,10 +59,6 @@
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"
         />
-        <createIndex tableName="dinners" indexName="idx_dinners_creator_id">
-            <column name="creator_id"/>
-        </createIndex>
-        <!--todo what is index?-->
     </changeSet>
 
     <changeSet id="create attendees table" author="alise">
@@ -104,8 +94,8 @@
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"
         />
-        <createIndex tableName="attendees" indexName="idx_attendee_user_id">
-            <column name="user_id"/>
+        <createIndex tableName="attendees" indexName="idx_attendee_dinner_id">
+            <column name="dinner_id"/>
         </createIndex>
     </changeSet>
 
@@ -143,9 +133,18 @@
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"
         />
-        <createIndex tableName="feedbacks" indexName="idx_feedbacks_receiver_id">
-            <column name="receiver_id"/>
-        </createIndex>
+    </changeSet>
+
+
+    <changeSet id="create simple authorization table" author="nikola">
+        <createTable tableName="authorizations">
+            <column name="email" type="varchar(100)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_authorization"/>
+            </column>
+            <column name="password" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
     </changeSet>
 
 </databaseChangeLog>

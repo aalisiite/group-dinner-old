@@ -4,7 +4,7 @@ import io.codelex.groupdinner.api.UserAuthorization;
 
 import java.util.Optional;
 
-public interface UserDataService {
+public interface UserAuthorizationService {
 
     Optional<UserAuthorization> addUser(UserAuthorization userAuthorization);
 

@@ -1,17 +1,17 @@
 package io.codelex.groupdinner.inmemory;
 
-import io.codelex.groupdinner.UserDataService;
+import io.codelex.groupdinner.UserAuthorizationService;
 import io.codelex.groupdinner.api.UserAuthorization;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class InMemoryUserDataService implements UserDataService {
+public class InMemoryUserAuthorizationService implements UserAuthorizationService {
 
     private List<UserAuthorization> registrations = new ArrayList<>();
 
-    public InMemoryUserDataService() {
+    public InMemoryUserAuthorizationService() {
     }
 
     @Override
