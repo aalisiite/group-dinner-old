@@ -10,7 +10,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.codelex.groupdinner.api.CreateDinnerRequest;
 import io.codelex.groupdinner.api.Dinner;
 import io.codelex.groupdinner.api.User;
-import io.codelex.groupdinner.repository.RepositoryUserService;
+import io.codelex.groupdinner.repository.service.RepositoryUserService;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.UserRecord;
 import org.junit.Test;
@@ -126,7 +126,8 @@ public class UserControllerTest {
         return new UserRecord(
                 "Janis",
                 "Berzins",
-                "berzins@gmai.com"
+                "berzins@gmai.com",
+                "password"
         );
     }
 

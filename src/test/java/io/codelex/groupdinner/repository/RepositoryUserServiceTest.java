@@ -9,6 +9,7 @@ import io.codelex.groupdinner.repository.mapper.MapDinnerRecordToDinner;
 import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.UserRecord;
+import io.codelex.groupdinner.repository.service.RepositoryUserService;
 import org.junit.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mockito;
@@ -153,7 +154,8 @@ public class RepositoryUserServiceTest {
         return new UserRecord(
                 "Janis",
                 "Berzins",
-                "berzins@gmai.com"
+                "berzins@gmai.com",
+                "password"
         );
     }
 

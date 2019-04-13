@@ -113,7 +113,8 @@ class DinnerRecordRepositoryTest extends Assertions {
         UserRecord userRecord = new UserRecord(
                 "Janis",
                 "Berzins",
-                "berzins@gmai.com"
+                "berzins@gmai.com",
+                "password"
         );
         return userRecord;
     }

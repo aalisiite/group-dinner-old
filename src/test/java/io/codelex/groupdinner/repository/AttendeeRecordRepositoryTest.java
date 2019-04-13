@@ -49,7 +49,8 @@ public class AttendeeRecordRepositoryTest extends Assertions {
         UserRecord userRecord2 = new UserRecord(
                 "Anna",
                 "Kalniņa",
-                "a.kalnina@gmail.com"
+                "a.kalnina@gmail.com",
+                "password"
         );
         userRecord2 = userRecordRepository.save(userRecord2);
         AttendeeRecord attendeeRecord2 = new AttendeeRecord(
@@ -76,7 +77,8 @@ public class AttendeeRecordRepositoryTest extends Assertions {
         UserRecord userRecord2 = new UserRecord(
                 "Anna",
                 "Kalniņa",
-                "a.kalnina@gmail.com"
+                "a.kalnina@gmail.com",
+                "password"
         );
         userRecord2 = userRecordRepository.save(userRecord2);
         AttendeeRecord attendeeRecord2 = new AttendeeRecord(
@@ -123,7 +125,8 @@ public class AttendeeRecordRepositoryTest extends Assertions {
         UserRecord userRecord = new UserRecord(
                 "Janis",
                 "Berzins",
-                "berzins@gmai.com"
+                "berzins@gmai.com",
+                "password"
         );
         return userRecord;
     }

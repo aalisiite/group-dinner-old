@@ -4,10 +4,7 @@ import io.codelex.groupdinner.repository.AttendeeRecordRepository;
 import io.codelex.groupdinner.repository.DinnerRecordRepository;
 import io.codelex.groupdinner.repository.FeedbackRecordRepository;
 import io.codelex.groupdinner.repository.UserRecordRepository;
-import io.codelex.groupdinner.repository.mapper.MapAttendeeRecordToAttendee;
-import io.codelex.groupdinner.repository.mapper.MapDinnerRecordToDinner;
-import io.codelex.groupdinner.repository.mapper.MapFeedbackRecordToFeedback;
-import io.codelex.groupdinner.repository.mapper.MapUserRecordToUser;
+import io.codelex.groupdinner.repository.mapper.*;
 import io.codelex.groupdinner.UserService;
 import io.codelex.groupdinner.api.*;
 import io.codelex.groupdinner.repository.model.AttendeeRecord;
@@ -32,6 +29,7 @@ public class RepositoryUserService implements UserService {
     private final MapDinnerRecordToDinner toDinner = new MapDinnerRecordToDinner();
     private final MapAttendeeRecordToAttendee toAttendee = new MapAttendeeRecordToAttendee();
     private final MapFeedbackRecordToFeedback toFeedback = new MapFeedbackRecordToFeedback();
+    private final PasswordEncrypt passwordEncrypt = new PasswordEncrypt();
 
     public RepositoryUserService(DinnerRecordRepository dinnerRecordRepository, UserRecordRepository userRecordRepository, AttendeeRecordRepository attendeeRecordRepository, FeedbackRecordRepository feedbackRecordRepository) {
         this.dinnerRecordRepository = dinnerRecordRepository;
@@ -61,6 +59,35 @@ public class RepositoryUserService implements UserService {
             return toDinner.apply(dinnerRecord);
         } else {
             throw new IllegalStateException("Dinner already present");
+        }
+    }
+
+    @Override
+    public User registerUser(String firstName, String lastName, String email, String password) {
+        if (!userRecordRepository.isUserPresent(email)) {
+            UserRecord userRecord = new UserRecord(
+                    firstName,
+                    lastName,
+                    email.toLowerCase().trim(),
+                    passwordEncrypt.hashPassword(password)
+            );
+            return toUser.apply(userRecord);
+        } else {
+            throw new IllegalStateException("email already exists");
+        }
+    }
+
+    @Override
+    public User authenticateUser(String email, String password) {
+        UserRecord userRecord = userRecordRepository.findByEmail(email.toLowerCase().trim());
+        if (userRecord != null) {
+            if (passwordEncrypt.passwordMatches(password, userRecord.getPassword())){
+                return toUser.apply(userRecord);
+            } else {
+                throw new IllegalStateException("password incorrect");
+            }
+        } else {
+            throw new IllegalStateException("email incorrect");
         }
     }
 
@@ -123,24 +150,19 @@ public class RepositoryUserService implements UserService {
     private DinnerRecord createDinnerRecordFromRequest(CreateDinnerRequest request) {
         DinnerRecord dinnerRecord = new DinnerRecord();
         dinnerRecord.setTitle(request.getTitle());
-        dinnerRecord.setCreator(createOrGetUser(request.getCreator()));
+        dinnerRecord.setCreator(getUserById(request.getCreator()));
         dinnerRecord.setMaxGuests(request.getMaxGuests());
         dinnerRecord.setDescription(request.getDescription());
         dinnerRecord.setLocation(request.getLocation());
         dinnerRecord.setDateTime(request.getDateTime());
         return dinnerRecord;
     }
+    
 
-    private UserRecord createOrGetUser(User user) {
-        return userRecordRepository.findById(user.getId())
-                .orElseGet(() -> {
-                    UserRecord created = new UserRecord(
-                            user.getFirstName(),
-                            user.getLastName(),
-                            user.getEmail()
-                    );
-                    return userRecordRepository.save(created);
-                });
+    private UserRecord getUserById(User user) {
+        return userRecordRepository.findById(user.getId()).get();
     }
+    
+    
 
 }

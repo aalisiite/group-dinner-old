@@ -52,7 +52,8 @@ public class FeedbackRecordRepositoryTest extends Assertions {
         UserRecord userRecord2 = new UserRecord(
                 "Anna",
                 "Kalniņa",
-                "a.kalnina@gmail.com"
+                "a.kalnina@gmail.com",
+                "password"
         );
         userRecord2 = userRecordRepository.save(userRecord2);
         FeedbackRecord feedbackRecord = new FeedbackRecord(
@@ -77,7 +78,8 @@ public class FeedbackRecordRepositoryTest extends Assertions {
         UserRecord userRecord2 = new UserRecord(
                 "Anna",
                 "Kalniņa",
-                "a.kalnina@gmail.com"
+                "a.kalnina@gmail.com",
+                "password"
         );
         userRecord2 = userRecordRepository.save(userRecord2);
         FeedbackRecord feedbackRecord = new FeedbackRecord(
@@ -119,7 +121,8 @@ public class FeedbackRecordRepositoryTest extends Assertions {
         UserRecord userRecord = new UserRecord(
                 "Janis",
                 "Berzins",
-                "berzins@gmai.com"
+                "berzins@gmai.com",
+                "password"
         );
         return userRecord;
     }

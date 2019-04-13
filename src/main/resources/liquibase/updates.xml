@@ -20,6 +20,9 @@
             <column name="email" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
     </changeSet>
@@ -133,18 +136,6 @@
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"
         />
-    </changeSet>
-
-
-    <changeSet id="create simple authorization table" author="nikola">
-        <createTable tableName="authorizations">
-            <column name="email" type="varchar(100)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_authorization"/>
-            </column>
-            <column name="password" type="varchar(100)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
     </changeSet>
 
 </databaseChangeLog>

@@ -1,13 +1,15 @@
-package io.codelex.groupdinner.api;
+package io.codelex.groupdinner.inmemory;
 
 import java.util.Objects;
 
 public class AuthRequest {
-    
+
     private String email;
     private String password;
 
-    public AuthRequest(String email, String password) {
+    public AuthRequest(
+            String email,
+            String password) {
         this.email = email;
         this.password = password;
     }

@@ -23,5 +23,14 @@ public class UsersService {
                 .filter(it -> it.getId().equals(id))
                 .findFirst();
     }
+    
+    public Optional<User> getUserByEmail (String email) {
+        for (User user : users) {
+            if (user.getEmail().equals(email)){
+                return Optional.of(user);
+            }
+        }
+        return Optional.empty();
+    }
 
 }

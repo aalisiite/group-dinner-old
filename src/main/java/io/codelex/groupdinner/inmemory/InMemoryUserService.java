@@ -16,6 +16,7 @@ public class InMemoryUserService implements UserService {
     private UsersService usersService;
     private AtomicLong attendeeSequence = new AtomicLong(1L);
     private AtomicLong dinnerSequence = new AtomicLong(1L);
+    private AtomicLong userSequence = new AtomicLong(1L);
 
     public InMemoryUserService(AttendeeService attendeeService, DinnerService dinnerService, UsersService usersService) {
         this.attendeeService = attendeeService;
@@ -38,6 +39,27 @@ public class InMemoryUserService implements UserService {
         dinnerService.addDinner(dinner);
         attendeeService.addAttendee(new Attendee(attendeeSequence.getAndIncrement(), dinner, dinner.getCreator(), true));
         return dinner;
+    }
+
+    @Override
+    public User registerUser(String firstName, String lastName, String email, String password) {
+        Optional<User> user = usersService.getUserByEmail(email.toLowerCase());
+        if (user.isEmpty()) {
+            User newUser = new User(
+                    userSequence.getAndIncrement(),
+                    firstName,
+                    lastName,
+                    email
+            );
+            usersService.addUser(newUser);
+        }
+        return null;
+    }
+
+    @Override
+    public User authenticateUser(String email, String password) {
+        Optional<User> user = usersService.getUserByEmail(email.toLowerCase());
+        return user.orElse(null);
     }
 
     @Override
