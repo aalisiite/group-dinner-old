@@ -7,13 +7,13 @@ public class Attendee {
     private Long id;
     private Dinner dinner;
     private User user;
-    private boolean isAccepted;
+    private boolean accepted;
 
-    public Attendee(Long id, Dinner dinner, User user, boolean isAccepted) {
+    public Attendee(Long id, Dinner dinner, User user, boolean accepted) {
         this.id = id;
         this.dinner = dinner;
         this.user = user;
-        this.isAccepted = isAccepted;
+        this.accepted = accepted;
     }
 
     public Long getId() {
@@ -40,12 +40,12 @@ public class Attendee {
         this.user = user;
     }
 
-    public boolean getIsAccepted() {
-        return isAccepted;
+    public boolean isAccepted() {
+        return accepted;
     }
 
-    public void setIsAccepted(boolean isAccepted) {
-        this.isAccepted = isAccepted;
+    public void setAccepted(boolean accepted) {
+        this.accepted = accepted;
     }
 
     @Override

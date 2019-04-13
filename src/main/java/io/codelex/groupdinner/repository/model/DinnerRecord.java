@@ -17,7 +17,7 @@ public class DinnerRecord {
     @ManyToOne
     private UserRecord creator;
     private Integer maxGuests;
-    private Integer currentGuests = 1;
+    private Integer currentGuests = 1; //todo use count of attendees
     private String description;
     private String location;
     private LocalDateTime dateTime;

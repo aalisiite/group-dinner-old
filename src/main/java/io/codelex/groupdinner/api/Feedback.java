@@ -5,7 +5,7 @@ public class Feedback {
     private Long id;
     private User provider;
     private User receiver;
-    private Boolean rating;
+    private boolean rating;
 
     public Feedback(Long id, User provider, User receiver, Boolean rating) {
         this.id = id;
@@ -41,11 +41,11 @@ public class Feedback {
         this.receiver = receiver;
     }
 
-    public Boolean isRating() {
+    public boolean isRating() {
         return rating;
     }
 
-    public void setRating(Boolean rating) {
+    public void setRating(boolean rating) {
         this.rating = rating;
     }
 }

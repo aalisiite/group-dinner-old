@@ -52,7 +52,6 @@ class DinnerRecordRepositoryTest extends Assertions {
         //when
         boolean isDinnerPresent = dinnerRecordRepository.isDinnerPresent(
                 dinnerRecord.getTitle(),
-                dinnerRecord.getCreator().getId(),
                 dinnerRecord.getMaxGuests(),
                 dinnerRecord.getDescription(),
                 dinnerRecord.getLocation(),
@@ -69,7 +68,6 @@ class DinnerRecordRepositoryTest extends Assertions {
         //when
         boolean isDinnerPresent = dinnerRecordRepository.isDinnerPresent(
                 dinnerRecord.getTitle(),
-                dinnerRecord.getCreator().getId(),
                 dinnerRecord.getMaxGuests(),
                 dinnerRecord.getDescription(),
                 dinnerRecord.getLocation(),
@@ -78,23 +76,6 @@ class DinnerRecordRepositoryTest extends Assertions {
 
         //then
         assertFalse(isDinnerPresent);
-    }
-
-    @Test //todo
-    void should_increment_current_guests_by_one() {
-        //given
-        userRecord = userRecordRepository.save(userRecord);
-        dinnerRecord = dinnerRecordRepository.save(dinnerRecord);
-
-        Integer initialGuests = dinnerRecord.getCurrentGuests();
-
-        //when
-        dinnerRecordRepository.incrementCurrentGuests(dinnerRecord.getId());
-        dinnerRecordRepository.incrementCurrentGuests(dinnerRecord.getId());
-
-        //then
-        Optional<DinnerRecord> result = dinnerRecordRepository.findById(dinnerRecord.getId());
-        assertEquals(initialGuests + 1, result.get().getCurrentGuests());
     }
 
     private DinnerRecord createDinnerRecord() {

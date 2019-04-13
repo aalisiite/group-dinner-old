@@ -8,7 +8,7 @@ public interface UserService {
     
     User registerUser(RegistrationRequest request);
     
-    User authenticateUser(SigninRequest request);
+    User authenticateUser(SignInRequest request);
 
     Attendee joinDinner(String userId, Long dinnerId);
 

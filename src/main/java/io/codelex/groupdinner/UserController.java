@@ -34,7 +34,7 @@ public class UserController {
     public ResponseEntity<Feedback> leaveFeedback(
             Principal principal,
             @PathVariable Long id,
-            LeaveFeedbackRequest request) {
+            @Valid @RequestBody LeaveFeedbackRequest request) {
         return new ResponseEntity<>(userService.leaveFeedback(principal.getName(), id, request), HttpStatus.OK);
     }
 

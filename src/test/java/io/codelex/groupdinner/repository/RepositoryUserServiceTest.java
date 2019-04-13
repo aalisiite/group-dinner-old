@@ -13,6 +13,7 @@ import io.codelex.groupdinner.repository.service.RepositoryUserService;
 import org.junit.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mockito;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -29,7 +30,8 @@ public class RepositoryUserServiceTest {
     private UserRecordRepository userRecordRepository = Mockito.mock(UserRecordRepository.class);
     private AttendeeRecordRepository attendeeRecordRepository = Mockito.mock(AttendeeRecordRepository.class);
     private FeedbackRecordRepository feedbackRecordRepository = Mockito.mock(FeedbackRecordRepository.class);
-    private RepositoryUserService userModule = new RepositoryUserService(dinnerRecordRepository, userRecordRepository, attendeeRecordRepository, feedbackRecordRepository);
+    private final PasswordEncoder passwordEncoder = Mockito.mock(PasswordEncoder.class);
+    private RepositoryUserService userModule = new RepositoryUserService(dinnerRecordRepository, userRecordRepository, attendeeRecordRepository, feedbackRecordRepository, passwordEncoder);
     private LocalDateTime localDateTime = LocalDateTime.of(2019, 1, 1, 0, 0);
     private UserRecord userRecord = createUserRecord();
     private String location = createLocation();
@@ -44,7 +46,7 @@ public class RepositoryUserServiceTest {
         Dinner dinner = createDinner();
 
         //when
-        Mockito.when(dinnerRecordRepository.isDinnerPresent(any(), any(), any(), any(), any(), any()))
+        Mockito.when(dinnerRecordRepository.isDinnerPresent(any(), any(), any(), any(), any()))
                 .thenReturn(false);
         Mockito.when(dinnerRecordRepository.save(any()))
                 .thenReturn(dinnerRecord);
@@ -65,7 +67,7 @@ public class RepositoryUserServiceTest {
     @Test
     public void should_not_be_able_to_create_duplicate_dinner() {
         //when
-        Mockito.when(dinnerRecordRepository.isDinnerPresent(any(), any(), any(), any(), any(), any()))
+        Mockito.when(dinnerRecordRepository.isDinnerPresent(any(), any(), any(), any(), any()))
                 .thenReturn(true);
 
         //then
@@ -94,7 +96,7 @@ public class RepositoryUserServiceTest {
         Attendee result = userModule.joinDinner(principal.getName(), dinnerRecord.getId());
 
         //then
-        assertTrue(result.getIsAccepted());
+        assertTrue(result.isAccepted());
     }
 
 
@@ -120,7 +122,7 @@ public class RepositoryUserServiceTest {
         Attendee result = userModule.joinDinner(principal.getName(), dinnerRecord.getId());
 
         //then
-        assertFalse(result.getIsAccepted());
+        assertFalse(result.isAccepted());
     }
     
     @Test
@@ -162,7 +164,6 @@ public class RepositoryUserServiceTest {
     private CreateDinnerRequest createDinnerRequest() {
         return new CreateDinnerRequest(
                 "This is a title",
-                user,
                 2,
                 "This is a description",
                 location,

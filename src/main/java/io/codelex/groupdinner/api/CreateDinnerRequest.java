@@ -14,8 +14,6 @@ public class CreateDinnerRequest {
     @NotEmpty
     private String title;
     @NotNull
-    private User creator;
-    @NotNull
     private int maxGuests;
     @NotEmpty
     private String description;
@@ -25,13 +23,11 @@ public class CreateDinnerRequest {
     @JsonCreator
     public CreateDinnerRequest(
             @JsonProperty("title") @NotEmpty String title,
-            @JsonProperty("creator") @NotNull User creator,
             @JsonProperty("maxGuests") @NotNull Integer maxGuests,
             @JsonProperty("description") @NotEmpty String description,
             @JsonProperty("location") String location,
             @JsonProperty("dateTime") LocalDateTime dateTime) {
         this.title = title;
-        this.creator = creator;
         this.maxGuests = maxGuests;
         this.description = description;
         this.location = location;
@@ -44,14 +40,6 @@ public class CreateDinnerRequest {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public User getCreator() {
-        return creator;
-    }
-
-    public void setCreator(User creator) {
-        this.creator = creator;
     }
 
     public int getMaxGuests() {
@@ -85,23 +73,5 @@ public class CreateDinnerRequest {
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CreateDinnerRequest request = (CreateDinnerRequest) o;
-        return maxGuests == request.maxGuests &&
-                title.equals(request.title) &&
-                creator.equals(request.creator) &&
-                description.equals(request.description) &&
-                Objects.equals(location, request.location) &&
-                Objects.equals(dateTime, request.dateTime);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(title, creator, maxGuests, description, location, dateTime);
-    }
+    
 }

@@ -6,13 +6,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-public class GroupDinnerApplication extends SpringBootServletInitializer {
-
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(GroupDinnerApplication.class);
-    }
-
+public class GroupDinnerApplication {
     public static void main(String[] args) {
         SpringApplication.run(GroupDinnerApplication.class, args);
     }

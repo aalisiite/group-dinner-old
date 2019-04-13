@@ -13,14 +13,12 @@ public interface DinnerRecordRepository extends JpaRepository<DinnerRecord, Long
 
     @Query("select count(dinner) > 0 from DinnerRecord dinner where"
             + " dinner.title = :title"
-            + " and dinner.creator.id = :creator"
             + " and dinner.maxGuests = :maxGuests"
             + " and dinner.description = :description"
             + " and dinner.location = :location"
             + " and dinner.dateTime = :dateTime")
     boolean isDinnerPresent(
             @Param("title") String title,
-            @Param("creator") Long creator,
             @Param("maxGuests") Integer maxGuests,
             @Param("description") String description,
             @Param("location") String location,

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
-public class SigninRequest {
+public class SignInRequest {
 
     @Email
     private String email;
@@ -14,7 +14,7 @@ public class SigninRequest {
     private String password;
 
     @JsonCreator
-    public SigninRequest(
+    public SignInRequest(
             @JsonProperty("email") @Email String email, 
             @JsonProperty("password") @NotEmpty String password) {
         this.email = email;

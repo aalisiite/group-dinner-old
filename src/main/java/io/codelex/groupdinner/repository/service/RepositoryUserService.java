@@ -11,6 +11,7 @@ import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.FeedbackRecord;
 import io.codelex.groupdinner.repository.model.UserRecord;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -29,20 +30,22 @@ public class RepositoryUserService implements UserService {
     private final MapDinnerRecordToDinner toDinner = new MapDinnerRecordToDinner();
     private final MapAttendeeRecordToAttendee toAttendee = new MapAttendeeRecordToAttendee();
     private final MapFeedbackRecordToFeedback toFeedback = new MapFeedbackRecordToFeedback();
-    private final PasswordEncrypt passwordEncrypt = new PasswordEncrypt();
+    private final PasswordEncoder passwordEncoder;
 
-    public RepositoryUserService(DinnerRecordRepository dinnerRecordRepository, UserRecordRepository userRecordRepository, AttendeeRecordRepository attendeeRecordRepository, FeedbackRecordRepository feedbackRecordRepository) {
+    public RepositoryUserService(DinnerRecordRepository dinnerRecordRepository,
+                                 UserRecordRepository userRecordRepository,
+                                 AttendeeRecordRepository attendeeRecordRepository, FeedbackRecordRepository feedbackRecordRepository, PasswordEncoder passwordEncoder) {
         this.dinnerRecordRepository = dinnerRecordRepository;
         this.userRecordRepository = userRecordRepository;
         this.attendeeRecordRepository = attendeeRecordRepository;
         this.feedbackRecordRepository = feedbackRecordRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public Dinner createDinner(CreateDinnerRequest request) {
         if (!dinnerRecordRepository.isDinnerPresent(
                 request.getTitle(),
-                request.getCreator().getId(),
                 request.getMaxGuests(),
                 request.getDescription(),
                 request.getLocation(),
@@ -69,7 +72,7 @@ public class RepositoryUserService implements UserService {
                     request.getFirstName(),
                     request.getLastName(),
                     request.getEmail().toLowerCase().trim(),
-                    passwordEncrypt.hashPassword(request.getPassword())
+                    passwordEncoder.encode(request.getPassword())
             );
             userRecord = userRecordRepository.save(userRecord);
             return toUser.apply(userRecord);
@@ -79,10 +82,10 @@ public class RepositoryUserService implements UserService {
     }
 
     @Override
-    public User authenticateUser(SigninRequest request) {
+    public User authenticateUser(SignInRequest request) {
         UserRecord userRecord = userRecordRepository.findByEmail(request.getEmail().toLowerCase().trim());
         if (userRecord != null) {
-            if (passwordEncrypt.passwordMatches(request.getPassword(), userRecord.getPassword())){
+            if (passwordEncoder.matches(request.getPassword(), userRecord.getPassword())){
                 return toUser.apply(userRecord);
             } else {
                 throw new IllegalStateException("password incorrect");
@@ -151,19 +154,11 @@ public class RepositoryUserService implements UserService {
     private DinnerRecord createDinnerRecordFromRequest(CreateDinnerRequest request) {
         DinnerRecord dinnerRecord = new DinnerRecord();
         dinnerRecord.setTitle(request.getTitle());
-        dinnerRecord.setCreator(getUserById(request.getCreator()));
         dinnerRecord.setMaxGuests(request.getMaxGuests());
         dinnerRecord.setDescription(request.getDescription());
         dinnerRecord.setLocation(request.getLocation());
         dinnerRecord.setDateTime(request.getDateTime());
         return dinnerRecord;
     }
-    
-
-    private UserRecord getUserById(User user) {
-        return userRecordRepository.findById(user.getId()).get();
-    }
-    
-    
 
 }

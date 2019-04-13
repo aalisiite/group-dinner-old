@@ -1,8 +1,6 @@
 package io.codelex.groupdinner.repository.model;
 
 
-import io.codelex.groupdinner.repository.mapper.PasswordEncrypt;
-
 import javax.persistence.*;
 import java.util.Objects;
 

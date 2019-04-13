@@ -1,7 +1,7 @@
 package io.codelex.groupdinner;
 
 import io.codelex.groupdinner.api.RegistrationRequest;
-import io.codelex.groupdinner.api.SigninRequest;
+import io.codelex.groupdinner.api.SignInRequest;
 import io.codelex.groupdinner.api.User;
 import io.codelex.groupdinner.repository.service.AuthService;
 import io.codelex.groupdinner.repository.service.RepositoryUserService;
@@ -19,7 +19,7 @@ import static io.codelex.groupdinner.repository.service.Role.*;
 public class AuthController {
     
     private final AuthService authService;
-    private RepositoryUserService service;
+    private final RepositoryUserService service;
 
     AuthController(RepositoryUserService repositoryUserService, AuthService authService) {
         this.service = repositoryUserService;
@@ -27,16 +27,18 @@ public class AuthController {
     }
 
     @PostMapping("/sign-in")
-    public ResponseEntity<User> signIn(@Valid @RequestBody SigninRequest request) {
+    public ResponseEntity<User> signIn(@Valid @RequestBody SignInRequest request) {
+        User user = service.authenticateUser(request);
         authService.authorise(request.getEmail(), request.getPassword(), REGISTERED_CLIENT);
-        return new ResponseEntity<>(service.authenticateUser(request), HttpStatus.OK);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PostMapping("/register")
     public ResponseEntity<User> register(
             @Valid @RequestBody RegistrationRequest request) {
+        User user = service.registerUser(request);
         authService.authorise(request.getEmail(), request.getPassword(), REGISTERED_CLIENT);
-        return new ResponseEntity<>(service.registerUser(request), HttpStatus.CREATED);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     @PostMapping("/sign-out")
