@@ -71,6 +71,7 @@ public class RepositoryUserService implements UserService {
                     request.getEmail().toLowerCase().trim(),
                     passwordEncrypt.hashPassword(request.getPassword())
             );
+            userRecord = userRecordRepository.save(userRecord);
             return toUser.apply(userRecord);
         } else {
             throw new IllegalStateException("email already exists");

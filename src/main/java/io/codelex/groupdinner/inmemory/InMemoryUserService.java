@@ -1,11 +1,11 @@
 package io.codelex.groupdinner.inmemory;
 
 
+import io.codelex.groupdinner.UserService;
+import io.codelex.groupdinner.api.*;
 import io.codelex.groupdinner.inmemory.service.AttendeeService;
 import io.codelex.groupdinner.inmemory.service.DinnerService;
 import io.codelex.groupdinner.inmemory.service.UsersService;
-import io.codelex.groupdinner.UserService;
-import io.codelex.groupdinner.api.*;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
@@ -18,7 +18,7 @@ public class InMemoryUserService implements UserService {
     private AtomicLong dinnerSequence = new AtomicLong(1L);
     private AtomicLong userSequence = new AtomicLong(1L);
 
-    public InMemoryUserService(AttendeeService attendeeService, DinnerService dinnerService, UsersService usersService) {
+    InMemoryUserService(AttendeeService attendeeService, DinnerService dinnerService, UsersService usersService) {
         this.attendeeService = attendeeService;
         this.dinnerService = dinnerService;
         this.usersService = usersService;
@@ -42,14 +42,14 @@ public class InMemoryUserService implements UserService {
     }
 
     @Override
-    public User registerUser(String firstName, String lastName, String email, String password) {
-        Optional<User> user = usersService.getUserByEmail(email.toLowerCase());
+    public User registerUser(RegistrationRequest request) {
+        Optional<User> user = usersService.getUserByEmail(request.getEmail().toLowerCase());
         if (user.isEmpty()) {
             User newUser = new User(
                     userSequence.getAndIncrement(),
-                    firstName,
-                    lastName,
-                    email
+                    request.getFirstName(),
+                    request.getLastName(),
+                    request.getEmail()
             );
             usersService.addUser(newUser);
         }
@@ -57,8 +57,8 @@ public class InMemoryUserService implements UserService {
     }
 
     @Override
-    public User authenticateUser(String email, String password) {
-        Optional<User> user = usersService.getUserByEmail(email.toLowerCase());
+    public User authenticateUser(SigninRequest request) {
+        Optional<User> user = usersService.getUserByEmail(request.getEmail().toLowerCase());
         return user.orElse(null);
     }
 
