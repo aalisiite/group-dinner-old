@@ -1,13 +1,15 @@
 package io.codelex.groupdinner.repository.model;
 
 
+import io.codelex.groupdinner.repository.mapper.PasswordEncrypt;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "users")
 public class UserRecord {
-
+    
     @Id
     @GeneratedValue(generator = "user_seq_generator", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "user_seq_generator", sequenceName = "user_seq", allocationSize = 1)
@@ -15,14 +17,16 @@ public class UserRecord {
     private String firstName;
     private String lastName;
     private String email;
+    private String password;
 
     public UserRecord() {
     }
 
-    public UserRecord(String firstName, String lastName, String email) {
+    public UserRecord(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.password = password;
     }
 
     public Long getId() {
@@ -55,6 +59,14 @@ public class UserRecord {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override

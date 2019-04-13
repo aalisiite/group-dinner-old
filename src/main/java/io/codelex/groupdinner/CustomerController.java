@@ -1,6 +1,6 @@
 package io.codelex.groupdinner;
 
-import io.codelex.groupdinner.api.UserAuthorization;
+import io.codelex.groupdinner.api.AuthRequest;
 import io.codelex.groupdinner.repository.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,18 +24,18 @@ public class CustomerController {
     }
 
     @PostMapping("/sign-in")
-    public ResponseEntity<Optional<UserAuthorization>> signIn(@RequestParam("email") String email,
-                                                              @RequestParam("password") String password) {
+    public ResponseEntity<Optional<AuthRequest>> signIn(@RequestParam("email") String email,
+                                                        @RequestParam("password") String password) {
         authService.authorise(email, password, REGISTERED_CLIENT);
         return new ResponseEntity<>(service.findUser(email, password), HttpStatus.OK);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Optional<UserAuthorization>> register(
+    public ResponseEntity<Optional<AuthRequest>> register(
             @RequestParam("email") String email,
             @RequestParam("password") String password) {
         authService.authorise(email, password, REGISTERED_CLIENT);
-        return new ResponseEntity<>(service.addUser(new UserAuthorization(email, password)), HttpStatus.CREATED);
+        return new ResponseEntity<>(service.addUser(new AuthRequest(email, password)), HttpStatus.CREATED);
     }
 
     @PostMapping("/sign-out")

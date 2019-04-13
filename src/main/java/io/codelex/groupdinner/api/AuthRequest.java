@@ -2,12 +2,12 @@ package io.codelex.groupdinner.api;
 
 import java.util.Objects;
 
-public class UserAuthorization {
+public class AuthRequest {
     
     private String email;
     private String password;
 
-    public UserAuthorization(String email, String password) {
+    public AuthRequest(String email, String password) {
         this.email = email;
         this.password = password;
     }
@@ -32,7 +32,7 @@ public class UserAuthorization {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserAuthorization that = (UserAuthorization) o;
+        AuthRequest that = (AuthRequest) o;
         return email.equals(that.email);
     }
 

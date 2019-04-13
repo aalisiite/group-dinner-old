@@ -1,7 +1,7 @@
 package io.codelex.groupdinner.inmemory;
 
 import io.codelex.groupdinner.UserAuthorizationService;
-import io.codelex.groupdinner.api.UserAuthorization;
+import io.codelex.groupdinner.api.AuthRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,17 +9,17 @@ import java.util.Optional;
 
 public class InMemoryUserAuthorizationService implements UserAuthorizationService {
 
-    private List<UserAuthorization> registrations = new ArrayList<>();
+    private List<AuthRequest> registrations = new ArrayList<>();
 
     public InMemoryUserAuthorizationService() {
     }
 
     @Override
-    public Optional<UserAuthorization> addUser(UserAuthorization userAuthorization) {
-        if (!isUserDataMatching(userAuthorization)) {
-            UserAuthorization lowerCaseData = new UserAuthorization(
-                    userAuthorization.getEmail().toLowerCase(),
-                    userAuthorization.getPassword()
+    public Optional<AuthRequest> addUser(AuthRequest authRequest) {
+        if (!isUserDataMatching(authRequest)) {
+            AuthRequest lowerCaseData = new AuthRequest(
+                    authRequest.getEmail().toLowerCase(),
+                    authRequest.getPassword()
             );
             registrations.add(lowerCaseData);
             return Optional.of(lowerCaseData);
@@ -27,8 +27,8 @@ public class InMemoryUserAuthorizationService implements UserAuthorizationServic
         return Optional.empty();
     }
 
-    private boolean isUserDataMatching(UserAuthorization data) {
-        UserAuthorization lowerCaseData = new UserAuthorization(
+    private boolean isUserDataMatching(AuthRequest data) {
+        AuthRequest lowerCaseData = new AuthRequest(
                 data.getEmail().toLowerCase(),
                 data.getPassword()
         );
@@ -36,13 +36,13 @@ public class InMemoryUserAuthorizationService implements UserAuthorizationServic
     }
 
     @Override
-    public Optional<UserAuthorization> findUser(String email, String password) {
-        UserAuthorization userAuthorization = new UserAuthorization(
+    public Optional<AuthRequest> findUser(String email, String password) {
+        AuthRequest authRequest = new AuthRequest(
                 email,
                 password
         );
-        for (UserAuthorization user : registrations) {
-            if (isUserDataMatching(userAuthorization)) {
+        for (AuthRequest user : registrations) {
+            if (isUserDataMatching(authRequest)) {
                 return Optional.of(user);
             }
         }

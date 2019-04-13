@@ -1,12 +1,12 @@
 package io.codelex.groupdinner;
 
-import io.codelex.groupdinner.api.UserAuthorization;
+import io.codelex.groupdinner.api.AuthRequest;
 
 import java.util.Optional;
 
 public interface UserAuthorizationService {
 
-    Optional<UserAuthorization> addUser(UserAuthorization userAuthorization);
+    Optional<AuthRequest> addUser(AuthRequest authRequest);
 
-    Optional<UserAuthorization> findUser(String email, String password);
+    Optional<AuthRequest> findUser(String email, String password);
 }
