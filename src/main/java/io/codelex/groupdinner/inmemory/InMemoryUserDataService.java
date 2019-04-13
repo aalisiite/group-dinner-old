@@ -2,13 +2,11 @@ package io.codelex.groupdinner.inmemory;
 
 import io.codelex.groupdinner.authorization.UserDataService;
 import io.codelex.groupdinner.authorization.api.UserData;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Component
 public class InMemoryUserDataService implements UserDataService {
 
     private List<UserData> registrations = new ArrayList<>();
