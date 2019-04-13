@@ -1,7 +1,7 @@
 package io.codelex.groupdinner.authorization;
 
 import io.codelex.groupdinner.authorization.api.UserData;
-import io.codelex.groupdinner.authorization.service.UserDataService;
+import io.codelex.groupdinner.inmemory.InMemoryUserDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import static io.codelex.groupdinner.authorization.Role.*;
 class CustomerController {
     private final AuthService authService;
     @Autowired
-    UserDataService service;
+    InMemoryUserDataService service;
 
     CustomerController(AuthService authService) {
         this.authService = authService;

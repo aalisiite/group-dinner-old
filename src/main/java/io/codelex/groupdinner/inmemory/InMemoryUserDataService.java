@@ -1,5 +1,6 @@
-package io.codelex.groupdinner.authorization.service;
+package io.codelex.groupdinner.inmemory;
 
+import io.codelex.groupdinner.authorization.UserDataService;
 import io.codelex.groupdinner.authorization.api.UserData;
 import org.springframework.stereotype.Component;
 
@@ -8,13 +9,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class UserDataService {
+public class InMemoryUserDataService implements UserDataService {
 
     private List<UserData> registrations = new ArrayList<>();
 
-    public UserDataService() {
+    public InMemoryUserDataService() {
     }
 
+    @Override
     public Optional<UserData> addUser(UserData userData) {
         if (!isUserDataMatching(userData)) {
             UserData lowerCaseData = new UserData(
@@ -35,13 +37,14 @@ public class UserDataService {
         return registrations.contains(lowerCaseData);
     }
 
+    @Override
     public Optional<UserData> findUser(String email, String password) {
         UserData userData = new UserData(
                 email,
                 password
         );
-        for (UserData user: registrations) {
-            if (isUserDataMatching(userData)){
+        for (UserData user : registrations) {
+            if (isUserDataMatching(userData)) {
                 return Optional.of(user);
             }
         }
