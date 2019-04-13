@@ -10,6 +10,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.codelex.groupdinner.api.CreateDinnerRequest;
 import io.codelex.groupdinner.api.Dinner;
 import io.codelex.groupdinner.api.User;
+import io.codelex.groupdinner.repository.RepositoryUserService;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.UserRecord;
 import org.junit.Test;
@@ -17,7 +18,11 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -35,7 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
-//@Import(WebConfiguration.class)
+@Import(RepositoryUserService.class)
 public class UserControllerTest {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -78,6 +83,8 @@ public class UserControllerTest {
     private CreateDinnerRequest request = createDinnerRequest(user, location, localDateTime);
     private DinnerRecord dinnerRecord = createDinnerRecord();
     private Dinner dinner = createDinner();
+    @MockBean
+    RepositoryUserService service;
 
     @Test
     public void should_return_dinner_and_status_created() throws Exception {
