@@ -1,7 +1,7 @@
 package io.codelex.groupdinner.inmemory;
 
 import io.codelex.groupdinner.UserDataService;
-import io.codelex.groupdinner.api.UserData;
+import io.codelex.groupdinner.api.UserAuthorization;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,17 +9,17 @@ import java.util.Optional;
 
 public class InMemoryUserDataService implements UserDataService {
 
-    private List<UserData> registrations = new ArrayList<>();
+    private List<UserAuthorization> registrations = new ArrayList<>();
 
     public InMemoryUserDataService() {
     }
 
     @Override
-    public Optional<UserData> addUser(UserData userData) {
-        if (!isUserDataMatching(userData)) {
-            UserData lowerCaseData = new UserData(
-                    userData.getEmail().toLowerCase(),
-                    userData.getPassword()
+    public Optional<UserAuthorization> addUser(UserAuthorization userAuthorization) {
+        if (!isUserDataMatching(userAuthorization)) {
+            UserAuthorization lowerCaseData = new UserAuthorization(
+                    userAuthorization.getEmail().toLowerCase(),
+                    userAuthorization.getPassword()
             );
             registrations.add(lowerCaseData);
             return Optional.of(lowerCaseData);
@@ -27,8 +27,8 @@ public class InMemoryUserDataService implements UserDataService {
         return Optional.empty();
     }
 
-    private boolean isUserDataMatching(UserData data) {
-        UserData lowerCaseData = new UserData(
+    private boolean isUserDataMatching(UserAuthorization data) {
+        UserAuthorization lowerCaseData = new UserAuthorization(
                 data.getEmail().toLowerCase(),
                 data.getPassword()
         );
@@ -36,13 +36,13 @@ public class InMemoryUserDataService implements UserDataService {
     }
 
     @Override
-    public Optional<UserData> findUser(String email, String password) {
-        UserData userData = new UserData(
+    public Optional<UserAuthorization> findUser(String email, String password) {
+        UserAuthorization userAuthorization = new UserAuthorization(
                 email,
                 password
         );
-        for (UserData user : registrations) {
-            if (isUserDataMatching(userData)) {
+        for (UserAuthorization user : registrations) {
+            if (isUserDataMatching(userAuthorization)) {
                 return Optional.of(user);
             }
         }

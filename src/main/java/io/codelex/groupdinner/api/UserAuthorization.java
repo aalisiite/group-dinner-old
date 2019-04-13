@@ -1,10 +1,11 @@
 package io.codelex.groupdinner.api;
 
-public class UserData {
+public class UserAuthorization {
+    
     private String email;
     private String password;
 
-    public UserData(String email, String password) {
+    public UserAuthorization(String email, String password) {
         this.email = email;
         this.password = password;
     }
