@@ -6,9 +6,9 @@ public interface UserService {
 
     Dinner createDinner(CreateDinnerRequest request);
     
-    User registerUser(String firstName, String lastName, String email, String password);
+    User registerUser(RegistrationRequest request);
     
-    User authenticateUser(String email, String password);
+    User authenticateUser(SigninRequest request);
 
     Attendee joinDinner(String userId, Long dinnerId);
 

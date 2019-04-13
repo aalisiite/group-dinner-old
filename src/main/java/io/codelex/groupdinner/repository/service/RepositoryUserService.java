@@ -63,13 +63,13 @@ public class RepositoryUserService implements UserService {
     }
 
     @Override
-    public User registerUser(String firstName, String lastName, String email, String password) {
-        if (!userRecordRepository.isUserPresent(email)) {
+    public User registerUser(RegistrationRequest request) {
+        if (!userRecordRepository.isUserPresent(request.getEmail())) {
             UserRecord userRecord = new UserRecord(
-                    firstName,
-                    lastName,
-                    email.toLowerCase().trim(),
-                    passwordEncrypt.hashPassword(password)
+                    request.getFirstName(),
+                    request.getLastName(),
+                    request.getEmail().toLowerCase().trim(),
+                    passwordEncrypt.hashPassword(request.getPassword())
             );
             return toUser.apply(userRecord);
         } else {
@@ -78,10 +78,10 @@ public class RepositoryUserService implements UserService {
     }
 
     @Override
-    public User authenticateUser(String email, String password) {
-        UserRecord userRecord = userRecordRepository.findByEmail(email.toLowerCase().trim());
+    public User authenticateUser(SigninRequest request) {
+        UserRecord userRecord = userRecordRepository.findByEmail(request.getEmail().toLowerCase().trim());
         if (userRecord != null) {
-            if (passwordEncrypt.passwordMatches(password, userRecord.getPassword())){
+            if (passwordEncrypt.passwordMatches(request.getPassword(), userRecord.getPassword())){
                 return toUser.apply(userRecord);
             } else {
                 throw new IllegalStateException("password incorrect");
