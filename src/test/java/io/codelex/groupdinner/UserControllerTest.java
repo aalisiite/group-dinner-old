@@ -86,7 +86,7 @@ public class UserControllerTest {
     @MockBean
     RepositoryUserService service;
 
-    
+
     @WithMockUser()
     @Test
     public void should_return_dinner_and_status_created() throws Exception {
@@ -143,7 +143,6 @@ public class UserControllerTest {
     private CreateDinnerRequest createDinnerRequest(User user, String location, LocalDateTime localDateTime) {
         return new CreateDinnerRequest(
                 "This is a title",
-                user,
                 2,
                 "This is a description",
                 location,

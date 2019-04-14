@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/io.codelex.group-dinner.iml" filepath="$PROJECT_DIR$/.idea/modules/io.codelex.group-dinner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/io.codelex.group-dinner.main.iml" filepath="$PROJECT_DIR$/.idea/modules/io.codelex.group-dinner.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/io.codelex.group-dinner.test.iml" filepath="$PROJECT_DIR$/.idea/modules/io.codelex.group-dinner.test.iml" />
     </modules>
   </component>
 </project>
