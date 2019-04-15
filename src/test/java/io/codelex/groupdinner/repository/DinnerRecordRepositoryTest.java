@@ -10,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -24,7 +23,7 @@ class DinnerRecordRepositoryTest extends Assertions {
 
     @Autowired
     UserRecordRepository userRecordRepository;
-    
+
     @Autowired
     FeedbackRecordRepository feedbackRecordRepository;
 
@@ -79,7 +78,7 @@ class DinnerRecordRepositoryTest extends Assertions {
     }
 
     private DinnerRecord createDinnerRecord() {
-        DinnerRecord dinnerRecord = new DinnerRecord(
+        return new DinnerRecord(
                 "This is a title",
                 userRecord,
                 2,
@@ -87,17 +86,15 @@ class DinnerRecordRepositoryTest extends Assertions {
                 location,
                 localDateTime
         );
-        return dinnerRecord;
     }
 
     private UserRecord createUserRecord() {
-        UserRecord userRecord = new UserRecord(
+        return new UserRecord(
                 "Janis",
                 "Berzins",
                 "berzins@gmai.com",
                 "password"
         );
-        return userRecord;
     }
 
     private String createLocation() {

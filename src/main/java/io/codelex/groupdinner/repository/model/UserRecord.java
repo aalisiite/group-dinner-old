@@ -7,7 +7,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "users")
 public class UserRecord {
-    
+
     @Id
     @GeneratedValue(generator = "user_seq_generator", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "user_seq_generator", sequenceName = "user_seq", allocationSize = 1)

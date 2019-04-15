@@ -106,6 +106,9 @@
             <column name="id" type="bigint" defaultValueSequenceNext="feedback_seq">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_feedback"/>
             </column>
+            <column name="dinner_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
             <column name="provider_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
@@ -116,6 +119,13 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+        <addForeignKeyConstraint baseTableName="feedbacks"
+                                 baseColumnNames="dinner_id"
+                                 constraintName="fk_feedbacks_dinner_id_dinners_id"
+                                 referencedTableName="dinners"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"
+        />
         <addForeignKeyConstraint baseTableName="feedbacks"
                                  baseColumnNames="provider_id"
                                  constraintName="fk_feedbacks_provider_id_users_id"

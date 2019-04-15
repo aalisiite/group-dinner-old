@@ -12,12 +12,15 @@ public class FeedbackRecord {
     @SequenceGenerator(name = "feedback_seq_generator", sequenceName = "feedback_seq", allocationSize = 1)
     private Long id;
     @ManyToOne
+    private DinnerRecord dinner;
+    @ManyToOne
     private UserRecord provider;
     @ManyToOne
     private UserRecord receiver;
     private Boolean rating;
 
-    public FeedbackRecord(UserRecord provider, UserRecord receiver, Boolean rating) {
+    public FeedbackRecord(DinnerRecord dinner, UserRecord provider, UserRecord receiver, Boolean rating) {
+        this.dinner = dinner;
         this.provider = provider;
         this.receiver = receiver;
         this.rating = rating;
@@ -32,6 +35,14 @@ public class FeedbackRecord {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public DinnerRecord getDinner() {
+        return dinner;
+    }
+
+    public void setDinner(DinnerRecord dinner) {
+        this.dinner = dinner;
     }
 
     public UserRecord getProvider() {

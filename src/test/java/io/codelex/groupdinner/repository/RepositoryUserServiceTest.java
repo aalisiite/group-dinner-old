@@ -24,13 +24,13 @@ import static org.mockito.ArgumentMatchers.any;
 
 public class RepositoryUserServiceTest {
 
+    private final PasswordEncoder passwordEncoder = Mockito.mock(PasswordEncoder.class);
     private MapAttendeeRecordToAttendee toAttendee = Mockito.mock(MapAttendeeRecordToAttendee.class);
     private MapDinnerRecordToDinner toDinner = Mockito.mock(MapDinnerRecordToDinner.class);
     private DinnerRecordRepository dinnerRecordRepository = Mockito.mock(DinnerRecordRepository.class);
     private UserRecordRepository userRecordRepository = Mockito.mock(UserRecordRepository.class);
     private AttendeeRecordRepository attendeeRecordRepository = Mockito.mock(AttendeeRecordRepository.class);
     private FeedbackRecordRepository feedbackRecordRepository = Mockito.mock(FeedbackRecordRepository.class);
-    private final PasswordEncoder passwordEncoder = Mockito.mock(PasswordEncoder.class);
     private RepositoryUserService userModule = new RepositoryUserService(dinnerRecordRepository, userRecordRepository, attendeeRecordRepository, feedbackRecordRepository, passwordEncoder);
     private LocalDateTime localDateTime = LocalDateTime.of(2019, 1, 1, 0, 0);
     private UserRecord userRecord = createUserRecord();
@@ -123,14 +123,14 @@ public class RepositoryUserServiceTest {
         //then
         assertFalse(result.isAccepted());
     }
-    
+
     @Test
-    public void should_be_able_to_leave_feedback () {
+    public void should_be_able_to_leave_feedback() {
         //todo
     }
-    
+
     @Test
-    public void should_not_be_able_to_leave_feedback_two_times_for_one_person () {
+    public void should_not_be_able_to_leave_feedback_two_times_for_one_person() {
         //todo
     }
 
