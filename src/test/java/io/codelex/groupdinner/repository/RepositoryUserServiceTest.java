@@ -103,8 +103,7 @@ public class RepositoryUserServiceTest {
     @Test
     public void should_be_able_to_join_event_with_pending_status() {
         //given
-        dinnerRecord.setCurrentGuests(dinnerRecord.getMaxGuests());
-        int initialGuestCount = dinnerRecord.getCurrentGuests();
+        dinnerRecord.setMaxGuests(1);
         Attendee attendee = createAcceptedAttendee();
         Principal principal = () -> "1";
 

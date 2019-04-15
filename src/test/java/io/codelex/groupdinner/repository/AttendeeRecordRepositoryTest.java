@@ -35,7 +35,6 @@ public class AttendeeRecordRepositoryTest extends Assertions {
 
     @BeforeEach
     void setUp() {
-        //todo check if works without these?
         attendeeRecordRepository.deleteAll();
         dinnerRecordRepository.deleteAll();
         userRecordRepository.deleteAll();

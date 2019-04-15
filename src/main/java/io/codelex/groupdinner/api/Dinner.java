@@ -9,7 +9,6 @@ public class Dinner {
     private String title;
     private User creator;
     private int maxGuests;
-    private int currentGuests;
     private String description;
     private String location;
     private LocalDateTime dateTime;
@@ -20,18 +19,9 @@ public class Dinner {
         this.title = title;
         this.creator = creator;
         this.maxGuests = maxGuests;
-        this.currentGuests = 1;
         this.description = description;
         this.location = location;
         this.dateTime = dateTime;
-    }
-
-    public boolean shouldAcceptRequest() {
-        return maxGuests > currentGuests;
-    }
-
-    public void incrementCurrentGuests() {
-        currentGuests++;
     }
 
     public Long getId() {
@@ -65,15 +55,7 @@ public class Dinner {
     public void setMaxGuests(int maxGuests) {
         this.maxGuests = maxGuests;
     }
-
-    public int getCurrentGuests() {
-        return currentGuests;
-    }
-
-    public void setCurrentGuests(int currentGuests) {
-        this.currentGuests = currentGuests;
-    }
-
+    
     public String getDescription() {
         return description;
     }

@@ -17,7 +17,6 @@ public class DinnerRecord {
     @ManyToOne
     private UserRecord creator;
     private Integer maxGuests;
-    private Integer currentGuests = 1; //todo use count of attendees
     private String description;
     private String location;
     private LocalDateTime dateTime;
@@ -32,14 +31,6 @@ public class DinnerRecord {
         this.description = description;
         this.location = location;
         this.dateTime = dateTime;
-    }
-
-    public boolean shouldAcceptRequest() {
-        return maxGuests > currentGuests;
-    }
-
-    public void incrementCurrentGuests() {
-        currentGuests++;
     }
 
     public Long getId() {
@@ -72,14 +63,6 @@ public class DinnerRecord {
 
     public void setMaxGuests(int maxGuests) {
         this.maxGuests = maxGuests;
-    }
-
-    public Integer getCurrentGuests() {
-        return currentGuests;
-    }
-
-    public void setCurrentGuests(int currentGuests) {
-        this.currentGuests = currentGuests;
     }
 
     public String getDescription() {

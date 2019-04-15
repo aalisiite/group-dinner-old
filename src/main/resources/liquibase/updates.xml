@@ -42,9 +42,6 @@
             <column name="max_guests" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="current_guests" type="int">
-                <constraints nullable="true"/>
-            </column>
             <column name="description" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>

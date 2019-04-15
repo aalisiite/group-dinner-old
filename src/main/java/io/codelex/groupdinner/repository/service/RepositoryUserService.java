@@ -1,12 +1,15 @@
 package io.codelex.groupdinner.repository.service;
 
+import io.codelex.groupdinner.UserService;
+import io.codelex.groupdinner.api.*;
 import io.codelex.groupdinner.repository.AttendeeRecordRepository;
 import io.codelex.groupdinner.repository.DinnerRecordRepository;
 import io.codelex.groupdinner.repository.FeedbackRecordRepository;
 import io.codelex.groupdinner.repository.UserRecordRepository;
-import io.codelex.groupdinner.repository.mapper.*;
-import io.codelex.groupdinner.UserService;
-import io.codelex.groupdinner.api.*;
+import io.codelex.groupdinner.repository.mapper.MapAttendeeRecordToAttendee;
+import io.codelex.groupdinner.repository.mapper.MapDinnerRecordToDinner;
+import io.codelex.groupdinner.repository.mapper.MapFeedbackRecordToFeedback;
+import io.codelex.groupdinner.repository.mapper.MapUserRecordToUser;
 import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.FeedbackRecord;
@@ -85,7 +88,7 @@ public class RepositoryUserService implements UserService {
     public User authenticateUser(SignInRequest request) {
         UserRecord userRecord = userRecordRepository.findByEmail(request.getEmail().toLowerCase().trim());
         if (userRecord != null) {
-            if (passwordEncoder.matches(request.getPassword(), userRecord.getPassword())){
+            if (passwordEncoder.matches(request.getPassword(), userRecord.getPassword())) {
                 return toUser.apply(userRecord);
             } else {
                 throw new IllegalStateException("password incorrect");
@@ -101,12 +104,12 @@ public class RepositoryUserService implements UserService {
         Optional<DinnerRecord> dinnerRecord = dinnerRecordRepository.findById(dinnerId);
         Long userIdLong = Long.parseLong(userId);
         if (dinnerRecord.isPresent()) {
-            boolean isAccepted = dinnerRecord.get().shouldAcceptRequest();
-            dinnerRecordRepository.incrementCurrentGuests(dinnerRecord.get().getId());
+            Integer attendeeCount = attendeeRecordRepository.countDinnerAttendees(dinnerId);
+            Boolean addToAcceptedGuests = attendeeCount < dinnerRecord.get().getMaxGuests();
             AttendeeRecord attendeeRecord = new AttendeeRecord(
                     dinnerRecord.get(),
                     userRecordRepository.findById(userIdLong).get(),
-                    isAccepted
+                    addToAcceptedGuests
             );
             attendeeRecordRepository.save(attendeeRecord);
             return toAttendee.apply(attendeeRecord);
@@ -120,9 +123,10 @@ public class RepositoryUserService implements UserService {
         Long providerId = Long.parseLong(provider);
         if (feedbackRecordRepository.isFeedbackPresent(providerId, request.getReceiver().getId())) {
             throw new IllegalStateException("Feedback for users already exist");
+        } else if (attendeeRecordRepository.userAttendedDinner(dinnerId, providerId)
+                && attendeeRecordRepository.userAttendedDinner(dinnerId, request.getReceiver().getId())) {
+            throw new IllegalStateException("No such common dinner for users");
         } else {
-            //todo
-            //need to check if provider & receiver attended same dinner before leaving feedback?
             Optional<UserRecord> providerRecord = userRecordRepository.findById(providerId);
             Optional<UserRecord> receiverRecord = userRecordRepository.findById(request.getReceiver().getId());
             FeedbackRecord feedbackRecord = new FeedbackRecord(
@@ -140,8 +144,8 @@ public class RepositoryUserService implements UserService {
         return dinnerRecord.map(toDinner).orElse(null);
     }
 
-    public List<User> findUsersWithAcceptedStatus(Long dinnerId, boolean isAccepted) {
-        List<AttendeeRecord> attendees = attendeeRecordRepository.findDinnerAttendees(dinnerId, isAccepted);
+    public List<User> findUsersWithAcceptedStatus(Long dinnerId, boolean accepted) {
+        List<AttendeeRecord> attendees = attendeeRecordRepository.findDinnerAttendees(dinnerId, accepted);
         List<UserRecord> users = Collections.emptyList();
         for (AttendeeRecord attendee : attendees) {
             Optional<UserRecord> userRecord = userRecordRepository.findById(attendee.getUser().getId());
