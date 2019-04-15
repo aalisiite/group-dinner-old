@@ -5,6 +5,7 @@ import io.codelex.groupdinner.api.SignInRequest;
 import io.codelex.groupdinner.api.User;
 import io.codelex.groupdinner.repository.service.AuthService;
 import io.codelex.groupdinner.repository.service.RepositoryUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +18,13 @@ import static io.codelex.groupdinner.repository.service.Role.*;
 @RestController
 @RequestMapping("/api")
 public class AuthController {
-    
+
     private final AuthService authService;
     private final RepositoryUserService service;
 
-    AuthController(RepositoryUserService repositoryUserService, AuthService authService) {
-        this.service = repositoryUserService;
+    public AuthController(AuthService authService, RepositoryUserService service) {
         this.authService = authService;
+        this.service = service;
     }
 
     @PostMapping("/sign-in")

@@ -76,7 +76,7 @@
             <column name="user_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="is_accepted" type="boolean">
+            <column name="accepted" type="boolean">
                 <constraints nullable="false"/>
             </column>
         </createTable>

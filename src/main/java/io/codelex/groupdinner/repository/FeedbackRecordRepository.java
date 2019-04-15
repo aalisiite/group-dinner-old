@@ -8,17 +8,17 @@ import org.springframework.data.repository.query.Param;
 public interface FeedbackRecordRepository extends JpaRepository<FeedbackRecord, Long> {
 
     @Query("select feedback from FeedbackRecord feedback where"
-            + " feedback.provider.id = :provider_id" +
-            " and feedback.receiver.id = :receiver_id")
+            + " feedback.provider.id = :providerId" +
+            " and feedback.receiver.id = :receiverId")
     FeedbackRecord getFeedbackRecord(
-            @Param("provider_id") Long providerId,
-            @Param("receiver_id") Long receiverId);
+            @Param("providerId") Long providerId,
+            @Param("receiverId") Long receiverId);
 
     @Query("select count(feedback) > 0 from FeedbackRecord feedback where"
-            + " feedback.provider.id = :provider_id"
-            + " and feedback.receiver.id = :receiver_id")
+            + " feedback.provider.id = :providerId"
+            + " and feedback.receiver.id = :receiverId")
     boolean isFeedbackPresent(
-            @Param("provider_id") Long provider,
-            @Param("receiver_id") Long receiver
+            @Param("providerId") Long provider,
+            @Param("receiverId") Long receiver
     );
 }

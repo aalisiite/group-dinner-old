@@ -15,15 +15,15 @@ public class AttendeeRecord {
     private DinnerRecord dinner;
     @ManyToOne
     private UserRecord user;
-    private boolean isAccepted;
+    private boolean accepted;
 
     public AttendeeRecord() {
     }
 
-    public AttendeeRecord(DinnerRecord dinner, UserRecord user, boolean isAccepted) {
+    public AttendeeRecord(DinnerRecord dinner, UserRecord user, boolean accepted) {
         this.dinner = dinner;
         this.user = user;
-        this.isAccepted = isAccepted;
+        this.accepted = accepted;
     }
 
     public Long getId() {
@@ -50,12 +50,12 @@ public class AttendeeRecord {
         this.user = user;
     }
 
-    public boolean getIsAccepted() {
-        return isAccepted;
+    public boolean isAccepted() {
+        return accepted;
     }
 
-    public void setIsAccepted(boolean isAccepted) {
-        this.isAccepted = isAccepted;
+    public void setAccepted(boolean accepted) {
+        this.accepted = accepted;
     }
 
     @Override
