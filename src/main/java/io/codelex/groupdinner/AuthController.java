@@ -29,7 +29,7 @@ public class AuthController {
     @PostMapping("/sign-in")
     public ResponseEntity<User> signIn(@Valid @RequestBody SignInRequest request) {
         User user = service.authenticateUser(request);
-        authService.authorise(request.getEmail(), request.getPassword(), REGISTERED_CLIENT);
+        authService.authorise(request.getEmail().trim().toLowerCase(), request.getPassword(), REGISTERED_CLIENT);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -37,7 +37,7 @@ public class AuthController {
     public ResponseEntity<User> register(
             @Valid @RequestBody RegistrationRequest request) {
         User user = service.registerUser(request);
-        authService.authorise(request.getEmail(), request.getPassword(), REGISTERED_CLIENT);
+        authService.authorise(request.getEmail().trim().toLowerCase(), request.getPassword(), REGISTERED_CLIENT);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 

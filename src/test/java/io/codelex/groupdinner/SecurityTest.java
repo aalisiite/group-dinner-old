@@ -26,13 +26,13 @@ import static org.springframework.web.util.UriComponentsBuilder.fromPath;
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 public class SecurityTest {
 
-    AuthService service;
+    AuthService service = new AuthService();
 
     @Autowired
     TestRestTemplate restTemplate;
 
-    static final String email = "codelex@gmail.com";
-    static final String password = "codelex";
+    private static final String email = "codelex@gmail.com";
+    private static final String password = "codelex";
 
     @Test
     public void customer_account_should_be_secured_by_default() {
@@ -43,19 +43,12 @@ public class SecurityTest {
     @Test
     public void customer_should_be_authorised_on_registration() {
         //given
-
+        var result = register();
+        assertEquals(OK, result.getStatusCode());
         //when
-
+        var sessionId = sessionId(result);
         //then
-//        //given
-//        var result = register();
-//        var sessionId = sessionId(result);
-//        service.authorise(email, password, Role.REGISTERED_CLIENT);
-//        //when
-//        
-//        //then
-//        assertEquals(OK, result.getStatusCode());
-//        assertEquals(OK, accessAccount(sessionId).getStatusCode());
+        assertEquals(OK, accessAccount(sessionId).getStatusCode());
     }
 
     private ResponseEntity<Void> register() {
@@ -76,15 +69,6 @@ public class SecurityTest {
                 .toUri();
 
         return restTemplate.postForEntity(uri, EMPTY, Void.class);
-    }
-
-    RegistrationRequest registrationRequest() {
-        return new RegistrationRequest(
-                "Marija",
-                "Zālīte",
-                "MZalite@gmail.com",
-                "zalite123"
-        );
     }
 
     private ResponseEntity<Void> signOut(String sessionId) {
