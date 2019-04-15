@@ -1,5 +1,7 @@
 package io.codelex.groupdinner.api;
 
+import java.util.Objects;
+
 public class Feedback {
 
     private Long id;
@@ -47,5 +49,20 @@ public class Feedback {
 
     public void setRating(boolean rating) {
         this.rating = rating;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Feedback feedback = (Feedback) o;
+        return id.equals(feedback.id) &&
+                provider.equals(feedback.provider) &&
+                receiver.equals(feedback.receiver);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, provider, receiver);
     }
 }

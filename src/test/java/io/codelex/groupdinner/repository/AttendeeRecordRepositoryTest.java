@@ -89,7 +89,7 @@ public class AttendeeRecordRepositoryTest extends Assertions {
         attendeeRecordRepository.save(attendeeRecord2);
 
         //when
-        List<AttendeeRecord> attendeeRecords = attendeeRecordRepository.findDinnerAttendees(dinnerRecord.getId(), true);
+        List<AttendeeRecord> attendeeRecords = attendeeRecordRepository.findDinnerAttendees(dinnerRecord.getId(), false);
 
         //then
         assertEquals(1, attendeeRecords.size());
