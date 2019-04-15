@@ -8,9 +8,9 @@ import javax.validation.constraints.NotEmpty;
 
 public class SignInRequest {
 
-    @Email
+    @Email(message = "Please enter a valid email")
     private String email;
-    @NotEmpty
+    @NotEmpty(message = "Please enter your password")
     private String password;
 
     @JsonCreator

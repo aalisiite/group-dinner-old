@@ -5,15 +5,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 public class RegistrationRequest {
 
-    @NotEmpty
+    @NotEmpty(message = "Please enter your name")
     private String firstName;
-    @NotEmpty
+    @NotEmpty(message = "Please enter your last name")
     private String lastName;
-    @Email
+    @Email(message = "Please enter a valid email")
     private String email;
+    @Size(min = 8, max = 30, message = "Password must be at least 8 characters long")
     @NotEmpty
     private String password;
 
