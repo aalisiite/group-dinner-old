@@ -129,7 +129,9 @@ public class RepositoryUserService implements UserService {
         } else {
             Optional<UserRecord> providerRecord = userRecordRepository.findById(providerId);
             Optional<UserRecord> receiverRecord = userRecordRepository.findById(request.getReceiver().getId());
+            Optional<DinnerRecord> dinnerRecord = dinnerRecordRepository.findById(dinnerId);
             FeedbackRecord feedbackRecord = new FeedbackRecord(
+                    dinnerRecord.get(),
                     providerRecord.get(),
                     receiverRecord.get(),
                     request.getFeedback()

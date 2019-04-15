@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -56,6 +57,7 @@ public class FeedbackRecordRepositoryTest extends Assertions {
         );
         userRecord2 = userRecordRepository.save(userRecord2);
         FeedbackRecord feedbackRecord = new FeedbackRecord(
+                dinnerRecord,
                 userRecord,
                 userRecord2,
                 true
@@ -63,11 +65,11 @@ public class FeedbackRecordRepositoryTest extends Assertions {
         feedbackRecordRepository.save(feedbackRecord);
 
         //when
-        FeedbackRecord result = feedbackRecordRepository.getFeedbackRecord(userRecord.getId(), userRecord2.getId());
+        List<FeedbackRecord> result = feedbackRecordRepository.getFeedbackRecords(userRecord.getId(), userRecord2.getId());
 
         //then
-        assertEquals(feedbackRecord, result);
-        assertTrue(result.isRating());
+        assertEquals(feedbackRecord, ((List) result).get(0));
+        assertTrue(result.get(0).isRating());
     }
 
     @Test
@@ -82,6 +84,7 @@ public class FeedbackRecordRepositoryTest extends Assertions {
         );
         userRecord2 = userRecordRepository.save(userRecord2);
         FeedbackRecord feedbackRecord = new FeedbackRecord(
+                dinnerRecord,
                 userRecord,
                 userRecord2,
                 true

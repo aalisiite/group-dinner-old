@@ -1,22 +1,19 @@
 package io.codelex.groupdinner.api;
 
-import java.util.Objects;
-
 public class Feedback {
 
     private Long id;
+    private Dinner dinner;
     private User provider;
     private User receiver;
     private boolean rating;
 
-    public Feedback(Long id, User provider, User receiver, Boolean rating) {
+    public Feedback(Long id, Dinner dinner, User provider, User receiver, boolean rating) {
         this.id = id;
+        this.dinner = dinner;
         this.provider = provider;
         this.receiver = receiver;
         this.rating = rating;
-    }
-
-    public Feedback() {
     }
 
     public Long getId() {
@@ -25,6 +22,14 @@ public class Feedback {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Dinner getDinner() {
+        return dinner;
+    }
+
+    public void setDinner(Dinner dinner) {
+        this.dinner = dinner;
     }
 
     public User getProvider() {
@@ -49,20 +54,5 @@ public class Feedback {
 
     public void setRating(boolean rating) {
         this.rating = rating;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Feedback feedback = (Feedback) o;
-        return id.equals(feedback.id) &&
-                provider.equals(feedback.provider) &&
-                receiver.equals(feedback.receiver);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, provider, receiver);
     }
 }
