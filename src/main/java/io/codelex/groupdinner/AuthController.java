@@ -39,7 +39,7 @@ public class AuthController {
             @Valid @RequestBody RegistrationRequest request) {
         User user = service.registerUser(request);
         authService.authorise(request.getEmail(), request.getPassword(), REGISTERED_CLIENT);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PostMapping("/sign-out")
