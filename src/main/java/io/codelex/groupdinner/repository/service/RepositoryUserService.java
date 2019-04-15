@@ -141,12 +141,14 @@ public class RepositoryUserService implements UserService {
         }
     }
 
-    public Dinner findDinnerById(Long id) {
+    @Override
+    public Dinner findDinner(Long id) {
         Optional<DinnerRecord> dinnerRecord = dinnerRecordRepository.findById(id);
         return dinnerRecord.map(toDinner).orElse(null);
     }
-
-    public List<User> findUsersWithAcceptedStatus(Long dinnerId, boolean accepted) {
+    
+    @Override
+    public List<User> findDinnerAttendees(Long dinnerId, boolean accepted) {
         List<AttendeeRecord> attendees = attendeeRecordRepository.findDinnerAttendees(dinnerId, accepted);
         List<UserRecord> users = Collections.emptyList();
         for (AttendeeRecord attendee : attendees) {

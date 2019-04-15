@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
 public class UserController {
-    
+
     @Autowired
     private UserService userService;
 
@@ -41,8 +42,18 @@ public class UserController {
     }
 
     @GetMapping("/dinners/{id}")
-    public ResponseEntity<Attendee> findDinner() {
-        return null;
+    public ResponseEntity<Dinner> getDinner(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(userService.findDinner(id), HttpStatus.OK);
+    }
+    
+    @GetMapping("/dinners/{id}/accepted")
+    public ResponseEntity<List<User>> getAcceptedDinnerAttendees (@PathVariable("id") Long id) {
+        return new ResponseEntity<>(userService.findDinnerAttendees(id, true), HttpStatus.OK);
+    }
+    
+    @GetMapping("/dinners/{id}/pending")
+    public ResponseEntity<List<User>> getPendingDinnerAttendees (@PathVariable("id") Long id) {
+        return new ResponseEntity<>(userService.findDinnerAttendees(id, false), HttpStatus.OK);
     }
 
 

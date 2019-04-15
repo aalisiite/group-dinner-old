@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 
 public class CreateDinnerRequest {
@@ -73,5 +72,5 @@ public class CreateDinnerRequest {
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
-    
+
 }

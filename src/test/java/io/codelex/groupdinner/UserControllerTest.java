@@ -10,9 +10,9 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.codelex.groupdinner.api.CreateDinnerRequest;
 import io.codelex.groupdinner.api.Dinner;
 import io.codelex.groupdinner.api.User;
-import io.codelex.groupdinner.repository.service.RepositoryUserService;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.UserRecord;
+import io.codelex.groupdinner.repository.service.RepositoryUserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -73,6 +73,8 @@ public class UserControllerTest {
         MAPPER.registerModule(javaTimeModule);
     }
 
+    @MockBean
+    RepositoryUserService service;
     @Autowired
     private MockMvc mockMvc;
     private UserService userService = Mockito.mock(UserService.class);
@@ -83,9 +85,6 @@ public class UserControllerTest {
     private CreateDinnerRequest request = createDinnerRequest(user, location, localDateTime);
     private DinnerRecord dinnerRecord = createDinnerRecord();
     private Dinner dinner = createDinner();
-    @MockBean
-    RepositoryUserService service;
-
 
     @WithMockUser()
     @Test

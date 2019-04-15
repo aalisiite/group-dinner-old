@@ -5,7 +5,6 @@ import io.codelex.groupdinner.api.SignInRequest;
 import io.codelex.groupdinner.api.User;
 import io.codelex.groupdinner.repository.service.AuthService;
 import io.codelex.groupdinner.repository.service.RepositoryUserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.security.Principal;
 
-import static io.codelex.groupdinner.repository.service.Role.*;
+import static io.codelex.groupdinner.repository.service.Role.REGISTERED_CLIENT;
 
 @RestController
 @RequestMapping("/api")

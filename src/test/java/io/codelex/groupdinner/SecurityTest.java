@@ -23,12 +23,11 @@ import static org.springframework.web.util.UriComponentsBuilder.fromPath;
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 public class SecurityTest {
 
+    private static final String email = "codelex@gmail.com";
+    private static final String password = "codelex";
     @Autowired
     TestRestTemplate restTemplate;
 
-    static final String email = "codelex@gmail.com";
-    static final String password = "codelex";
-    
     @Test
     public void customer_account_should_be_secured_by_default() {
         var result = restTemplate.getForEntity("/api/account", String.class);
@@ -85,5 +84,5 @@ public class SecurityTest {
         headers.set("Cookie", sessionId);
         return new HttpEntity<>(headers);
     }
-    
+
 }

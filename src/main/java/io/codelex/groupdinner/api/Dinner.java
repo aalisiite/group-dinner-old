@@ -55,7 +55,7 @@ public class Dinner {
     public void setMaxGuests(int maxGuests) {
         this.maxGuests = maxGuests;
     }
-    
+
     public String getDescription() {
         return description;
     }
