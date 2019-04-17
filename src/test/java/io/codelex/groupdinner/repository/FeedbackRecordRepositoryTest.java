@@ -48,7 +48,7 @@ public class FeedbackRecordRepositoryTest extends Assertions {
         goodFeedbackRecord = feedbackRecordRepository.save(goodFeedbackRecord);
 
         //when
-        List<FeedbackRecord> result = feedbackRecordRepository.getFeedbackRecords(userRecord1.getId(), userRecord2.getId());
+        List<FeedbackRecord> result = feedbackRecordRepository.getFeedbacksForUsers(userRecord1.getId(), userRecord2.getId());
 
         //then
         assertEquals(goodFeedbackRecord, ((List) result).get(0));

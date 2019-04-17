@@ -25,4 +25,21 @@ public interface DinnerRecordRepository extends JpaRepository<DinnerRecord, Long
             @Param("location") String location,
             @Param("dateTime") LocalDateTime dateTime
     );
+    
+    //todo test this
+    @Query("select dinner 0 from DinnerRecord dinner where"
+            + " dinner.creator.id = :creator"
+            + " and dinner.title = :title"
+            + " and dinner.maxGuests = :maxGuests"
+            + " and dinner.description = :description"
+            + " and dinner.location = :location"
+            + " and dinner.dateTime = :dateTime")
+    DinnerRecord getDinner(
+            @Param("creator") Long userId,
+            @Param("title") String title,
+            @Param("maxGuests") Integer maxGuests,
+            @Param("description") String description,
+            @Param("location") String location,
+            @Param("dateTime") LocalDateTime dateTime
+    );
 }

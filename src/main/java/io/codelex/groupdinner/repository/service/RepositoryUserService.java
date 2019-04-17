@@ -23,9 +23,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+//todo separate auth methods from functionality of app
 @Component
 public class RepositoryUserService implements UserService {
-
+    
     private final DinnerRecordRepository dinnerRecordRepository;
     private final UserRecordRepository userRecordRepository;
     private final AttendeeRecordRepository attendeeRecordRepository;
@@ -46,6 +47,7 @@ public class RepositoryUserService implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    //tested
     @Override
     public Dinner createDinner(String userEmail, CreateDinnerRequest request) {
         UserRecord user = userRecordRepository.findByEmail(userEmail);
@@ -67,10 +69,18 @@ public class RepositoryUserService implements UserService {
             attendeeRecordRepository.save(attendee);
             return toDinner.apply(dinner);
         } else {
-            throw new IllegalStateException("Dinner already present");
+            DinnerRecord dinner = dinnerRecordRepository.getDinner(
+                    user.getId(),
+                    request.getTitle(),
+                    request.getMaxGuests(),
+                    request.getDescription(),
+                    request.getLocation(),
+                    request.getDateTime()
+            );
+            return toDinner.apply(dinner);
         }
     }
-
+    
     @Override
     public User registerUser(RegistrationRequest request) {
         if (!userRecordRepository.isUserPresent(request.getEmail())) {
@@ -87,6 +97,7 @@ public class RepositoryUserService implements UserService {
         }
     }
 
+    //todo test this
     @Override
     public User authenticateUser(SignInRequest request) {
         UserRecord user = userRecordRepository.findByEmail(request.getEmail().toLowerCase().trim());
@@ -100,31 +111,33 @@ public class RepositoryUserService implements UserService {
             throw new IllegalStateException("Email incorrect");
         }
     }
-
-
+    
+    //tested
     @Override
     public Attendee joinDinner(String userEmail, Long dinnerId) {
         Optional<DinnerRecord> dinner = dinnerRecordRepository.findById(dinnerId);
         UserRecord user = userRecordRepository.findByEmail(userEmail);
-        if (dinner.isPresent()) {
+        if (dinner.isPresent()) { //todo needed if dinnerId we get from pathvariable?
             if (!attendeeRecordRepository.userJoinedDinner(dinner.get().getId(), user.getId())) {
                 Integer attendeeCount = attendeeRecordRepository.countDinnerAttendees(dinnerId);
                 Boolean addToAcceptedGuests = attendeeCount < dinner.get().getMaxGuests();
                 AttendeeRecord attendee = new AttendeeRecord(
                         dinner.get(),
-                        userRecordRepository.findById(user.getId()).get(),
+                        user,
                         addToAcceptedGuests
                 );
                 attendee = attendeeRecordRepository.save(attendee);
                 return toAttendee.apply(attendee);
             } else {
-                throw new IllegalStateException("User already joined dinner");
+                AttendeeRecord attendee = attendeeRecordRepository.getAttendee(dinnerId, user.getId());
+                return toAttendee.apply(attendee);
             }
         } else {
             throw new IllegalArgumentException("No such dinner present");
         }
     }
 
+    //tested
     @Override
     public Feedback leaveFeedback(String providerEmail, Long dinnerId, LeaveFeedbackRequest request) {
         UserRecord provider = userRecordRepository.findByEmail(providerEmail);
@@ -134,11 +147,10 @@ public class RepositoryUserService implements UserService {
         } else if (provider.equals(receiver)) {
             throw new IllegalStateException("Provider is same as receiver");
         } else if (feedbackRecordRepository.isFeedbackPresent(dinnerId, provider.getId(), receiver.getId())) {
-            throw new IllegalStateException("Feedback for users already exist");
-        } else if (!attendeeRecordRepository.userJoinedDinner(dinnerId, provider.getId())
-                || !attendeeRecordRepository.userJoinedDinner(dinnerId, receiver.getId())) {
-            throw new IllegalStateException("No such common dinner for users");
-        } else {
+            FeedbackRecord feedback = feedbackRecordRepository.getFeedback(dinnerId, provider.getId(), receiver.getId());
+            return toFeedback.apply(feedback);
+        } else if (attendeeRecordRepository.userJoinedDinner(dinnerId, provider.getId())
+                && attendeeRecordRepository.userJoinedDinner(dinnerId, receiver.getId())) {
             Optional<DinnerRecord> dinner = dinnerRecordRepository.findById(dinnerId);
             FeedbackRecord feedback = new FeedbackRecord(
                     dinner.get(),
@@ -148,15 +160,19 @@ public class RepositoryUserService implements UserService {
             );
             feedback = feedbackRecordRepository.save(feedback);
             return toFeedback.apply(feedback);
+        } else {
+            throw new IllegalStateException("No such common dinner for users");
         }
     }
 
+    //todo test this ?
     @Override
     public Dinner findDinner(Long id) {
         Optional<DinnerRecord> dinner = dinnerRecordRepository.findById(id);
         return dinner.map(toDinner).orElse(null);
     }
-
+    
+    //todo test this
     @Override
     public List<User> findDinnerAttendees(Long dinnerId, boolean accepted) {
         List<AttendeeRecord> attendees = attendeeRecordRepository.findDinnerAttendees(dinnerId, accepted);
@@ -167,7 +183,8 @@ public class RepositoryUserService implements UserService {
         }
         return users.stream().map(toUser).collect(Collectors.toList());
     }
-
+    
+    //todo test this
     @Override //todo now only shows dinners only with guests that had good feedback from this user
     public List<Dinner> getGoodMatchDinners(String userEmail) {
         UserRecord user = userRecordRepository.findByEmail(userEmail);
@@ -187,8 +204,8 @@ public class RepositoryUserService implements UserService {
         }
         return resultingDinners;
     }
-
-
+    
+    //todo test this ??
     private DinnerRecord createDinnerRecordFromRequest(Long creatorId, CreateDinnerRequest request) {
         DinnerRecord dinner = new DinnerRecord();
         dinner.setTitle(request.getTitle());

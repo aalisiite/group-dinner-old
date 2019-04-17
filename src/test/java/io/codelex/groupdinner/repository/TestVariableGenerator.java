@@ -104,6 +104,22 @@ public class TestVariableGenerator {
                 true
         );
     }
+    
+    public RegistrationRequest createRegistrationRequest () {
+        return new RegistrationRequest(
+                "Janis",
+                "Berzins",
+                "berzins@gmai.com",
+                "password"
+        );
+    }
+    
+    public SignInRequest createSignInRequest () {
+        return new SignInRequest(
+                "berzins@gmai.com",
+                "password"
+        );
+    }
 
     public String createLocation() {
         return "Jurmalas Gatve 76";
