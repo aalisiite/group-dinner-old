@@ -32,32 +32,50 @@ public class RepositoryUserServiceTest {
     private AttendeeRecordRepository attendeeRecordRepository = Mockito.mock(AttendeeRecordRepository.class);
     private FeedbackRecordRepository feedbackRecordRepository = Mockito.mock(FeedbackRecordRepository.class);
     private RepositoryUserService userModule = new RepositoryUserService(dinnerRecordRepository, userRecordRepository, attendeeRecordRepository, feedbackRecordRepository, passwordEncoder);
-    private LocalDateTime localDateTime = LocalDateTime.of(2019, 1, 1, 0, 0);
-    private UserRecord userRecord = createUserRecord();
-    private String location = createLocation();
-    private DinnerRecord dinnerRecord = createDinnerRecord();
-    private AttendeeRecord attendeeRecord = createAcceptedAttendeeRecord();
-    private User user = createUser();
-    private CreateDinnerRequest dinnerRequest = createDinnerRequest();
+    
+    
+    private final TestVariableGenerator generator = new TestVariableGenerator();
+    private LocalDateTime localDateTime = generator.createDateTime();
+    private String location = generator.createLocation();
+    
+    private UserRecord userRecord1 = generator.createUserRecord1();
+    private UserRecord userRecord2 = generator.createUserRecord2();
+    private User user1 = generator.getUserFromUserRecord(1L, userRecord1);
+    private User user2 = generator.getUserFromUserRecord(2L, userRecord2);
+    
+    private CreateDinnerRequest createDinnerRequest = generator.createDinnerRequest(location, localDateTime);
+    
+    private DinnerRecord dinnerRecord = generator.createDinnerRecord(userRecord1,location,localDateTime);
+    private Dinner dinner = generator.getDinnerFromDinnerRecord(1L, dinnerRecord);
+    
+    private AttendeeRecord acceptedAttendeeRecord1 = generator.createAcceptedAttendeeRecord(dinnerRecord, userRecord1);
+    private AttendeeRecord acceptedAttendeeRecord2 = generator.createAcceptedAttendeeRecord(dinnerRecord, userRecord2);
+    private AttendeeRecord pendingAttendeeRecord1 = generator.createPendingAttendeeRecord(dinnerRecord, userRecord1);
+    private AttendeeRecord pendingAttendeeRecord2 = generator.createPendingAttendeeRecord(dinnerRecord, userRecord2);
+    
+    private Attendee acceptedAttendee1 = generator.getAttendeeFromAttendeeRecord(1L, acceptedAttendeeRecord1);
+    private Attendee acceptedAttendee2 = generator.getAttendeeFromAttendeeRecord(2L, acceptedAttendeeRecord2);
+    private Attendee pendingAttendee1 = generator.getAttendeeFromAttendeeRecord(3L, pendingAttendeeRecord1);
+    private Attendee pendingAttendee2 = generator.getAttendeeFromAttendeeRecord(4L, pendingAttendeeRecord2);
+
 
     @Test
     public void should_be_able_to_create_dinner() {
-        //given
-        Dinner dinner = createDinner();
-
         //when
+        Mockito.when(userRecordRepository.findByEmail(any()))
+                .thenReturn(userRecord1);
         Mockito.when(dinnerRecordRepository.isDinnerPresent(any(), any(), any(), any(), any(), any()))
                 .thenReturn(false);
+        Mockito.when(userRecordRepository.findById(any()))
+                .thenReturn(Optional.of(userRecord1));
         Mockito.when(dinnerRecordRepository.save(any()))
                 .thenReturn(dinnerRecord);
         Mockito.when(attendeeRecordRepository.save(any()))
-                .thenReturn(attendeeRecord);
+                .thenReturn(acceptedAttendeeRecord1);
         Mockito.when(toDinner.apply(any()))
                 .thenReturn(dinner);
 
-        Dinner result = userModule.createDinner(user.getId().toString(), dinnerRequest);
-        result.setId(dinner.getId());
-        result.getCreator().setId(dinner.getCreator().getId());
+        Dinner result = userModule.createDinner(user1.getId().toString(), createDinnerRequest);
 
         //then
         assertEquals(dinner.getTitle(), result.getTitle());
@@ -67,11 +85,13 @@ public class RepositoryUserServiceTest {
     @Test
     public void should_not_be_able_to_create_duplicate_dinner() {
         //when
+        Mockito.when(userRecordRepository.findByEmail(any()))
+                .thenReturn(userRecord1);
         Mockito.when(dinnerRecordRepository.isDinnerPresent(any(), any(), any(), any(), any(), any()))
                 .thenReturn(true);
 
         //then
-        Executable executable = () -> userModule.createDinner(user.getId().toString(), dinnerRequest);
+        Executable executable = () -> userModule.createDinner(user1.getId().toString(), createDinnerRequest);
         assertThrows(IllegalStateException.class, executable);
     }
 
@@ -79,18 +99,17 @@ public class RepositoryUserServiceTest {
     @Test
     public void should_be_able_to_join_event_with_accepted_status() {
         //given
-        Attendee attendee = createAcceptedAttendee();
         Principal principal = () -> "1";
 
         //when
         Mockito.when(dinnerRecordRepository.findById(any()))
                 .thenReturn(Optional.of(dinnerRecord));
         Mockito.when(userRecordRepository.findById(any()))
-                .thenReturn(Optional.of(userRecord));
+                .thenReturn(Optional.of(userRecord1));
         Mockito.when(attendeeRecordRepository.save(any()))
-                .thenReturn(attendeeRecord);
+                .thenReturn(acceptedAttendeeRecord1);
         Mockito.when(toAttendee.apply(any()))
-                .thenReturn(attendee);
+                .thenReturn(acceptedAttendee1);
 
 
         Attendee result = userModule.joinDinner(principal.getName(), dinnerRecord.getId());
@@ -104,18 +123,17 @@ public class RepositoryUserServiceTest {
     public void should_be_able_to_join_event_with_pending_status() {
         //given
         dinnerRecord.setMaxGuests(1);
-        Attendee attendee = createAcceptedAttendee();
         Principal principal = () -> "1";
 
         //when
         Mockito.when(dinnerRecordRepository.findById(any()))
                 .thenReturn(Optional.of(dinnerRecord));
         Mockito.when(userRecordRepository.findById(any()))
-                .thenReturn(Optional.of(userRecord));
+                .thenReturn(Optional.of(userRecord1));
         Mockito.when(attendeeRecordRepository.save(any()))
-                .thenReturn(attendeeRecord);
+                .thenReturn(acceptedAttendeeRecord1);
         Mockito.when(toAttendee.apply(any()))
-                .thenReturn(attendee);
+                .thenReturn(acceptedAttendee1);
 
 
         Attendee result = userModule.joinDinner(principal.getName(), dinnerRecord.getId());
@@ -134,76 +152,7 @@ public class RepositoryUserServiceTest {
         //todo
     }
 
-    private AttendeeRecord createAcceptedAttendeeRecord() {
-        return new AttendeeRecord(
-                dinnerRecord,
-                userRecord,
-                true
-        );
-    }
 
-    private Attendee createAcceptedAttendee() {
-        return new Attendee(
-                1L,
-                createDinner(),
-                user,
-                true
-        );
-    }
 
-    private UserRecord createUserRecord() {
-        return new UserRecord(
-                "Janis",
-                "Berzins",
-                "berzins@gmai.com",
-                "password"
-        );
-    }
-
-    private CreateDinnerRequest createDinnerRequest() {
-        return new CreateDinnerRequest(
-                "This is a title",
-                2,
-                "This is a description",
-                location,
-                localDateTime
-        );
-    }
-
-    private DinnerRecord createDinnerRecord() {
-        return new DinnerRecord(
-                "This is a title",
-                userRecord,
-                2,
-                "This is a description",
-                location,
-                localDateTime
-        );
-    }
-
-    private String createLocation() {
-        return "Jurmalas Gatve 76";
-    }
-
-    private User createUser() {
-        return new User(
-                1L,
-                "Janis",
-                "Berzins",
-                "berzins@gmai.com"
-        );
-    }
-
-    private Dinner createDinner() {
-        return new Dinner(
-                1L,
-                "This is a title",
-                user,
-                2,
-                "This is a description",
-                location,
-                localDateTime
-        );
-    }
 
 }

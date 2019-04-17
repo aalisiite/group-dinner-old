@@ -11,17 +11,15 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/dinners")
 public class UserController {
-
-    @Autowired //todo needed?
-    private UserService userService;
-
+    private final UserService userService;
+    
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @PostMapping("/dinners")
+    @PostMapping//todo remove dinners
     public ResponseEntity<Dinner> createDinner(
             Principal principal,
             @Valid @RequestBody CreateDinnerRequest request) {

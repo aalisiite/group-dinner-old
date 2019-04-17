@@ -1,6 +1,8 @@
 package io.codelex.groupdinner.repository;
 
 
+import io.codelex.groupdinner.api.Dinner;
+import io.codelex.groupdinner.api.User;
 import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.UserRecord;
@@ -26,40 +28,26 @@ public class AttendeeRecordRepositoryTest extends Assertions {
 
     @Autowired
     UserRecordRepository userRecordRepository;
-
-    private LocalDateTime localDateTime = LocalDateTime.of(2019, 1, 1, 0, 0);
-    private UserRecord userRecord = createUserRecord();
-    private String location = createLocation();
-    private DinnerRecord dinnerRecord = createDinnerRecord();
-    private AttendeeRecord attendeeRecord = createAttendeeRecord();
-
-    @BeforeEach
-    void setUp() {
-        attendeeRecordRepository.deleteAll();
-        dinnerRecordRepository.deleteAll();
-        userRecordRepository.deleteAll();
-    }
+    
+    private final TestVariableGenerator generator = new TestVariableGenerator();
+    private LocalDateTime localDateTime = generator.createDateTime();
+    private String location = generator.createLocation();
+    private UserRecord userRecord1 = generator.createUserRecord1();
+    private UserRecord userRecord2 = generator.createUserRecord2();
+    private DinnerRecord dinnerRecord = generator.createDinnerRecord(userRecord1,location,localDateTime);
+    private AttendeeRecord acceptedAttendeeRecord1 = generator.createAcceptedAttendeeRecord(dinnerRecord, userRecord1);
+    private AttendeeRecord acceptedAttendeeRecord2 = generator.createAcceptedAttendeeRecord(dinnerRecord, userRecord2);
+    private AttendeeRecord pendingAttendeeRecord2 = generator.createPendingAttendeeRecord(dinnerRecord, userRecord2);
 
     @Test
-    public void should_return_all_accepted_attendees_to_given_dinner() {
+    public void should_return_all_accepted_attendees_to_dinner() {
 
         //given
-        userRecord = userRecordRepository.save(userRecord);
-        dinnerRecord = dinnerRecordRepository.save(dinnerRecord);
-        UserRecord userRecord2 = new UserRecord(
-                "Anna",
-                "Kalniņa",
-                "a.kalnina@gmail.com",
-                "password"
-        );
+        userRecord1 = userRecordRepository.save(userRecord1);
         userRecord2 = userRecordRepository.save(userRecord2);
-        AttendeeRecord attendeeRecord2 = new AttendeeRecord(
-                dinnerRecord,
-                userRecord2,
-                true
-        );
-        attendeeRecord = attendeeRecordRepository.save(attendeeRecord);
-        attendeeRecordRepository.save(attendeeRecord2);
+        dinnerRecord = dinnerRecordRepository.save(dinnerRecord);
+        acceptedAttendeeRecord1 = attendeeRecordRepository.save(acceptedAttendeeRecord1);
+        acceptedAttendeeRecord2 = attendeeRecordRepository.save(acceptedAttendeeRecord2);
 
         //when
         List<AttendeeRecord> attendeeRecords = attendeeRecordRepository.findDinnerAttendees(dinnerRecord.getId(), true);
@@ -69,24 +57,14 @@ public class AttendeeRecordRepositoryTest extends Assertions {
     }
 
     @Test
-    public void should_return_all_pending_attendees_to_given_dinner() {
+    public void should_return_all_pending_attendees_to_dinner() {
 
         //given
-        userRecord = userRecordRepository.save(userRecord);
+        userRecord1 = userRecordRepository.save(userRecord1);
         dinnerRecord = dinnerRecordRepository.save(dinnerRecord);
-        UserRecord userRecord2 = new UserRecord(
-                "Anna",
-                "Kalniņa",
-                "a.kalnina@gmail.com",
-                "password"
-        );
         userRecord2 = userRecordRepository.save(userRecord2);
-        AttendeeRecord attendeeRecord2 = new AttendeeRecord(
-                dinnerRecord,
-                userRecord2,
-                false
-        );
-        attendeeRecordRepository.save(attendeeRecord2);
+        acceptedAttendeeRecord1 = attendeeRecordRepository.save(acceptedAttendeeRecord1);
+        pendingAttendeeRecord2 = attendeeRecordRepository.save(pendingAttendeeRecord2);
 
         //when
         List<AttendeeRecord> attendeeRecords = attendeeRecordRepository.findDinnerAttendees(dinnerRecord.getId(), false);
@@ -94,53 +72,62 @@ public class AttendeeRecordRepositoryTest extends Assertions {
         //then
         assertEquals(1, attendeeRecords.size());
     }
+    
+
+    @Test
+    public void should_return_count_of_attendees_to_dinner() {
+
+        //given
+        userRecord1 = userRecordRepository.save(userRecord1);
+        userRecord2 = userRecordRepository.save(userRecord2);
+        dinnerRecord = dinnerRecordRepository.save(dinnerRecord);
+        acceptedAttendeeRecord1 = attendeeRecordRepository.save(acceptedAttendeeRecord1);
+        pendingAttendeeRecord2 = attendeeRecordRepository.save(pendingAttendeeRecord2);
+
+        //when
+        Integer count = attendeeRecordRepository.countDinnerAttendees(dinnerRecord.getId());
+
+        //then
+        assertEquals(2, count);
+    }
 
     @Test
     void should_return_attendee_status() {
         //given
-        userRecord = userRecordRepository.save(userRecord);
+        userRecord1 = userRecordRepository.save(userRecord1);
         dinnerRecord = dinnerRecordRepository.save(dinnerRecord);
-        attendeeRecord = attendeeRecordRepository.save(attendeeRecord);
+        acceptedAttendeeRecord1 = attendeeRecordRepository.save(acceptedAttendeeRecord1);
 
         //when
-        boolean result = attendeeRecordRepository.getAttendeeIsAccepted(dinnerRecord.getId(), userRecord.getId());
+        boolean result = attendeeRecordRepository.getAttendeeStatus(dinnerRecord.getId(), userRecord1.getId());
 
         //then
         assertTrue(result);
     }
 
-    private DinnerRecord createDinnerRecord() {
-        DinnerRecord dinnerRecord = new DinnerRecord(
-                "This is a title",
-                userRecord,
-                2,
-                "This is a description",
-                location,
-                localDateTime
-        );
-        return dinnerRecord;
+    @Test
+    void should_return_true_if_user_has_joined_dinner () {
+        
+        //given
+        userRecord1 = userRecordRepository.save(userRecord1);
+        dinnerRecord = dinnerRecordRepository.save(dinnerRecord);
+        acceptedAttendeeRecord1 = attendeeRecordRepository.save(acceptedAttendeeRecord1);
+
+        //when
+        boolean result = attendeeRecordRepository.userJoinedDinner(dinnerRecord.getId(), userRecord1.getId());
+
+        //then
+        assertTrue(result);
+    }
+    
+    @Test
+    void should_return_false_if_user_has_not_joined_dinner () {
+        
+        //when
+        boolean result = attendeeRecordRepository.userJoinedDinner(dinnerRecord.getId(), userRecord1.getId());
+
+        //then
+        assertFalse(result);
     }
 
-    private UserRecord createUserRecord() {
-        UserRecord userRecord = new UserRecord(
-                "Janis",
-                "Berzins",
-                "berzins@gmai.com",
-                "password"
-        );
-        return userRecord;
-    }
-
-    private AttendeeRecord createAttendeeRecord() {
-        AttendeeRecord attendeeRecord = new AttendeeRecord(
-                dinnerRecord,
-                userRecord,
-                true
-        );
-        return attendeeRecord;
-    }
-
-    private String createLocation() {
-        return "Jurmalas Gatve 76";
-    }
 }

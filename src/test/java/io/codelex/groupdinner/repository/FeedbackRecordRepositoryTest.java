@@ -1,5 +1,6 @@
 package io.codelex.groupdinner.repository;
 
+import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.FeedbackRecord;
 import io.codelex.groupdinner.repository.model.UserRecord;
@@ -28,71 +29,42 @@ public class FeedbackRecordRepositoryTest extends Assertions {
 
     @Autowired
     FeedbackRecordRepository feedbackRecordRepository;
-
-    private LocalDateTime localDateTime = LocalDateTime.of(2019, 1, 1, 0, 0);
-    private UserRecord userRecord = createUserRecord();
-    private String location = createLocation();
-    private DinnerRecord dinnerRecord = createDinnerRecord();
-
-    //todo 
-    //create separate class in tests that returns list of example UserRecords, DinnerRecords, AttendeeRecords, FeedbackRecords
-
-    @BeforeEach
-    void setUp() {
-        attendeeRecordRepository.deleteAll();
-        dinnerRecordRepository.deleteAll();
-        userRecordRepository.deleteAll();
-        feedbackRecordRepository.deleteAll();
-    }
+    
+    private final TestVariableGenerator generator = new TestVariableGenerator();
+    private LocalDateTime localDateTime = generator.createDateTime();
+    private String location = generator.createLocation();
+    private UserRecord userRecord1 = generator.createUserRecord1();
+    private UserRecord userRecord2 = generator.createUserRecord2();
+    private DinnerRecord dinnerRecord = generator.createDinnerRecord(userRecord1, location, localDateTime);
+    private FeedbackRecord goodFeedbackRecord = generator.createGoodFeedbackRecord(dinnerRecord, userRecord1, userRecord2);
 
     @Test
     public void should_return_feedback_by_provider_receiver_ids() {
+
         //given
-        userRecord = userRecordRepository.save(userRecord);
-        UserRecord userRecord2 = new UserRecord(
-                "Anna",
-                "Kalniņa",
-                "a.kalnina@gmail.com",
-                "password"
-        );
+        userRecord1 = userRecordRepository.save(userRecord1);
         userRecord2 = userRecordRepository.save(userRecord2);
-        FeedbackRecord feedbackRecord = new FeedbackRecord(
-                dinnerRecord,
-                userRecord,
-                userRecord2,
-                true
-        );
-        feedbackRecordRepository.save(feedbackRecord);
+        dinnerRecord = dinnerRecordRepository.save(dinnerRecord);
+        goodFeedbackRecord = feedbackRecordRepository.save(goodFeedbackRecord);
 
         //when
-        List<FeedbackRecord> result = feedbackRecordRepository.getFeedbackRecords(userRecord.getId(), userRecord2.getId());
+        List<FeedbackRecord> result = feedbackRecordRepository.getFeedbackRecords(userRecord1.getId(), userRecord2.getId());
 
         //then
-        assertEquals(feedbackRecord, ((List) result).get(0));
+        assertEquals(goodFeedbackRecord, ((List) result).get(0));
         assertTrue(result.get(0).isRating());
     }
 
     @Test
     public void should_return_true_if_given_feedback_present() {
         //given
-        userRecord = userRecordRepository.save(userRecord);
-        UserRecord userRecord2 = new UserRecord(
-                "Anna",
-                "Kalniņa",
-                "a.kalnina@gmail.com",
-                "password"
-        );
+        userRecord1 = userRecordRepository.save(userRecord1);
         userRecord2 = userRecordRepository.save(userRecord2);
-        FeedbackRecord feedbackRecord = new FeedbackRecord(
-                dinnerRecord,
-                userRecord,
-                userRecord2,
-                true
-        );
-        feedbackRecordRepository.save(feedbackRecord);
+        dinnerRecord = dinnerRecordRepository.save(dinnerRecord);
+        goodFeedbackRecord = feedbackRecordRepository.save(goodFeedbackRecord);
 
         //when
-        boolean result = feedbackRecordRepository.isFeedbackPresent(dinnerRecord.getId(), userRecord.getId(), userRecord2.getId());
+        boolean result = feedbackRecordRepository.isFeedbackPresent(dinnerRecord.getId(), userRecord1.getId(), userRecord2.getId());
 
         //then
         assertTrue(result);
@@ -105,30 +77,6 @@ public class FeedbackRecordRepositoryTest extends Assertions {
 
         //then
         assertFalse(result);
-    }
-
-    private DinnerRecord createDinnerRecord() {
-        return new DinnerRecord(
-                "This is a title",
-                userRecord,
-                2,
-                "This is a description",
-                location,
-                localDateTime
-        );
-    }
-
-    private UserRecord createUserRecord() {
-        return new UserRecord(
-                "Janis",
-                "Berzins",
-                "berzins@gmai.com",
-                "password"
-        );
-    }
-
-    private String createLocation() {
-        return "Jurmalas Gatve 76";
     }
 
 }

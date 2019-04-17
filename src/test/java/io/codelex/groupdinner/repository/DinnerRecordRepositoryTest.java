@@ -1,5 +1,6 @@
 package io.codelex.groupdinner.repository;
 
+import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.UserRecord;
 import org.junit.jupiter.api.Assertions;
@@ -26,23 +27,15 @@ class DinnerRecordRepositoryTest extends Assertions {
 
     @Autowired
     FeedbackRecordRepository feedbackRecordRepository;
-
-    private LocalDateTime localDateTime = LocalDateTime.of(2019, 1, 1, 0, 0);
-    private UserRecord userRecord = createUserRecord();
-    private String location = createLocation();
-    private DinnerRecord dinnerRecord = createDinnerRecord();
-
-    @BeforeEach
-    void setUp() {
-        attendeeRecordRepository.deleteAll();
-        dinnerRecordRepository.deleteAll();
-        userRecordRepository.deleteAll();
-        feedbackRecordRepository.deleteAll();
-    }
-
+    
+    private final TestVariableGenerator generator = new TestVariableGenerator();
+    private LocalDateTime localDateTime = generator.createDateTime();
+    private String location = generator.createLocation();
+    private UserRecord userRecord = generator.createUserRecord1();
+    private DinnerRecord dinnerRecord = generator.createDinnerRecord(userRecord,location,localDateTime);
 
     @Test
-    void is_dinner_present_should_return_true_when_match_found() {
+    void should_return_true_when_match_found() {
 
         //given
         userRecord = userRecordRepository.save(userRecord);
@@ -63,7 +56,7 @@ class DinnerRecordRepositoryTest extends Assertions {
     }
 
     @Test
-    void is_dinner_present_should_return_false_when_no_match_found() {
+    void should_return_false_when_no_match_found() {
 
         //when
         boolean isDinnerPresent = dinnerRecordRepository.isDinnerPresent(
@@ -77,30 +70,6 @@ class DinnerRecordRepositoryTest extends Assertions {
 
         //then
         assertFalse(isDinnerPresent);
-    }
-
-    private DinnerRecord createDinnerRecord() {
-        return new DinnerRecord(
-                "This is a title",
-                userRecord,
-                2,
-                "This is a description",
-                location,
-                localDateTime
-        );
-    }
-
-    private UserRecord createUserRecord() {
-        return new UserRecord(
-                "Janis",
-                "Berzins",
-                "berzins@gmai.com",
-                "password"
-        );
-    }
-
-    private String createLocation() {
-        return "Jurmalas Gatve 76";
     }
 
 }
