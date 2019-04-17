@@ -92,7 +92,7 @@ public class FeedbackRecordRepositoryTest extends Assertions {
         feedbackRecordRepository.save(feedbackRecord);
 
         //when
-        boolean result = feedbackRecordRepository.isFeedbackPresent(userRecord.getId(), userRecord2.getId());
+        boolean result = feedbackRecordRepository.isFeedbackPresent(dinnerRecord.getId(), userRecord.getId(), userRecord2.getId());
 
         //then
         assertTrue(result);
@@ -101,14 +101,14 @@ public class FeedbackRecordRepositoryTest extends Assertions {
     @Test
     public void should_return_false_if_given_feedback_not_present() {
         //when
-        boolean result = feedbackRecordRepository.isFeedbackPresent(1L, 2L);
+        boolean result = feedbackRecordRepository.isFeedbackPresent(1L, 1L, 2L);
 
         //then
         assertFalse(result);
     }
 
     private DinnerRecord createDinnerRecord() {
-        DinnerRecord dinnerRecord = new DinnerRecord(
+        return new DinnerRecord(
                 "This is a title",
                 userRecord,
                 2,
@@ -116,17 +116,15 @@ public class FeedbackRecordRepositoryTest extends Assertions {
                 location,
                 localDateTime
         );
-        return dinnerRecord;
     }
 
     private UserRecord createUserRecord() {
-        UserRecord userRecord = new UserRecord(
+        return new UserRecord(
                 "Janis",
                 "Berzins",
                 "berzins@gmai.com",
                 "password"
         );
-        return userRecord;
     }
 
     private String createLocation() {

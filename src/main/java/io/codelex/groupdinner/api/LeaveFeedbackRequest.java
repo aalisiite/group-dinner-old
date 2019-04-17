@@ -2,17 +2,18 @@ package io.codelex.groupdinner.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class LeaveFeedbackRequest {
 
-    @NotNull
-    private User receiver;
+    @NotEmpty
+    private String receiver;
     @NotNull
     private Boolean rating;
 
     public LeaveFeedbackRequest(
-            @JsonProperty("receiver") @NotNull User receiver,
+            @JsonProperty("receiver") @NotEmpty String receiver,
             @JsonProperty("rating") @NotNull Boolean rating) {
         this.receiver = receiver;
         this.rating = rating;
@@ -21,11 +22,11 @@ public class LeaveFeedbackRequest {
     public LeaveFeedbackRequest() {
     }
 
-    public User getReceiver() {
+    public String getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(User receiver) {
+    public void setReceiver(String receiver) {
         this.receiver = receiver;
     }
 

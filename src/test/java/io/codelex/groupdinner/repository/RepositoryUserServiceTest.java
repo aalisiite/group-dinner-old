@@ -46,7 +46,7 @@ public class RepositoryUserServiceTest {
         Dinner dinner = createDinner();
 
         //when
-        Mockito.when(dinnerRecordRepository.isDinnerPresent(any(), any(), any(), any(), any()))
+        Mockito.when(dinnerRecordRepository.isDinnerPresent(any(), any(), any(), any(), any(), any()))
                 .thenReturn(false);
         Mockito.when(dinnerRecordRepository.save(any()))
                 .thenReturn(dinnerRecord);
@@ -55,7 +55,7 @@ public class RepositoryUserServiceTest {
         Mockito.when(toDinner.apply(any()))
                 .thenReturn(dinner);
 
-        Dinner result = userModule.createDinner(dinnerRequest);
+        Dinner result = userModule.createDinner(user.getId().toString(), dinnerRequest);
         result.setId(dinner.getId());
         result.getCreator().setId(dinner.getCreator().getId());
 
@@ -67,11 +67,11 @@ public class RepositoryUserServiceTest {
     @Test
     public void should_not_be_able_to_create_duplicate_dinner() {
         //when
-        Mockito.when(dinnerRecordRepository.isDinnerPresent(any(), any(), any(), any(), any()))
+        Mockito.when(dinnerRecordRepository.isDinnerPresent(any(), any(), any(), any(), any(), any()))
                 .thenReturn(true);
 
         //then
-        Executable executable = () -> userModule.createDinner(dinnerRequest);
+        Executable executable = () -> userModule.createDinner(user.getId().toString(), dinnerRequest);
         assertThrows(IllegalStateException.class, executable);
     }
 

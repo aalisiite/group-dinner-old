@@ -94,7 +94,7 @@ public class UserControllerTest {
 
 
         //when
-        Mockito.when(userService.createDinner(any()))
+        Mockito.when(userService.createDinner(any(), any()))
                 .thenReturn(dinner);
 
         //expect

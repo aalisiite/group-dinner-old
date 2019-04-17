@@ -17,6 +17,7 @@ import io.codelex.groupdinner.repository.model.UserRecord;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -46,15 +47,17 @@ public class RepositoryUserService implements UserService {
     }
 
     @Override
-    public Dinner createDinner(CreateDinnerRequest request) {
+    public Dinner createDinner(String userEmail, CreateDinnerRequest request) {
+        UserRecord user = userRecordRepository.findByEmail(userEmail);
         if (!dinnerRecordRepository.isDinnerPresent(
+                user.getId(),
                 request.getTitle(),
                 request.getMaxGuests(),
                 request.getDescription(),
                 request.getLocation(),
                 request.getDateTime()
         )) {
-            DinnerRecord dinnerRecord = createDinnerRecordFromRequest(request);
+            DinnerRecord dinnerRecord = createDinnerRecordFromRequest(user.getId(), request);
             dinnerRecord = dinnerRecordRepository.save(dinnerRecord);
             AttendeeRecord attendeeRecord = new AttendeeRecord(
                     dinnerRecord,
@@ -80,7 +83,7 @@ public class RepositoryUserService implements UserService {
             userRecord = userRecordRepository.save(userRecord);
             return toUser.apply(userRecord);
         } else {
-            throw new IllegalStateException("email already exists");
+            throw new IllegalStateException("Email already exists");
         }
     }
 
@@ -91,52 +94,59 @@ public class RepositoryUserService implements UserService {
             if (passwordEncoder.matches(request.getPassword(), userRecord.getPassword())) {
                 return toUser.apply(userRecord);
             } else {
-                throw new IllegalStateException("password incorrect");
+                throw new IllegalStateException("Password incorrect");
             }
         } else {
-            throw new IllegalStateException("email incorrect");
+            throw new IllegalStateException("Email incorrect");
         }
     }
 
 
     @Override
-    public Attendee joinDinner(String userId, Long dinnerId) {
+    public Attendee joinDinner(String userEmail, Long dinnerId) {
         Optional<DinnerRecord> dinnerRecord = dinnerRecordRepository.findById(dinnerId);
-        Long userIdLong = Long.parseLong(userId);
+        UserRecord user = userRecordRepository.findByEmail(userEmail);
         if (dinnerRecord.isPresent()) {
-            Integer attendeeCount = attendeeRecordRepository.countDinnerAttendees(dinnerId);
-            Boolean addToAcceptedGuests = attendeeCount < dinnerRecord.get().getMaxGuests();
-            AttendeeRecord attendeeRecord = new AttendeeRecord(
-                    dinnerRecord.get(),
-                    userRecordRepository.findById(userIdLong).get(),
-                    addToAcceptedGuests
-            );
-            attendeeRecordRepository.save(attendeeRecord);
-            return toAttendee.apply(attendeeRecord);
+            if (!attendeeRecordRepository.userAttendsDinner(dinnerRecord.get().getId(), user.getId())) {
+                Integer attendeeCount = attendeeRecordRepository.countDinnerAttendees(dinnerId);
+                Boolean addToAcceptedGuests = attendeeCount < dinnerRecord.get().getMaxGuests();
+                AttendeeRecord attendeeRecord = new AttendeeRecord(
+                        dinnerRecord.get(),
+                        userRecordRepository.findById(user.getId()).get(),
+                        addToAcceptedGuests
+                );
+                attendeeRecord = attendeeRecordRepository.save(attendeeRecord);
+                return toAttendee.apply(attendeeRecord);
+            } else {
+                throw new IllegalStateException("User already joined dinner");
+            }
         } else {
             throw new IllegalArgumentException("No such dinner present");
         }
     }
 
     @Override
-    public Feedback leaveFeedback(String provider, Long dinnerId, LeaveFeedbackRequest request) {
-        Long providerId = Long.parseLong(provider);
-        if (feedbackRecordRepository.isFeedbackPresent(providerId, request.getReceiver().getId())) {
+    public Feedback leaveFeedback(String providerEmail, Long dinnerId, LeaveFeedbackRequest request) {
+        UserRecord provider = userRecordRepository.findByEmail(providerEmail);
+        UserRecord receiver = userRecordRepository.findByEmail(request.getReceiver());
+        if (receiver == null) {
+            throw new IllegalArgumentException("No such user");
+        } else if (provider.equals(receiver)) {
+            throw new IllegalStateException("Provider is same as receiver");
+        } else if (feedbackRecordRepository.isFeedbackPresent(dinnerId, provider.getId(), receiver.getId())) {
             throw new IllegalStateException("Feedback for users already exist");
-        } else if (attendeeRecordRepository.userAttendedDinner(dinnerId, providerId)
-                && attendeeRecordRepository.userAttendedDinner(dinnerId, request.getReceiver().getId())) {
+        } else if (!attendeeRecordRepository.userAttendsDinner(dinnerId, provider.getId())
+                || !attendeeRecordRepository.userAttendsDinner(dinnerId, receiver.getId())) {
             throw new IllegalStateException("No such common dinner for users");
         } else {
-            Optional<UserRecord> providerRecord = userRecordRepository.findById(providerId);
-            Optional<UserRecord> receiverRecord = userRecordRepository.findById(request.getReceiver().getId());
             Optional<DinnerRecord> dinnerRecord = dinnerRecordRepository.findById(dinnerId);
             FeedbackRecord feedbackRecord = new FeedbackRecord(
                     dinnerRecord.get(),
-                    providerRecord.get(),
-                    receiverRecord.get(),
+                    provider,
+                    receiver,
                     request.getFeedback()
             );
-            feedbackRecordRepository.save(feedbackRecord);
+            feedbackRecord = feedbackRecordRepository.save(feedbackRecord);
             return toFeedback.apply(feedbackRecord);
         }
     }
@@ -146,11 +156,11 @@ public class RepositoryUserService implements UserService {
         Optional<DinnerRecord> dinnerRecord = dinnerRecordRepository.findById(id);
         return dinnerRecord.map(toDinner).orElse(null);
     }
-    
+
     @Override
     public List<User> findDinnerAttendees(Long dinnerId, boolean accepted) {
         List<AttendeeRecord> attendees = attendeeRecordRepository.findDinnerAttendees(dinnerId, accepted);
-        List<UserRecord> users = Collections.emptyList();
+        List<UserRecord> users = new ArrayList<>();
         for (AttendeeRecord attendee : attendees) {
             Optional<UserRecord> userRecord = userRecordRepository.findById(attendee.getUser().getId());
             userRecord.ifPresent(users::add);
@@ -158,10 +168,32 @@ public class RepositoryUserService implements UserService {
         return users.stream().map(toUser).collect(Collectors.toList());
     }
 
+    @Override //todo now only shows dinners only with guests that had good feedback from this user
+    public List<Dinner> getGoodMatchDinners(String userEmail) {
+        UserRecord user = userRecordRepository.findByEmail(userEmail);
+        List<UserRecord> badFeedbackUsers = feedbackRecordRepository.getBadFeedbackUsers(user.getId());
+        List<DinnerRecord> dinners = dinnerRecordRepository.findAll();
+        for (DinnerRecord dinner : dinners) {
+            for (UserRecord userRecord : badFeedbackUsers) {
+                if (attendeeRecordRepository.userAttendsDinner(dinner.getId(), userRecord.getId())) {
+                    dinners.remove(dinner);
+                    break;
+                }
+            }
+        }
+        List<Dinner> resultingDinners = new ArrayList<>();
+        for (DinnerRecord dinnerRecord : dinners) {
+            resultingDinners.add(toDinner.apply(dinnerRecord));
+        }
+        return resultingDinners;
+    }
 
-    private DinnerRecord createDinnerRecordFromRequest(CreateDinnerRequest request) {
+
+    private DinnerRecord createDinnerRecordFromRequest(Long creatorId, CreateDinnerRequest request) {
         DinnerRecord dinnerRecord = new DinnerRecord();
         dinnerRecord.setTitle(request.getTitle());
+        Optional<UserRecord> creator = userRecordRepository.findById(creatorId);
+        dinnerRecord.setCreator(creator.get());
         dinnerRecord.setMaxGuests(request.getMaxGuests());
         dinnerRecord.setDescription(request.getDescription());
         dinnerRecord.setLocation(request.getLocation());

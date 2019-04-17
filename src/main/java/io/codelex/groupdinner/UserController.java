@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/api")
 public class UserController {
 
-    @Autowired
+    @Autowired //todo needed?
     private UserService userService;
 
     public UserController(UserService userService) {
@@ -22,8 +22,10 @@ public class UserController {
     }
 
     @PostMapping("/dinners")
-    public ResponseEntity<Dinner> createDinner(@Valid @RequestBody CreateDinnerRequest request) {
-        return new ResponseEntity<>(userService.createDinner(request), HttpStatus.CREATED);
+    public ResponseEntity<Dinner> createDinner(
+            Principal principal,
+            @Valid @RequestBody CreateDinnerRequest request) {
+        return new ResponseEntity<>(userService.createDinner(principal.getName(), request), HttpStatus.CREATED);
     }
 
     @PostMapping("/dinners/{id}/join")
@@ -45,15 +47,20 @@ public class UserController {
     public ResponseEntity<Dinner> getDinner(@PathVariable("id") Long id) {
         return new ResponseEntity<>(userService.findDinner(id), HttpStatus.OK);
     }
-    
+
     @GetMapping("/dinners/{id}/accepted")
-    public ResponseEntity<List<User>> getAcceptedDinnerAttendees (@PathVariable("id") Long id) {
+    public ResponseEntity<List<User>> getAcceptedDinnerAttendees(@PathVariable("id") Long id) {
         return new ResponseEntity<>(userService.findDinnerAttendees(id, true), HttpStatus.OK);
     }
-    
+
     @GetMapping("/dinners/{id}/pending")
-    public ResponseEntity<List<User>> getPendingDinnerAttendees (@PathVariable("id") Long id) {
+    public ResponseEntity<List<User>> getPendingDinnerAttendees(@PathVariable("id") Long id) {
         return new ResponseEntity<>(userService.findDinnerAttendees(id, false), HttpStatus.OK);
+    }
+
+    @GetMapping("/dinners")
+    public ResponseEntity<List<Dinner>> getDinners(Principal principal) {
+        return new ResponseEntity<>(userService.getGoodMatchDinners(principal.getName()), HttpStatus.OK);
     }
 
 

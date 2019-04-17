@@ -32,8 +32,10 @@ public interface AttendeeRecordRepository extends JpaRepository<AttendeeRecord, 
     @Query("select count(attendee) > 0 from AttendeeRecord attendee"
             + " where attendee.dinner.id = :dinnerId"
             + " and attendee.user.id = :userId")
-    Boolean userAttendedDinner(@Param("dinnerId") Long dinnerId,
+    Boolean userAttendsDinner(@Param("dinnerId") Long dinnerId,
                                @Param("userId") Long userId);
 
 
+    
+    
 }

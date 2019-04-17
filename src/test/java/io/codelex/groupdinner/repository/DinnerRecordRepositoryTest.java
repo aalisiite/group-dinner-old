@@ -50,6 +50,7 @@ class DinnerRecordRepositoryTest extends Assertions {
 
         //when
         boolean isDinnerPresent = dinnerRecordRepository.isDinnerPresent(
+                userRecord.getId(),
                 dinnerRecord.getTitle(),
                 dinnerRecord.getMaxGuests(),
                 dinnerRecord.getDescription(),
@@ -66,6 +67,7 @@ class DinnerRecordRepositoryTest extends Assertions {
 
         //when
         boolean isDinnerPresent = dinnerRecordRepository.isDinnerPresent(
+                userRecord.getId(),
                 dinnerRecord.getTitle(),
                 dinnerRecord.getMaxGuests(),
                 dinnerRecord.getDescription(),
