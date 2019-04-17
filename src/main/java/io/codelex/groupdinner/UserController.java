@@ -1,7 +1,6 @@
 package io.codelex.groupdinner;
 
 import io.codelex.groupdinner.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +13,7 @@ import java.util.List;
 @RequestMapping("/api/dinners")
 public class UserController {
     private final UserService userService;
-    
+
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -51,7 +50,7 @@ public class UserController {
     public ResponseEntity<List<User>> getAcceptedDinnerAttendees(@PathVariable("id") Long id) {
         return new ResponseEntity<>(userService.findDinnerAttendees(id, true), HttpStatus.OK);
     }
-    
+
     //todo same
     @GetMapping("/{id}/pending")
     public ResponseEntity<List<User>> getPendingDinnerAttendees(@PathVariable("id") Long id) {

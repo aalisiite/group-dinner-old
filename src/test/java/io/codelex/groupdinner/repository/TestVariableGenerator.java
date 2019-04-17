@@ -1,10 +1,7 @@
 package io.codelex.groupdinner.repository;
 
 import io.codelex.groupdinner.api.*;
-import io.codelex.groupdinner.repository.mapper.MapAttendeeRecordToAttendee;
-import io.codelex.groupdinner.repository.mapper.MapDinnerRecordToDinner;
-import io.codelex.groupdinner.repository.mapper.MapFeedbackRecordToFeedback;
-import io.codelex.groupdinner.repository.mapper.MapUserRecordToUser;
+import io.codelex.groupdinner.repository.mapper.MapDBRecordToApiCompatible;
 import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.FeedbackRecord;
@@ -14,11 +11,7 @@ import java.time.LocalDateTime;
 
 public class TestVariableGenerator {
 
-    private final MapDinnerRecordToDinner toDinner = new MapDinnerRecordToDinner();
-    private final MapAttendeeRecordToAttendee toAttendee = new MapAttendeeRecordToAttendee();
-    private final MapFeedbackRecordToFeedback toFeedback = new MapFeedbackRecordToFeedback();
-    private final MapUserRecordToUser toUser = new MapUserRecordToUser();
-
+    private final MapDBRecordToApiCompatible toApiCompatible = new MapDBRecordToApiCompatible();
 
     public UserRecord createUserRecord1() {
         return new UserRecord(
@@ -29,7 +22,7 @@ public class TestVariableGenerator {
         );
     }
 
-    public UserRecord createUserRecord2() {
+    UserRecord createUserRecord2() {
         return new UserRecord(
                 "Anna",
                 "Kalniņa",
@@ -37,12 +30,12 @@ public class TestVariableGenerator {
                 "password"
         );
     }
-    
+
     public LocalDateTime createDateTime() {
         return LocalDateTime.of(2019, 1, 1, 0, 0);
     }
 
-    public AttendeeRecord createAcceptedAttendeeRecord(DinnerRecord dinnerRecord, UserRecord userRecord) {
+    AttendeeRecord createAcceptedAttendeeRecord(DinnerRecord dinnerRecord, UserRecord userRecord) {
         return new AttendeeRecord(
                 dinnerRecord,
                 userRecord,
@@ -51,7 +44,7 @@ public class TestVariableGenerator {
     }
 
 
-    public AttendeeRecord createPendingAttendeeRecord(DinnerRecord dinnerRecord, UserRecord userRecord) {
+    AttendeeRecord createPendingAttendeeRecord(DinnerRecord dinnerRecord, UserRecord userRecord) {
         return new AttendeeRecord(
                 dinnerRecord,
                 userRecord,
@@ -69,8 +62,8 @@ public class TestVariableGenerator {
                 localDateTime
         );
     }
-    
-    public FeedbackRecord createGoodFeedbackRecord (DinnerRecord dinnerRecord, UserRecord userRecord1, UserRecord userRecord2) {
+
+    FeedbackRecord createGoodFeedbackRecord(DinnerRecord dinnerRecord, UserRecord userRecord1, UserRecord userRecord2) {
         return new FeedbackRecord(
                 dinnerRecord,
                 userRecord1,
@@ -78,8 +71,8 @@ public class TestVariableGenerator {
                 true
         );
     }
-    
-    public FeedbackRecord createBadFeedbackRecord (DinnerRecord dinnerRecord, UserRecord userRecord1, UserRecord userRecord2) {
+
+    public FeedbackRecord createBadFeedbackRecord(DinnerRecord dinnerRecord, UserRecord userRecord1, UserRecord userRecord2) {
         return new FeedbackRecord(
                 dinnerRecord,
                 userRecord1,
@@ -98,14 +91,14 @@ public class TestVariableGenerator {
         );
     }
 
-    public LeaveFeedbackRequest createLeaveFeedbackRequest () {
+    LeaveFeedbackRequest createLeaveFeedbackRequest() {
         return new LeaveFeedbackRequest(
                 "a.kalnina@gmail.com",
                 true
         );
     }
-    
-    public RegistrationRequest createRegistrationRequest () {
+
+    RegistrationRequest createRegistrationRequest() {
         return new RegistrationRequest(
                 "Janis",
                 "Berzins",
@@ -113,8 +106,8 @@ public class TestVariableGenerator {
                 "password"
         );
     }
-    
-    public SignInRequest createSignInRequest () {
+
+    SignInRequest createSignInRequest() {
         return new SignInRequest(
                 "berzins@gmai.com",
                 "password"
@@ -128,22 +121,22 @@ public class TestVariableGenerator {
 
     public User getUserFromUserRecord(Long id, UserRecord userRecord) {
         userRecord.setId(id);
-        return toUser.apply(userRecord);
+        return toApiCompatible.apply(userRecord);
     }
 
     public Dinner getDinnerFromDinnerRecord(Long id, DinnerRecord dinnerRecord) {
         dinnerRecord.setId(id);
-        return toDinner.apply(dinnerRecord);
+        return toApiCompatible.apply(dinnerRecord);
     }
 
-    public Feedback getFeedbackFromFeedbackRecord (Long id, FeedbackRecord feedbackRecord) {
+    Feedback getFeedbackFromFeedbackRecord(Long id, FeedbackRecord feedbackRecord) {
         feedbackRecord.setId(id);
-        return toFeedback.apply(feedbackRecord);
+        return toApiCompatible.apply(feedbackRecord);
     }
 
-    public Attendee getAttendeeFromAttendeeRecord (Long id, AttendeeRecord attendeeRecord) {
+    Attendee getAttendeeFromAttendeeRecord(Long id, AttendeeRecord attendeeRecord) {
         attendeeRecord.setId(id);
-        return toAttendee.apply(attendeeRecord);
+        return toApiCompatible.apply(attendeeRecord);
     }
 
 

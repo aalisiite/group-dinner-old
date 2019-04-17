@@ -10,6 +10,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.codelex.groupdinner.api.CreateDinnerRequest;
 import io.codelex.groupdinner.api.Dinner;
 import io.codelex.groupdinner.api.User;
+import io.codelex.groupdinner.repository.TestVariableGenerator;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.UserRecord;
 import io.codelex.groupdinner.repository.service.RepositoryUserService;
@@ -40,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
 @Import(RepositoryUserService.class)
-//@Import(WebConfiguration.class)
+//@Import(WebConfiguration.class) //todo tests 
 public class UserControllerTest {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -75,17 +76,22 @@ public class UserControllerTest {
 
     @MockBean
     RepositoryUserService service;
+    
     @Autowired
     private MockMvc mockMvc;
+    
     private UserService userService = Mockito.mock(UserService.class);
-    private UserRecord userRecord = createUserRecord();
-    private User user = createUser();
-    private String location = createLocation();
-    private LocalDateTime localDateTime = LocalDateTime.of(2019, 1, 1, 0, 0);
-    private CreateDinnerRequest request = createDinnerRequest(user, location, localDateTime);
-    private DinnerRecord dinnerRecord = createDinnerRecord();
-    private Dinner dinner = createDinner();
 
+    private final TestVariableGenerator generator = new TestVariableGenerator();
+    private String location = generator.createLocation();
+    private LocalDateTime localDateTime = generator.createDateTime();
+    private UserRecord userRecord1 = generator.createUserRecord1();
+    private User user1 = generator.getUserFromUserRecord(1L, userRecord1);
+    private DinnerRecord dinnerRecord = generator.createDinnerRecord(userRecord1, location, localDateTime);
+    private Dinner dinner = generator.getDinnerFromDinnerRecord(1L, dinnerRecord);
+    private CreateDinnerRequest request = generator.createDinnerRequest(location, localDateTime);
+    
+    //todo
     @WithMockUser()
     @Test
     public void should_return_dinner_and_status_created() throws Exception {
@@ -118,62 +124,5 @@ public class UserControllerTest {
         assertEquals(dinner.getCreator().getId(), result.getCreator().getId());
         assertEquals(dinner.getDateTime(), result.getDateTime());
     }
-
-
-    private UserRecord createUserRecord() {
-        return new UserRecord(
-                "Janis",
-                "Berzins",
-                "berzins@gmai.com",
-                "password"
-        );
-    }
-
-    private User createUser() {
-        return new User(
-                1L,
-                "Janis",
-                "Berzins",
-                "berzins@gmai.com"
-        );
-    }
-
-    private CreateDinnerRequest createDinnerRequest(User user, String location, LocalDateTime localDateTime) {
-        return new CreateDinnerRequest(
-                "This is a title",
-                2,
-                "This is a description",
-                location,
-                localDateTime
-        );
-    }
-
-    private Dinner createDinner() {
-        return new Dinner(
-                1L,
-                "This is a title",
-                user,
-                2,
-                "This is a description",
-                location,
-                localDateTime
-        );
-    }
-
-    private DinnerRecord createDinnerRecord() {
-        return new DinnerRecord(
-                "This is a title",
-                userRecord,
-                2,
-                "This is a description",
-                location,
-                localDateTime
-        );
-    }
-
-
-    private String createLocation() {
-        return "Jurmalas Gatve 76";
-    }
-
+    
 }

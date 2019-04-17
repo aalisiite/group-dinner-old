@@ -19,6 +19,6 @@ public interface UserService {
     Dinner findDinner(Long id);
 
     List<User> findDinnerAttendees(Long dinnerId, boolean accepted);
-    
+
     List<Dinner> getGoodMatchDinners(String userEmail);
 }

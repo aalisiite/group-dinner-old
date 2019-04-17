@@ -1,11 +1,9 @@
 package io.codelex.groupdinner.repository;
 
-import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.FeedbackRecord;
 import io.codelex.groupdinner.repository.model.UserRecord;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -18,19 +16,15 @@ import java.util.List;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class FeedbackRecordRepositoryTest extends Assertions {
 
+    private final TestVariableGenerator generator = new TestVariableGenerator();
     @Autowired
     DinnerRecordRepository dinnerRecordRepository;
-
     @Autowired
     AttendeeRecordRepository attendeeRecordRepository;
-
     @Autowired
     UserRecordRepository userRecordRepository;
-
     @Autowired
     FeedbackRecordRepository feedbackRecordRepository;
-    
-    private final TestVariableGenerator generator = new TestVariableGenerator();
     private LocalDateTime localDateTime = generator.createDateTime();
     private String location = generator.createLocation();
     private UserRecord userRecord1 = generator.createUserRecord1();

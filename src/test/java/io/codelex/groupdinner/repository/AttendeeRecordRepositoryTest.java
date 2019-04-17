@@ -1,13 +1,10 @@
 package io.codelex.groupdinner.repository;
 
 
-import io.codelex.groupdinner.api.Dinner;
-import io.codelex.groupdinner.api.User;
 import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.UserRecord;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -20,21 +17,18 @@ import java.util.List;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class AttendeeRecordRepositoryTest extends Assertions {
 
+    private final TestVariableGenerator generator = new TestVariableGenerator();
     @Autowired
     DinnerRecordRepository dinnerRecordRepository;
-
     @Autowired
     AttendeeRecordRepository attendeeRecordRepository;
-
     @Autowired
     UserRecordRepository userRecordRepository;
-    
-    private final TestVariableGenerator generator = new TestVariableGenerator();
     private LocalDateTime localDateTime = generator.createDateTime();
     private String location = generator.createLocation();
     private UserRecord userRecord1 = generator.createUserRecord1();
     private UserRecord userRecord2 = generator.createUserRecord2();
-    private DinnerRecord dinnerRecord = generator.createDinnerRecord(userRecord1,location,localDateTime);
+    private DinnerRecord dinnerRecord = generator.createDinnerRecord(userRecord1, location, localDateTime);
     private AttendeeRecord acceptedAttendeeRecord1 = generator.createAcceptedAttendeeRecord(dinnerRecord, userRecord1);
     private AttendeeRecord acceptedAttendeeRecord2 = generator.createAcceptedAttendeeRecord(dinnerRecord, userRecord2);
     private AttendeeRecord pendingAttendeeRecord2 = generator.createPendingAttendeeRecord(dinnerRecord, userRecord2);
@@ -72,7 +66,7 @@ public class AttendeeRecordRepositoryTest extends Assertions {
         //then
         assertEquals(1, attendeeRecords.size());
     }
-    
+
 
     @Test
     public void should_return_count_of_attendees_to_dinner() {
@@ -106,8 +100,8 @@ public class AttendeeRecordRepositoryTest extends Assertions {
     }
 
     @Test
-    void should_return_true_if_user_has_joined_dinner () {
-        
+    void should_return_true_if_user_has_joined_dinner() {
+
         //given
         userRecord1 = userRecordRepository.save(userRecord1);
         dinnerRecord = dinnerRecordRepository.save(dinnerRecord);
@@ -119,10 +113,10 @@ public class AttendeeRecordRepositoryTest extends Assertions {
         //then
         assertTrue(result);
     }
-    
+
     @Test
-    void should_return_false_if_user_has_not_joined_dinner () {
-        
+    void should_return_false_if_user_has_not_joined_dinner() {
+
         //when
         boolean result = attendeeRecordRepository.userJoinedDinner(dinnerRecord.getId(), userRecord1.getId());
 

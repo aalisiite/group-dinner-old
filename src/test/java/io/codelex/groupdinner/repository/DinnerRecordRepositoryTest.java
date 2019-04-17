@@ -1,10 +1,8 @@
 package io.codelex.groupdinner.repository;
 
-import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.UserRecord;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -16,23 +14,19 @@ import java.time.LocalDateTime;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class DinnerRecordRepositoryTest extends Assertions {
 
+    private final TestVariableGenerator generator = new TestVariableGenerator();
     @Autowired
     DinnerRecordRepository dinnerRecordRepository;
-
     @Autowired
     AttendeeRecordRepository attendeeRecordRepository;
-
     @Autowired
     UserRecordRepository userRecordRepository;
-
     @Autowired
     FeedbackRecordRepository feedbackRecordRepository;
-    
-    private final TestVariableGenerator generator = new TestVariableGenerator();
     private LocalDateTime localDateTime = generator.createDateTime();
     private String location = generator.createLocation();
     private UserRecord userRecord = generator.createUserRecord1();
-    private DinnerRecord dinnerRecord = generator.createDinnerRecord(userRecord,location,localDateTime);
+    private DinnerRecord dinnerRecord = generator.createDinnerRecord(userRecord, location, localDateTime);
 
     @Test
     void should_return_true_when_match_found() {
