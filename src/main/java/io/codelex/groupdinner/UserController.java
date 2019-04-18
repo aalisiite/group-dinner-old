@@ -13,10 +13,12 @@ import java.util.List;
 @RequestMapping("/api/dinners")
 public class UserController {
     private final UserService userService;
-
+    
     public UserController(UserService userService) {
         this.userService = userService;
     }
+    
+    //todo catch exceptions + response codes
 
     @PostMapping
     public ResponseEntity<Dinner> createDinner(
@@ -45,16 +47,11 @@ public class UserController {
         return new ResponseEntity<>(userService.findDinner(id), HttpStatus.OK);
     }
 
-    //todo make one method with parameter status = accepted or pending
-    @GetMapping("/{id}/accepted")
-    public ResponseEntity<List<User>> getAcceptedDinnerAttendees(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(userService.findDinnerAttendees(id, true), HttpStatus.OK);
-    }
-
-    //todo same
-    @GetMapping("/{id}/pending")
-    public ResponseEntity<List<User>> getPendingDinnerAttendees(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(userService.findDinnerAttendees(id, false), HttpStatus.OK);
+    @GetMapping("/{id}")
+    public ResponseEntity<List<User>> getAcceptedDinnerAttendees(
+            @PathVariable("id") Long id,
+            @RequestParam("accepted") Boolean accepted) {
+        return new ResponseEntity<>(userService.findDinnerAttendees(id, accepted), HttpStatus.OK);
     }
 
     @GetMapping

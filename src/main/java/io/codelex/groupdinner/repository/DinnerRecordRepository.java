@@ -27,7 +27,7 @@ public interface DinnerRecordRepository extends JpaRepository<DinnerRecord, Long
     );
 
     //todo test this
-    @Query("select dinner 0 from DinnerRecord dinner where"
+    @Query("select dinner from DinnerRecord dinner where"
             + " dinner.creator.id = :creator"
             + " and dinner.title = :title"
             + " and dinner.maxGuests = :maxGuests"

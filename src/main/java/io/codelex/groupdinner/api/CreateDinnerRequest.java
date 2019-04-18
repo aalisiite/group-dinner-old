@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 
 public class CreateDinnerRequest {
@@ -73,4 +74,20 @@ public class CreateDinnerRequest {
         this.dateTime = dateTime;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CreateDinnerRequest request = (CreateDinnerRequest) o;
+        return maxGuests == request.maxGuests &&
+                title.equals(request.title) &&
+                description.equals(request.description) &&
+                Objects.equals(location, request.location) &&
+                Objects.equals(dateTime, request.dateTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, maxGuests, description, location, dateTime);
+    }
 }

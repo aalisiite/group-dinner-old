@@ -9,6 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.codelex.groupdinner.api.CreateDinnerRequest;
 import io.codelex.groupdinner.api.Dinner;
+import io.codelex.groupdinner.configuration.WebConfiguration;
 import io.codelex.groupdinner.repository.TestVariableGenerator;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.UserRecord;
@@ -31,7 +32,6 @@ import java.time.format.DateTimeFormatter;
 
 import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -39,8 +39,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
-@Import(RepositoryUserService.class)
-//@Import(WebConfiguration.class) //todo tests 
+@Import(WebConfiguration.class)
+@WithMockUser(roles={"REGISTERED_CLIENT"})
 public class UserControllerTest {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -87,15 +87,13 @@ public class UserControllerTest {
     private CreateDinnerRequest request = generator.createDinnerRequest(location, localDateTime);
 
     //todo
-    @WithMockUser()
     @Test
     public void should_return_dinner_and_status_created() throws Exception {
         //given
         String jsonRequest = MAPPER.writeValueAsString(request);
 
-
         //when
-        Mockito.when(userService.createDinner(any(), any()))
+        Mockito.when(userService.createDinner("user", request))
                 .thenReturn(dinner);
 
         //expect

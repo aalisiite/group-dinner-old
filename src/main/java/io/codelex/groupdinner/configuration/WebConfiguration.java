@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Configuration
+public
 class WebConfiguration {
     @Bean
     Jackson2ObjectMapperBuilder objectMapperBuilder() {
