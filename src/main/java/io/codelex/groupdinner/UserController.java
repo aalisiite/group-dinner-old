@@ -47,7 +47,7 @@ public class UserController {
         return new ResponseEntity<>(userService.findDinner(id), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @PostMapping("/{id}")
     public ResponseEntity<List<User>> getAcceptedDinnerAttendees(
             @PathVariable("id") Long id,
             @RequestParam("accepted") Boolean accepted) {
