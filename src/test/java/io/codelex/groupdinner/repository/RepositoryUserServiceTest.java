@@ -248,7 +248,7 @@ public class RepositoryUserServiceTest {
         //given
         userRecord1.setId(1L);
         userRecord2.setId(2L);
-        
+
         //when
         Mockito.when(userRecordRepository.findByEmail(any())).thenAnswer(new Answer() {
             private int count = 0;
@@ -294,7 +294,7 @@ public class RepositoryUserServiceTest {
         //given
         userRecord1.setId(1L);
         userRecord2.setId(2L);
-        
+
         //when
         Mockito.when(userRecordRepository.findByEmail(any())).thenAnswer(new Answer() {
             private int count = 0;
@@ -326,7 +326,7 @@ public class RepositoryUserServiceTest {
         //given
         userRecord1.setId(1L);
         userRecord2.setId(2L);
-        
+
         //when
         Mockito.when(userRecordRepository.findByEmail(any())).thenAnswer(new Answer() {
             private int count = 0;
@@ -375,64 +375,17 @@ public class RepositoryUserServiceTest {
     }
 
     @Test
-    public void should_return_dinners_if_no_bad_feedback_guests_found() {
+    public void should_return_good_dinners() {
         //when
         Mockito.when(userRecordRepository.findByEmail(any()))
                 .thenReturn(userRecord1);
-        Mockito.when(feedbackRecordRepository.getBadFeedbackUsers(any()))
-                .thenReturn(Collections.emptyList());
-        Mockito.when(dinnerRecordRepository.findAll())
+        Mockito.when(dinnerRecordRepository.getGoodDinners(any()))
                 .thenReturn(List.of(dinnerRecord));
-        Mockito.when(attendeeRecordRepository.userJoinedDinner(any(), any()))
-                .thenReturn(true);
-        Mockito.when(toApiCompatible.apply(dinnerRecord))
-                .thenReturn(dinner);
-
+        
         List<Dinner> result = userModule.getGoodMatchDinners(userRecord1.getEmail());
 
         //then
         assertEquals(1, result.size());
-    }
-
-    @Test
-    public void should_return_dinners_if_bad_feedback_guest_not_attending() {
-        //when
-        Mockito.when(userRecordRepository.findByEmail(any()))
-                .thenReturn(userRecord1);
-        Mockito.when(feedbackRecordRepository.getBadFeedbackUsers(any()))
-                .thenReturn(List.of(userRecord2));
-        Mockito.when(dinnerRecordRepository.findAll())
-                .thenReturn(List.of(dinnerRecord));
-        Mockito.when(attendeeRecordRepository.userJoinedDinner(any(), any()))
-                .thenReturn(false);
-        Mockito.when(toApiCompatible.apply(dinnerRecord))
-                .thenReturn(dinner);
-
-        List<Dinner> result = userModule.getGoodMatchDinners(userRecord1.getEmail());
-
-        //then
-        assertEquals(1, result.size());
-    }
-
-
-    @Test
-    public void should_return_no_dinners_for_only_bad_feedback_guests() {
-        //when
-        Mockito.when(userRecordRepository.findByEmail(any()))
-                .thenReturn(userRecord1);
-        Mockito.when(feedbackRecordRepository.getBadFeedbackUsers(any()))
-                .thenReturn(List.of(userRecord2));
-        Mockito.when(dinnerRecordRepository.findAll())
-                .thenReturn(List.of(dinnerRecord));
-        Mockito.when(attendeeRecordRepository.userJoinedDinner(any(), any()))
-                .thenReturn(true);
-        Mockito.when(toApiCompatible.apply(dinnerRecord))
-                .thenReturn(dinner);
-
-        List<Dinner> result = userModule.getGoodMatchDinners(userRecord1.getEmail());
-
-        //then
-        assertEquals(0, result.size());
     }
 
     @Test

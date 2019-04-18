@@ -118,7 +118,7 @@ public class AttendeeRecordRepositoryTest extends Assertions {
         //then
         assertFalse(result);
     }
-    
+
     @Test
     void should_return_attendee() {
         //given

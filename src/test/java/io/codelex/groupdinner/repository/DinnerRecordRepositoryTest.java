@@ -1,6 +1,7 @@
 package io.codelex.groupdinner.repository;
 
 import io.codelex.groupdinner.repository.model.DinnerRecord;
+import io.codelex.groupdinner.repository.model.FeedbackRecord;
 import io.codelex.groupdinner.repository.model.UserRecord;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -26,8 +28,11 @@ class DinnerRecordRepositoryTest extends Assertions {
     private LocalDateTime localDateTime = generator.createDateTime();
     private String location = generator.createLocation();
     private UserRecord userRecord = generator.createUserRecord1();
+    private UserRecord userRecord2 = generator.createUserRecord2();
     private DinnerRecord dinnerRecord = generator.createDinnerRecord(userRecord, location, localDateTime);
-
+    private FeedbackRecord goodFeedbackRecord1to2 = generator.createGoodFeedbackRecord(dinnerRecord, userRecord, userRecord2);
+    private FeedbackRecord badFeedbackRecord1to2 = generator.createBadFeedbackRecord(dinnerRecord, userRecord, userRecord2);
+    
     @Test
     void should_return_true_when_match_found() {
         //given
@@ -83,6 +88,23 @@ class DinnerRecordRepositoryTest extends Assertions {
 
         //then
         assertEquals(dinnerRecord, result);
+    }
+
+
+    @Test
+    void should_return_good_dinners() {
+        //given
+        userRecord = userRecordRepository.save(userRecord);
+        userRecord2 = userRecordRepository.save(userRecord2);
+        dinnerRecord = dinnerRecordRepository.save(dinnerRecord);
+        goodFeedbackRecord1to2 = feedbackRecordRepository.save(goodFeedbackRecord1to2);
+
+        //when
+        List<DinnerRecord> result = dinnerRecordRepository.getGoodDinners(userRecord.getId());
+
+        //then
+        assertEquals(1, result.size());
+        assertEquals(dinnerRecord, result.get(0));
     }
 
 }

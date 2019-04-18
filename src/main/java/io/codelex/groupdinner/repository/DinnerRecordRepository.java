@@ -1,11 +1,13 @@
 package io.codelex.groupdinner.repository;
 
 import io.codelex.groupdinner.repository.model.DinnerRecord;
+import io.codelex.groupdinner.repository.model.UserRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface DinnerRecordRepository extends JpaRepository<DinnerRecord, Long> {
 
@@ -40,5 +42,14 @@ public interface DinnerRecordRepository extends JpaRepository<DinnerRecord, Long
             @Param("description") String description,
             @Param("location") String location,
             @Param("dateTime") LocalDateTime dateTime
+    );
+    
+    @Query("select dinner from DinnerRecord dinner" +
+            " left outer join FeedbackRecord feedback " +
+            " on dinner.id = feedback.dinner.id" +
+            " where feedback.provider.id = :providerId" +
+            " and feedback.rating = true")
+    List<DinnerRecord> getGoodDinners (
+            @Param("providerId") Long providerId
     );
 }

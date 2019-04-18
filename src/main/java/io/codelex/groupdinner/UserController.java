@@ -1,6 +1,8 @@
 package io.codelex.groupdinner;
 
 import io.codelex.groupdinner.api.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,12 +14,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/dinners")
 public class UserController {
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
-    
+
     public UserController(UserService userService) {
         this.userService = userService;
     }
-    
+
     //todo catch exceptions + response codes
 
     @PostMapping
@@ -59,4 +62,9 @@ public class UserController {
         return new ResponseEntity<>(userService.getGoodMatchDinners(principal.getName()), HttpStatus.OK);
     }
 
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(IllegalStateException.class)
+    public void handleIllegalState(IllegalStateException e){
+        log.warn("Exception caught: ", e);
+    }
 }
