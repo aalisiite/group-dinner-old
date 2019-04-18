@@ -21,9 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-
-//todo remove all unused imports in project files
+import static org.mockito.ArgumentMatchers.*;
 
 public class RepositoryUserServiceTest {
 
@@ -37,25 +35,17 @@ public class RepositoryUserServiceTest {
     private RepositoryUserService userModule = new RepositoryUserService(dinnerRecordRepository, userRecordRepository, attendeeRecordRepository, feedbackRecordRepository, passwordEncoder);
     private LocalDateTime localDateTime = generator.createDateTime();
     private String location = generator.createLocation();
-
     private UserRecord userRecord1 = generator.createUserRecord1();
     private UserRecord userRecord2 = generator.createUserRecord2();
     private User user1 = generator.getUserFromUserRecord(1L, userRecord1);
-    private User user2 = generator.getUserFromUserRecord(2L, userRecord2);
-
     private CreateDinnerRequest createDinnerRequest = generator.createDinnerRequest(location, localDateTime);
-
     private DinnerRecord dinnerRecord = generator.createDinnerRecord(userRecord1, location, localDateTime);
     private Dinner dinner = generator.getDinnerFromDinnerRecord(1L, dinnerRecord);
-
     private AttendeeRecord acceptedAttendeeRecord1 = generator.createAcceptedAttendeeRecord(dinnerRecord, userRecord1);
     private AttendeeRecord pendingAttendeeRecord1 = generator.createPendingAttendeeRecord(dinnerRecord, userRecord1);
-
     private Attendee acceptedAttendee1 = generator.getAttendeeFromAttendeeRecord(1L, acceptedAttendeeRecord1);
-    
     private FeedbackRecord goodFeedbackRecord = generator.createGoodFeedbackRecord(dinnerRecord, userRecord1, userRecord2);
     private Feedback goodFeedback = generator.getFeedbackFromFeedbackRecord(1L, goodFeedbackRecord);
-    
     private LeaveFeedbackRequest leaveFeedbackRequest = generator.createLeaveFeedbackRequest();
     private RegistrationRequest registrationRequest = generator.createRegistrationRequest();
     private SignInRequest signInRequest = generator.createSignInRequest();
@@ -131,8 +121,6 @@ public class RepositoryUserServiceTest {
         Executable executable = () -> userModule.registerUser(registrationRequest);
         assertThrows(IllegalStateException.class, executable, "Email already exists");
     }
-
-//todo change all returns to result
 
     @Test
     public void should_be_able_to_sign_in() {
@@ -256,6 +244,10 @@ public class RepositoryUserServiceTest {
 
     @Test
     public void should_be_able_to_leave_feedback() {
+        //given
+        userRecord1.setId(1L);
+        userRecord2.setId(2L);
+        
         //when
         Mockito.when(userRecordRepository.findByEmail(any())).thenAnswer(new Answer() {
             private int count = 0;
@@ -298,6 +290,10 @@ public class RepositoryUserServiceTest {
 
     @Test
     public void should_not_be_able_to_leave_feedback_if_did_not_attend_same_dinner() {
+        //given
+        userRecord1.setId(1L);
+        userRecord2.setId(2L);
+        
         //when
         Mockito.when(userRecordRepository.findByEmail(any())).thenAnswer(new Answer() {
             private int count = 0;
@@ -326,6 +322,10 @@ public class RepositoryUserServiceTest {
 
     @Test
     public void should_not_be_able_to_leave_duplicate_feedback() {
+        //given
+        userRecord1.setId(1L);
+        userRecord2.setId(2L);
+        
         //when
         Mockito.when(userRecordRepository.findByEmail(any())).thenAnswer(new Answer() {
             private int count = 0;
@@ -359,7 +359,7 @@ public class RepositoryUserServiceTest {
         boolean status = true;
 
         //when
-        Mockito.when(attendeeRecordRepository.findDinnerAttendees(any(), any()))
+        Mockito.when(attendeeRecordRepository.findDinnerAttendees(anyLong(), anyBoolean()))
                 .thenReturn(attendeeRecordList);
         Mockito.when(userRecordRepository.findById(any()))
                 .thenReturn(Optional.of(userRecord1));
@@ -376,17 +376,10 @@ public class RepositoryUserServiceTest {
     @Test
     public void should_return_dinners_with_guests_with_good_reviews() {
         //when
-        UserRecord badFeedbackUser = new UserRecord(
-                "Firstname",
-                "Lastname",
-                "email@email.com",
-                "password"
-        );
-
         Mockito.when(userRecordRepository.findByEmail(any()))
                 .thenReturn(userRecord1);
         Mockito.when(feedbackRecordRepository.getBadFeedbackUsers(any()))
-                .thenReturn(List.of(badFeedbackUser));
+                .thenReturn(List.of(userRecord2));
         Mockito.when(dinnerRecordRepository.findAll())
                 .thenReturn(List.of(dinnerRecord));
         Mockito.when(attendeeRecordRepository.userJoinedDinner(any(), any()))

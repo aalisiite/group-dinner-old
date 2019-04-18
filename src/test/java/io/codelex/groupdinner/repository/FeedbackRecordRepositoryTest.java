@@ -34,7 +34,6 @@ public class FeedbackRecordRepositoryTest extends Assertions {
 
     @Test
     public void should_return_feedback_by_provider_receiver_ids() {
-
         //given
         userRecord1 = userRecordRepository.save(userRecord1);
         userRecord2 = userRecordRepository.save(userRecord2);

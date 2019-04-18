@@ -30,13 +30,12 @@ class DinnerRecordRepositoryTest extends Assertions {
 
     @Test
     void should_return_true_when_match_found() {
-
         //given
         userRecord = userRecordRepository.save(userRecord);
         dinnerRecord = dinnerRecordRepository.save(this.dinnerRecord);
 
         //when
-        boolean isDinnerPresent = dinnerRecordRepository.isDinnerPresent(
+        boolean result = dinnerRecordRepository.isDinnerPresent(
                 userRecord.getId(),
                 dinnerRecord.getTitle(),
                 dinnerRecord.getMaxGuests(),
@@ -46,14 +45,13 @@ class DinnerRecordRepositoryTest extends Assertions {
         );
 
         //then
-        assertTrue(isDinnerPresent);
+        assertTrue(result);
     }
 
     @Test
     void should_return_false_when_no_match_found() {
-
         //when
-        boolean isDinnerPresent = dinnerRecordRepository.isDinnerPresent(
+        boolean result = dinnerRecordRepository.isDinnerPresent(
                 userRecord.getId(),
                 dinnerRecord.getTitle(),
                 dinnerRecord.getMaxGuests(),
@@ -63,7 +61,7 @@ class DinnerRecordRepositoryTest extends Assertions {
         );
 
         //then
-        assertFalse(isDinnerPresent);
+        assertFalse(result);
     }
 
 }

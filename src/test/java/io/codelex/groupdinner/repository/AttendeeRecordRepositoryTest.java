@@ -35,7 +35,6 @@ public class AttendeeRecordRepositoryTest extends Assertions {
 
     @Test
     public void should_return_all_accepted_attendees_to_dinner() {
-
         //given
         userRecord1 = userRecordRepository.save(userRecord1);
         userRecord2 = userRecordRepository.save(userRecord2);
@@ -44,15 +43,14 @@ public class AttendeeRecordRepositoryTest extends Assertions {
         acceptedAttendeeRecord2 = attendeeRecordRepository.save(acceptedAttendeeRecord2);
 
         //when
-        List<AttendeeRecord> attendeeRecords = attendeeRecordRepository.findDinnerAttendees(dinnerRecord.getId(), true);
+        List<AttendeeRecord> result = attendeeRecordRepository.findDinnerAttendees(dinnerRecord.getId(), true);
 
         //then
-        assertEquals(2, attendeeRecords.size());
+        assertEquals(2, result.size());
     }
 
     @Test
     public void should_return_all_pending_attendees_to_dinner() {
-
         //given
         userRecord1 = userRecordRepository.save(userRecord1);
         dinnerRecord = dinnerRecordRepository.save(dinnerRecord);
@@ -61,16 +59,15 @@ public class AttendeeRecordRepositoryTest extends Assertions {
         pendingAttendeeRecord2 = attendeeRecordRepository.save(pendingAttendeeRecord2);
 
         //when
-        List<AttendeeRecord> attendeeRecords = attendeeRecordRepository.findDinnerAttendees(dinnerRecord.getId(), false);
+        List<AttendeeRecord> result = attendeeRecordRepository.findDinnerAttendees(dinnerRecord.getId(), false);
 
         //then
-        assertEquals(1, attendeeRecords.size());
+        assertEquals(1, result.size());
     }
 
 
     @Test
     public void should_return_count_of_attendees_to_dinner() {
-
         //given
         userRecord1 = userRecordRepository.save(userRecord1);
         userRecord2 = userRecordRepository.save(userRecord2);
@@ -79,10 +76,10 @@ public class AttendeeRecordRepositoryTest extends Assertions {
         pendingAttendeeRecord2 = attendeeRecordRepository.save(pendingAttendeeRecord2);
 
         //when
-        Integer count = attendeeRecordRepository.countDinnerAttendees(dinnerRecord.getId());
+        Integer result = attendeeRecordRepository.countDinnerAttendees(dinnerRecord.getId());
 
         //then
-        assertEquals(2, count);
+        assertEquals(2, result);
     }
 
     @Test
@@ -101,7 +98,6 @@ public class AttendeeRecordRepositoryTest extends Assertions {
 
     @Test
     void should_return_true_if_user_has_joined_dinner() {
-
         //given
         userRecord1 = userRecordRepository.save(userRecord1);
         dinnerRecord = dinnerRecordRepository.save(dinnerRecord);
@@ -116,7 +112,6 @@ public class AttendeeRecordRepositoryTest extends Assertions {
 
     @Test
     void should_return_false_if_user_has_not_joined_dinner() {
-
         //when
         boolean result = attendeeRecordRepository.userJoinedDinner(dinnerRecord.getId(), userRecord1.getId());
 

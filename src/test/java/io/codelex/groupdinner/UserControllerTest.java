@@ -9,7 +9,6 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.codelex.groupdinner.api.CreateDinnerRequest;
 import io.codelex.groupdinner.api.Dinner;
-import io.codelex.groupdinner.api.User;
 import io.codelex.groupdinner.repository.TestVariableGenerator;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.UserRecord;
@@ -74,23 +73,19 @@ public class UserControllerTest {
         MAPPER.registerModule(javaTimeModule);
     }
 
+    private final TestVariableGenerator generator = new TestVariableGenerator();
     @MockBean
     RepositoryUserService service;
-    
     @Autowired
     private MockMvc mockMvc;
-    
     private UserService userService = Mockito.mock(UserService.class);
-
-    private final TestVariableGenerator generator = new TestVariableGenerator();
     private String location = generator.createLocation();
     private LocalDateTime localDateTime = generator.createDateTime();
     private UserRecord userRecord1 = generator.createUserRecord1();
-    private User user1 = generator.getUserFromUserRecord(1L, userRecord1);
     private DinnerRecord dinnerRecord = generator.createDinnerRecord(userRecord1, location, localDateTime);
     private Dinner dinner = generator.getDinnerFromDinnerRecord(1L, dinnerRecord);
     private CreateDinnerRequest request = generator.createDinnerRequest(location, localDateTime);
-    
+
     //todo
     @WithMockUser()
     @Test
@@ -124,5 +119,5 @@ public class UserControllerTest {
         assertEquals(dinner.getCreator().getId(), result.getCreator().getId());
         assertEquals(dinner.getDateTime(), result.getDateTime());
     }
-    
+
 }
