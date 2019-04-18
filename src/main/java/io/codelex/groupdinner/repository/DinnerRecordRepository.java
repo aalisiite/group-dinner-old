@@ -26,7 +26,6 @@ public interface DinnerRecordRepository extends JpaRepository<DinnerRecord, Long
             @Param("dateTime") LocalDateTime dateTime
     );
 
-    //todo test this
     @Query("select dinner from DinnerRecord dinner where"
             + " dinner.creator.id = :creator"
             + " and dinner.title = :title"

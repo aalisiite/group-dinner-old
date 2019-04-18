@@ -118,5 +118,19 @@ public class AttendeeRecordRepositoryTest extends Assertions {
         //then
         assertFalse(result);
     }
+    
+    @Test
+    void should_return_attendee() {
+        //given
+        userRecord1 = userRecordRepository.save(userRecord1);
+        dinnerRecord = dinnerRecordRepository.save(dinnerRecord);
+        acceptedAttendeeRecord1 = attendeeRecordRepository.save(acceptedAttendeeRecord1);
+
+        //when
+        AttendeeRecord result = attendeeRecordRepository.getAttendee(dinnerRecord.getId(), userRecord1.getId());
+
+        //then
+        assertEquals(acceptedAttendeeRecord1, result);
+    }
 
 }

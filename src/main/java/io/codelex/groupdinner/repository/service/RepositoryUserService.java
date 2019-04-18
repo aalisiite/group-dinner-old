@@ -166,7 +166,7 @@ public class RepositoryUserService implements UserService {
         return dinner.map(toApiCompatible::apply).orElse(null);
     }
 
-    //todo test this finish
+    //tested
     @Override
     public List<User> findDinnerAttendees(Long dinnerId, boolean accepted) {
         List<AttendeeRecord> attendees = attendeeRecordRepository.findDinnerAttendees(dinnerId, accepted);
@@ -180,8 +180,8 @@ public class RepositoryUserService implements UserService {
                 .collect(Collectors.toList());
     }
 
-    //todo test this finish
-    @Override //todo now only shows dinners only with guests that had good feedback from this user
+    //todo test this
+    @Override //now only shows dinners only with guests that had good feedback from this user
     public List<Dinner> getGoodMatchDinners(String userEmail) {
         UserRecord user = userRecordRepository.findByEmail(userEmail);
         List<UserRecord> badFeedbackUsers = feedbackRecordRepository.getBadFeedbackUsers(user.getId());

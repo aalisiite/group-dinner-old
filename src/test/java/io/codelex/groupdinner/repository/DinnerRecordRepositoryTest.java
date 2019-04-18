@@ -64,4 +64,25 @@ class DinnerRecordRepositoryTest extends Assertions {
         assertFalse(result);
     }
 
+
+    @Test
+    void should_return_dinner_match() {
+        //given
+        userRecord = userRecordRepository.save(userRecord);
+        dinnerRecord = dinnerRecordRepository.save(this.dinnerRecord);
+
+        //when
+        DinnerRecord result = dinnerRecordRepository.getDinner(
+                userRecord.getId(),
+                dinnerRecord.getTitle(),
+                dinnerRecord.getMaxGuests(),
+                dinnerRecord.getDescription(),
+                dinnerRecord.getLocation(),
+                dinnerRecord.getDateTime()
+        );
+
+        //then
+        assertEquals(dinnerRecord, result);
+    }
+
 }

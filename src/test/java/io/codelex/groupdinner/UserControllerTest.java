@@ -86,7 +86,6 @@ public class UserControllerTest {
     private Dinner dinner = generator.getDinnerFromDinnerRecord(1L, dinnerRecord);
     private CreateDinnerRequest request = generator.createDinnerRequest(location, localDateTime);
 
-    //todo
     @Test
     public void should_return_dinner_and_status_created() throws Exception {
         //given

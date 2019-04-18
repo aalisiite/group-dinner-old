@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -374,7 +375,48 @@ public class RepositoryUserServiceTest {
     }
 
     @Test
-    public void should_return_dinners_with_guests_with_good_reviews() {
+    public void should_return_dinners_if_no_bad_feedback_guests_found() {
+        //when
+        Mockito.when(userRecordRepository.findByEmail(any()))
+                .thenReturn(userRecord1);
+        Mockito.when(feedbackRecordRepository.getBadFeedbackUsers(any()))
+                .thenReturn(Collections.emptyList());
+        Mockito.when(dinnerRecordRepository.findAll())
+                .thenReturn(List.of(dinnerRecord));
+        Mockito.when(attendeeRecordRepository.userJoinedDinner(any(), any()))
+                .thenReturn(true);
+        Mockito.when(toApiCompatible.apply(dinnerRecord))
+                .thenReturn(dinner);
+
+        List<Dinner> result = userModule.getGoodMatchDinners(userRecord1.getEmail());
+
+        //then
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    public void should_return_dinners_if_bad_feedback_guest_not_attending() {
+        //when
+        Mockito.when(userRecordRepository.findByEmail(any()))
+                .thenReturn(userRecord1);
+        Mockito.when(feedbackRecordRepository.getBadFeedbackUsers(any()))
+                .thenReturn(List.of(userRecord2));
+        Mockito.when(dinnerRecordRepository.findAll())
+                .thenReturn(List.of(dinnerRecord));
+        Mockito.when(attendeeRecordRepository.userJoinedDinner(any(), any()))
+                .thenReturn(false);
+        Mockito.when(toApiCompatible.apply(dinnerRecord))
+                .thenReturn(dinner);
+
+        List<Dinner> result = userModule.getGoodMatchDinners(userRecord1.getEmail());
+
+        //then
+        assertEquals(1, result.size());
+    }
+
+
+    @Test
+    public void should_return_no_dinners_for_only_bad_feedback_guests() {
         //when
         Mockito.when(userRecordRepository.findByEmail(any()))
                 .thenReturn(userRecord1);
