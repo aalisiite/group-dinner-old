@@ -79,11 +79,11 @@ public class CreateDinnerRequest {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CreateDinnerRequest request = (CreateDinnerRequest) o;
-        return maxGuests == request.maxGuests &&
-                title.equals(request.title) &&
-                description.equals(request.description) &&
-                Objects.equals(location, request.location) &&
-                Objects.equals(dateTime, request.dateTime);
+        return maxGuests == request.maxGuests
+                && title.equals(request.title)
+                && description.equals(request.description)
+                && Objects.equals(location, request.location)
+                && Objects.equals(dateTime, request.dateTime);
     }
 
     @Override

@@ -7,12 +7,12 @@ import org.springframework.data.repository.query.Param;
 
 public interface UserRecordRepository extends JpaRepository<UserRecord, Long> {
 
-    @Query("select user from UserRecord user where" +
-            " user.email = :email")
+    @Query("select user from UserRecord user where"
+            + " user.email = :email")
     UserRecord findByEmail(@Param("email") String email);
 
-    @Query("select count(user) > 0 from UserRecord user where" +
-            " user.email = :email")
+    @Query("select count(user) > 0 from UserRecord user where"
+            + " user.email = :email")
     boolean isUserPresent(@Param("email") String email);
 }
 

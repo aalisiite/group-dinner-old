@@ -1,17 +1,15 @@
 package io.codelex.groupdinner.repository.service;
 
-import io.codelex.groupdinner.UserService;
+import io.codelex.groupdinner.MapDBRecordToApiCompatible;
 import io.codelex.groupdinner.api.*;
 import io.codelex.groupdinner.repository.AttendeeRecordRepository;
 import io.codelex.groupdinner.repository.DinnerRecordRepository;
 import io.codelex.groupdinner.repository.FeedbackRecordRepository;
 import io.codelex.groupdinner.repository.UserRecordRepository;
-import io.codelex.groupdinner.repository.mapper.MapDBRecordToApiCompatible;
 import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.FeedbackRecord;
 import io.codelex.groupdinner.repository.model.UserRecord;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -20,7 +18,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
-public class RepositoryUserService implements UserService {
+public class DinnerService {
 
     private final DinnerRecordRepository dinnerRecordRepository;
     private final UserRecordRepository userRecordRepository;
@@ -28,16 +26,15 @@ public class RepositoryUserService implements UserService {
     private final FeedbackRecordRepository feedbackRecordRepository;
     private final MapDBRecordToApiCompatible toApiCompatible = new MapDBRecordToApiCompatible();
 
-    public RepositoryUserService(DinnerRecordRepository dinnerRecordRepository,
-                                 UserRecordRepository userRecordRepository,
-                                 AttendeeRecordRepository attendeeRecordRepository, FeedbackRecordRepository feedbackRecordRepository, PasswordEncoder passwordEncoder) {
+    public DinnerService(DinnerRecordRepository dinnerRecordRepository,
+                         UserRecordRepository userRecordRepository,
+                         AttendeeRecordRepository attendeeRecordRepository, FeedbackRecordRepository feedbackRecordRepository) {
         this.dinnerRecordRepository = dinnerRecordRepository;
         this.userRecordRepository = userRecordRepository;
         this.attendeeRecordRepository = attendeeRecordRepository;
         this.feedbackRecordRepository = feedbackRecordRepository;
     }
 
-    @Override
     public Dinner createDinner(String userEmail, CreateDinnerRequest request) {
         UserRecord user = userRecordRepository.findByEmail(userEmail);
         if (!dinnerRecordRepository.isDinnerPresent(
@@ -70,7 +67,6 @@ public class RepositoryUserService implements UserService {
         }
     }
 
-    @Override
     public Attendee joinDinner(String userEmail, Long dinnerId) {
         Optional<DinnerRecord> dinner = dinnerRecordRepository.findById(dinnerId);
         UserRecord user = userRecordRepository.findByEmail(userEmail);
@@ -93,7 +89,6 @@ public class RepositoryUserService implements UserService {
         }
     }
 
-    @Override
     public Feedback leaveFeedback(String providerEmail, Long dinnerId, LeaveFeedbackRequest request) {
         UserRecord provider = userRecordRepository.findByEmail(providerEmail);
         UserRecord receiver = userRecordRepository.findByEmail(request.getReceiver());
@@ -126,13 +121,11 @@ public class RepositoryUserService implements UserService {
         }
     }
 
-    @Override
     public Dinner findDinner(Long id) {
         Optional<DinnerRecord> dinner = dinnerRecordRepository.findById(id);
         return dinner.map(toApiCompatible::apply).orElse(null);
     }
 
-    @Override
     public List<User> findDinnerAttendees(Long dinnerId, boolean accepted) {
         List<AttendeeRecord> attendees = attendeeRecordRepository.findDinnerAttendees(dinnerId, accepted);
         List<UserRecord> users = new ArrayList<>();
@@ -145,7 +138,6 @@ public class RepositoryUserService implements UserService {
                 .collect(Collectors.toList());
     }
 
-    @Override
     public List<Dinner> getGoodMatchDinners(String userEmail) {
         UserRecord user = userRecordRepository.findByEmail(userEmail);
         List<DinnerRecord> goodDinners = dinnerRecordRepository.getGoodDinners(user.getId());

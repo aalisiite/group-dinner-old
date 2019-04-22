@@ -3,7 +3,9 @@ package io.codelex.groupdinner;
 import io.codelex.groupdinner.api.RegistrationRequest;
 import io.codelex.groupdinner.api.SignInRequest;
 import io.codelex.groupdinner.api.User;
-import io.codelex.groupdinner.repository.service.RepositoryAuthService;
+import io.codelex.groupdinner.repository.service.AuthService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +19,10 @@ import static io.codelex.groupdinner.repository.service.Role.REGISTERED_CLIENT;
 @RequestMapping("/api")
 public class AuthController {
 
-    private final RepositoryAuthService authService;
+    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
+    private final AuthService authService;
 
-    public AuthController(RepositoryAuthService authService) {
+    public AuthController(AuthService authService) {
         this.authService = authService;
     }
 
@@ -46,5 +49,11 @@ public class AuthController {
     @GetMapping("/account")
     public String account(Principal principal) {
         return principal.getName();
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(IllegalStateException.class)
+    public void handleIllegalState(IllegalStateException e) {
+        log.warn("Exception caught: ", e);
     }
 }

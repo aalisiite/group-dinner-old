@@ -43,11 +43,11 @@ public interface DinnerRecordRepository extends JpaRepository<DinnerRecord, Long
             @Param("dateTime") LocalDateTime dateTime
     );
 
-    @Query("select dinner from DinnerRecord dinner" +
-            " left outer join FeedbackRecord feedback " +
-            " on dinner.id = feedback.dinner.id" +
-            " where feedback.provider.id = :providerId" +
-            " and feedback.rating = true")
+    @Query("select dinner from DinnerRecord dinner"
+            + " left outer join FeedbackRecord feedback "
+            + " on dinner.id = feedback.dinner.id"
+            + " where feedback.provider.id = :providerId"
+            + " and feedback.rating = true")
     List<DinnerRecord> getGoodDinners(
             @Param("providerId") Long providerId
     );

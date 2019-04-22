@@ -1,11 +1,10 @@
 package io.codelex.groupdinner.repository.service;
 
-import io.codelex.groupdinner.AuthService;
+import io.codelex.groupdinner.MapDBRecordToApiCompatible;
 import io.codelex.groupdinner.api.RegistrationRequest;
 import io.codelex.groupdinner.api.SignInRequest;
 import io.codelex.groupdinner.api.User;
 import io.codelex.groupdinner.repository.UserRecordRepository;
-import io.codelex.groupdinner.repository.mapper.MapDBRecordToApiCompatible;
 import io.codelex.groupdinner.repository.model.UserRecord;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,13 +15,13 @@ import static java.util.Collections.singleton;
 import static org.springframework.security.core.context.SecurityContextHolder.getContext;
 
 @Component
-public class RepositoryAuthService implements AuthService {
+public class AuthService {
 
     private final UserRecordRepository userRecordRepository;
     private final MapDBRecordToApiCompatible toApiCompatible = new MapDBRecordToApiCompatible();
     private final PasswordEncoder passwordEncoder;
 
-    public RepositoryAuthService(
+    public AuthService(
             UserRecordRepository userRecordRepository,
             PasswordEncoder passwordEncoder) {
         this.userRecordRepository = userRecordRepository;
@@ -39,7 +38,6 @@ public class RepositoryAuthService implements AuthService {
         getContext().setAuthentication(null);
     }
 
-    @Override
     public User registerUser(RegistrationRequest request) {
         if (!userRecordRepository.isUserPresent(request.getEmail())) {
             UserRecord user = new UserRecord(
@@ -55,7 +53,6 @@ public class RepositoryAuthService implements AuthService {
         }
     }
 
-    @Override
     public User authenticateUser(SignInRequest request) {
         UserRecord user = userRecordRepository.findByEmail(request.getEmail().toLowerCase().trim());
         if (user != null) {

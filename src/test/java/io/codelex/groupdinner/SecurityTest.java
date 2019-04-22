@@ -1,6 +1,6 @@
 package io.codelex.groupdinner;
 
-import io.codelex.groupdinner.repository.service.RepositoryUserService;
+import io.codelex.groupdinner.repository.service.DinnerService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 public class SecurityTest {
 
     @Autowired
-    RepositoryUserService userService;
+    DinnerService userService;
 
     @Autowired
     TestRestTemplate restTemplate;

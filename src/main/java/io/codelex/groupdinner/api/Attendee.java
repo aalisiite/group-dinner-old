@@ -53,9 +53,9 @@ public class Attendee {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Attendee attendee = (Attendee) o;
-        return id.equals(attendee.id) &&
-                dinner.equals(attendee.dinner) &&
-                user.equals(attendee.user);
+        return id.equals(attendee.id)
+                && dinner.equals(attendee.dinner)
+                && user.equals(attendee.user);
     }
 
     @Override

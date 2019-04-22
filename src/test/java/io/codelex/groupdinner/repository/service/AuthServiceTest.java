@@ -1,11 +1,11 @@
 package io.codelex.groupdinner.repository.service;
 
+import io.codelex.groupdinner.MapDBRecordToApiCompatible;
 import io.codelex.groupdinner.api.RegistrationRequest;
 import io.codelex.groupdinner.api.SignInRequest;
 import io.codelex.groupdinner.api.User;
 import io.codelex.groupdinner.repository.TestVariableGenerator;
 import io.codelex.groupdinner.repository.UserRecordRepository;
-import io.codelex.groupdinner.repository.mapper.MapDBRecordToApiCompatible;
 import io.codelex.groupdinner.repository.model.UserRecord;
 import org.junit.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -16,13 +16,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 
-public class RepositoryAuthServiceTest {
+public class AuthServiceTest {
 
     private final PasswordEncoder passwordEncoder = Mockito.mock(PasswordEncoder.class);
     private final TestVariableGenerator generator = new TestVariableGenerator();
     private MapDBRecordToApiCompatible toApiCompatible = Mockito.mock(MapDBRecordToApiCompatible.class);
     private UserRecordRepository userRecordRepository = Mockito.mock(UserRecordRepository.class);
-    private RepositoryAuthService userModule = new RepositoryAuthService(userRecordRepository, passwordEncoder);
+    private AuthService authService = new AuthService(userRecordRepository, passwordEncoder);
     private UserRecord userRecord1 = generator.createUserRecord1();
     private User user1 = generator.getUserFromUserRecord(1L, userRecord1);
     private RegistrationRequest registrationRequest = generator.createRegistrationRequest();
@@ -42,7 +42,7 @@ public class RepositoryAuthServiceTest {
         Mockito.when(toApiCompatible.apply(userRecord1))
                 .thenReturn(user1);
 
-        User result = userModule.registerUser(registrationRequest);
+        User result = authService.registerUser(registrationRequest);
 
         //then
         assertEquals(result, user1);
@@ -55,7 +55,7 @@ public class RepositoryAuthServiceTest {
                 .thenReturn(true);
 
         //then
-        Executable executable = () -> userModule.registerUser(registrationRequest);
+        Executable executable = () -> authService.registerUser(registrationRequest);
         assertThrows(IllegalStateException.class, executable, "Email already exists");
     }
 
@@ -69,7 +69,7 @@ public class RepositoryAuthServiceTest {
         Mockito.when(toApiCompatible.apply(userRecord1))
                 .thenReturn(user1);
 
-        User result = userModule.authenticateUser(signInRequest);
+        User result = authService.authenticateUser(signInRequest);
 
         //then
         assertEquals(result, user1);
@@ -84,7 +84,7 @@ public class RepositoryAuthServiceTest {
                 .thenReturn(false);
 
         //then
-        Executable executable = () -> userModule.authenticateUser(signInRequest);
+        Executable executable = () -> authService.authenticateUser(signInRequest);
         assertThrows(IllegalStateException.class, executable, "Password incorrect");
     }
 
@@ -95,7 +95,7 @@ public class RepositoryAuthServiceTest {
                 .thenReturn(null);
 
         //then
-        Executable executable = () -> userModule.authenticateUser(signInRequest);
+        Executable executable = () -> authService.authenticateUser(signInRequest);
         assertThrows(IllegalStateException.class, executable, "Email incorrect");
     }
 

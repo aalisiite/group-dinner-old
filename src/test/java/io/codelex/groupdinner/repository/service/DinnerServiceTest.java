@@ -1,8 +1,8 @@
 package io.codelex.groupdinner.repository.service;
 
+import io.codelex.groupdinner.MapDBRecordToApiCompatible;
 import io.codelex.groupdinner.api.*;
 import io.codelex.groupdinner.repository.*;
-import io.codelex.groupdinner.repository.mapper.MapDBRecordToApiCompatible;
 import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.FeedbackRecord;
@@ -12,7 +12,6 @@ import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -23,16 +22,15 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 
-public class RepositoryUserServiceTest {
+public class DinnerServiceTest {
 
-    private final PasswordEncoder passwordEncoder = Mockito.mock(PasswordEncoder.class);
     private final TestVariableGenerator generator = new TestVariableGenerator();
     private MapDBRecordToApiCompatible toApiCompatible = Mockito.mock(MapDBRecordToApiCompatible.class);
     private DinnerRecordRepository dinnerRecordRepository = Mockito.mock(DinnerRecordRepository.class);
     private UserRecordRepository userRecordRepository = Mockito.mock(UserRecordRepository.class);
     private AttendeeRecordRepository attendeeRecordRepository = Mockito.mock(AttendeeRecordRepository.class);
     private FeedbackRecordRepository feedbackRecordRepository = Mockito.mock(FeedbackRecordRepository.class);
-    private RepositoryUserService userModule = new RepositoryUserService(dinnerRecordRepository, userRecordRepository, attendeeRecordRepository, feedbackRecordRepository, passwordEncoder);
+    private DinnerService dinnerService = new DinnerService(dinnerRecordRepository, userRecordRepository, attendeeRecordRepository, feedbackRecordRepository);
     private LocalDateTime localDateTime = generator.createDateTime();
     private String location = generator.createLocation();
     private UserRecord userRecord1 = generator.createUserRecord1();
@@ -47,8 +45,6 @@ public class RepositoryUserServiceTest {
     private FeedbackRecord goodFeedbackRecord = generator.createGoodFeedbackRecord(dinnerRecord, userRecord1, userRecord2);
     private Feedback goodFeedback = generator.getFeedbackFromFeedbackRecord(1L, goodFeedbackRecord);
     private LeaveFeedbackRequest leaveFeedbackRequest = generator.createLeaveFeedbackRequest();
-    private RegistrationRequest registrationRequest = generator.createRegistrationRequest();
-    private SignInRequest signInRequest = generator.createSignInRequest();
 
     @Test
     public void should_be_able_to_create_dinner() {
@@ -66,7 +62,7 @@ public class RepositoryUserServiceTest {
         Mockito.when(toApiCompatible.apply(dinnerRecord))
                 .thenReturn(dinner);
 
-        Dinner result = userModule.createDinner(user1.getId().toString(), createDinnerRequest);
+        Dinner result = dinnerService.createDinner(user1.getId().toString(), createDinnerRequest);
 
         //then
         assertEquals(dinner.getTitle(), result.getTitle());
@@ -85,7 +81,7 @@ public class RepositoryUserServiceTest {
         Mockito.when(toApiCompatible.apply(dinnerRecord))
                 .thenReturn(dinner);
 
-        Dinner result = userModule.createDinner(user1.getId().toString(), createDinnerRequest);
+        Dinner result = dinnerService.createDinner(user1.getId().toString(), createDinnerRequest);
 
         //then
         assertEquals(dinner.getTitle(), result.getTitle());
@@ -113,7 +109,7 @@ public class RepositoryUserServiceTest {
         Mockito.when(toApiCompatible.apply(acceptedAttendeeRecord1))
                 .thenReturn(acceptedAttendee1);
 
-        Attendee result = userModule.joinDinner(principal.getName(), dinnerRecord.getId());
+        Attendee result = dinnerService.joinDinner(principal.getName(), dinnerRecord.getId());
 
         //then
         assertTrue(result.isAccepted());
@@ -141,7 +137,7 @@ public class RepositoryUserServiceTest {
         Mockito.when(toApiCompatible.apply(acceptedAttendeeRecord1))
                 .thenReturn(acceptedAttendee1);
 
-        Attendee result = userModule.joinDinner(principal.getName(), dinnerRecord.getId());
+        Attendee result = dinnerService.joinDinner(principal.getName(), dinnerRecord.getId());
 
         //then
         assertFalse(result.isAccepted());
@@ -165,7 +161,7 @@ public class RepositoryUserServiceTest {
         Mockito.when(toApiCompatible.apply(acceptedAttendeeRecord1))
                 .thenReturn(acceptedAttendee1);
 
-        Attendee result = userModule.joinDinner(principal.getName(), dinnerRecord.getId());
+        Attendee result = dinnerService.joinDinner(principal.getName(), dinnerRecord.getId());
 
         //then
         assertTrue(result.isAccepted());
@@ -200,7 +196,7 @@ public class RepositoryUserServiceTest {
         Mockito.when(toApiCompatible.apply(goodFeedbackRecord))
                 .thenReturn(goodFeedback);
 
-        Feedback result = userModule.leaveFeedback(user1.getEmail(), dinnerRecord.getId(), leaveFeedbackRequest);
+        Feedback result = dinnerService.leaveFeedback(user1.getEmail(), dinnerRecord.getId(), leaveFeedbackRequest);
 
         //then
         assertEquals(result, goodFeedback);
@@ -214,7 +210,7 @@ public class RepositoryUserServiceTest {
                 .thenReturn(userRecord1);
 
         //then
-        Executable executable = () -> userModule.leaveFeedback(user1.getEmail(), dinnerRecord.getId(), leaveFeedbackRequest);
+        Executable executable = () -> dinnerService.leaveFeedback(user1.getEmail(), dinnerRecord.getId(), leaveFeedbackRequest);
         assertThrows(IllegalArgumentException.class, executable, "Provider is same as receiver");
     }
 
@@ -246,7 +242,7 @@ public class RepositoryUserServiceTest {
         });
 
         //then
-        Executable executable = () -> userModule.leaveFeedback(user1.getEmail(), dinnerRecord.getId(), leaveFeedbackRequest);
+        Executable executable = () -> dinnerService.leaveFeedback(user1.getEmail(), dinnerRecord.getId(), leaveFeedbackRequest);
         assertThrows(IllegalArgumentException.class, executable, "No such common dinner for users");
     }
 
@@ -267,6 +263,8 @@ public class RepositoryUserServiceTest {
                 return userRecord2;
             }
         });
+        Mockito.when(dinnerRecordRepository.findById(any()))
+                .thenReturn(Optional.of(dinnerRecord));
         Mockito.when(feedbackRecordRepository.isFeedbackPresent(any(), any(), any()))
                 .thenReturn(true);
         Mockito.when(feedbackRecordRepository.getFeedback(any(), any(), any()))
@@ -274,7 +272,7 @@ public class RepositoryUserServiceTest {
         Mockito.when(toApiCompatible.apply(goodFeedbackRecord))
                 .thenReturn(goodFeedback);
 
-        Feedback result = userModule.leaveFeedback(user1.getEmail(), dinnerRecord.getId(), leaveFeedbackRequest);
+        Feedback result = dinnerService.leaveFeedback(user1.getEmail(), dinnerRecord.getId(), leaveFeedbackRequest);
 
         //then
         assertEquals(result, goodFeedback);
@@ -296,7 +294,7 @@ public class RepositoryUserServiceTest {
         Mockito.when(toApiCompatible.apply(userRecord1))
                 .thenReturn(user1);
 
-        List<User> result = userModule.findDinnerAttendees(dinnerRecord.getId(), status);
+        List<User> result = dinnerService.findDinnerAttendees(dinnerRecord.getId(), status);
 
         //then
         assertEquals(1, result.size());
@@ -311,7 +309,7 @@ public class RepositoryUserServiceTest {
         Mockito.when(dinnerRecordRepository.getGoodDinners(any()))
                 .thenReturn(List.of(dinnerRecord));
 
-        List<Dinner> result = userModule.getGoodMatchDinners(userRecord1.getEmail());
+        List<Dinner> result = dinnerService.getGoodMatchDinners(userRecord1.getEmail());
 
         //then
         assertEquals(1, result.size());
@@ -323,7 +321,7 @@ public class RepositoryUserServiceTest {
         Mockito.when(userRecordRepository.findById(any()))
                 .thenReturn(Optional.of(userRecord1));
 
-        DinnerRecord result = userModule.createDinnerRecordFromRequest(userRecord1.getId(), createDinnerRequest);
+        DinnerRecord result = dinnerService.createDinnerRecordFromRequest(userRecord1.getId(), createDinnerRequest);
 
         //then
         assertEquals(result.getTitle(), dinnerRecord.getTitle());

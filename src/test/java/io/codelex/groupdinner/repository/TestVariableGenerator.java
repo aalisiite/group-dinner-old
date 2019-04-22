@@ -1,7 +1,7 @@
 package io.codelex.groupdinner.repository;
 
+import io.codelex.groupdinner.MapDBRecordToApiCompatible;
 import io.codelex.groupdinner.api.*;
-import io.codelex.groupdinner.repository.mapper.MapDBRecordToApiCompatible;
 import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.FeedbackRecord;
