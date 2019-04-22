@@ -3,8 +3,7 @@ package io.codelex.groupdinner;
 import io.codelex.groupdinner.api.RegistrationRequest;
 import io.codelex.groupdinner.api.SignInRequest;
 import io.codelex.groupdinner.api.User;
-import io.codelex.groupdinner.repository.service.AuthService;
-import io.codelex.groupdinner.repository.service.RepositoryUserService;
+import io.codelex.groupdinner.repository.service.RepositoryAuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,17 +17,15 @@ import static io.codelex.groupdinner.repository.service.Role.REGISTERED_CLIENT;
 @RequestMapping("/api")
 public class AuthController {
 
-    private final AuthService authService;
-    private final RepositoryUserService service;
+    private final RepositoryAuthService authService;
 
-    public AuthController(AuthService authService, RepositoryUserService service) {
+    public AuthController(RepositoryAuthService authService) {
         this.authService = authService;
-        this.service = service;
     }
 
     @PostMapping("/sign-in")
     public ResponseEntity<User> signIn(@Valid @RequestBody SignInRequest request) {
-        User user = service.authenticateUser(request);
+        User user = authService.authenticateUser(request);
         authService.authorise(request.getEmail().trim().toLowerCase(), request.getPassword(), REGISTERED_CLIENT);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -36,7 +33,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<User> register(
             @Valid @RequestBody RegistrationRequest request) {
-        User user = service.registerUser(request);
+        User user = authService.registerUser(request);
         authService.authorise(request.getEmail().trim().toLowerCase(), request.getPassword(), REGISTERED_CLIENT);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }

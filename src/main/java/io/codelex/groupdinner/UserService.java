@@ -8,10 +8,6 @@ public interface UserService {
 
     Dinner createDinner(String userEmail, CreateDinnerRequest request);
 
-    User registerUser(RegistrationRequest request);
-
-    User authenticateUser(SignInRequest request);
-
     Attendee joinDinner(String userEmail, Long dinnerId);
 
     Feedback leaveFeedback(String providerEmail, Long dinnerId, LeaveFeedbackRequest request);

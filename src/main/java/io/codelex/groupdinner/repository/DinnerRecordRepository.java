@@ -1,7 +1,6 @@
 package io.codelex.groupdinner.repository;
 
 import io.codelex.groupdinner.repository.model.DinnerRecord;
-import io.codelex.groupdinner.repository.model.UserRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -43,13 +42,13 @@ public interface DinnerRecordRepository extends JpaRepository<DinnerRecord, Long
             @Param("location") String location,
             @Param("dateTime") LocalDateTime dateTime
     );
-    
+
     @Query("select dinner from DinnerRecord dinner" +
             " left outer join FeedbackRecord feedback " +
             " on dinner.id = feedback.dinner.id" +
             " where feedback.provider.id = :providerId" +
             " and feedback.rating = true")
-    List<DinnerRecord> getGoodDinners (
+    List<DinnerRecord> getGoodDinners(
             @Param("providerId") Long providerId
     );
 }

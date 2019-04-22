@@ -44,6 +44,4 @@ public interface AttendeeRecordRepository extends JpaRepository<AttendeeRecord, 
                              @Param("userId") Long userId);
 
 
-    
-    
 }

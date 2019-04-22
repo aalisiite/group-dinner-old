@@ -1,12 +1,12 @@
-package io.codelex.groupdinner.repository;
+package io.codelex.groupdinner.repository.service;
 
 import io.codelex.groupdinner.api.*;
+import io.codelex.groupdinner.repository.*;
 import io.codelex.groupdinner.repository.mapper.MapDBRecordToApiCompatible;
 import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.FeedbackRecord;
 import io.codelex.groupdinner.repository.model.UserRecord;
-import io.codelex.groupdinner.repository.service.RepositoryUserService;
 import org.junit.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mockito;
@@ -17,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -91,76 +90,6 @@ public class RepositoryUserServiceTest {
         //then
         assertEquals(dinner.getTitle(), result.getTitle());
         assertEquals(dinner.getCreator(), result.getCreator());
-    }
-
-    @Test
-    public void should_be_able_to_register_as_new_user() {
-        //when
-        Mockito.when(userRecordRepository.isUserPresent(any()))
-                .thenReturn(false);
-        String encodedPassword = "encodedPassword";
-        Mockito.when(passwordEncoder.encode(any()))
-                .thenReturn(encodedPassword);
-        Mockito.when(userRecordRepository.save(any()))
-                .thenReturn(userRecord1);
-        Mockito.when(toApiCompatible.apply(userRecord1))
-                .thenReturn(user1);
-
-        User result = userModule.registerUser(registrationRequest);
-
-        //then
-        assertEquals(result, user1);
-    }
-
-    @Test
-    public void should_not_be_able_to_register_with_existing_email() {
-        //when
-        Mockito.when(userRecordRepository.isUserPresent(any()))
-                .thenReturn(true);
-
-        //then
-        Executable executable = () -> userModule.registerUser(registrationRequest);
-        assertThrows(IllegalStateException.class, executable, "Email already exists");
-    }
-
-    @Test
-    public void should_be_able_to_sign_in() {
-        //when
-        Mockito.when(userRecordRepository.findByEmail(any()))
-                .thenReturn(userRecord1);
-        Mockito.when(passwordEncoder.matches(any(), any()))
-                .thenReturn(true);
-        Mockito.when(toApiCompatible.apply(userRecord1))
-                .thenReturn(user1);
-
-        User result = userModule.authenticateUser(signInRequest);
-
-        //then
-        assertEquals(result, user1);
-    }
-
-    @Test
-    public void should_not_be_able_to_sign_in_with_wrong_password() {
-        //when
-        Mockito.when(userRecordRepository.findByEmail(any()))
-                .thenReturn(userRecord1);
-        Mockito.when(passwordEncoder.matches(any(), any()))
-                .thenReturn(false);
-
-        //then
-        Executable executable = () -> userModule.authenticateUser(signInRequest);
-        assertThrows(IllegalStateException.class, executable, "Password incorrect");
-    }
-
-    @Test
-    public void should_not_be_able_to_sign_in_with_nonexistent_email() {
-        //when
-        Mockito.when(userRecordRepository.findByEmail(any()))
-                .thenReturn(null);
-
-        //then
-        Executable executable = () -> userModule.authenticateUser(signInRequest);
-        assertThrows(IllegalStateException.class, executable, "Email incorrect");
     }
 
     @Test
@@ -286,7 +215,7 @@ public class RepositoryUserServiceTest {
 
         //then
         Executable executable = () -> userModule.leaveFeedback(user1.getEmail(), dinnerRecord.getId(), leaveFeedbackRequest);
-        assertThrows(IllegalStateException.class, executable, "Provider is same as receiver");
+        assertThrows(IllegalArgumentException.class, executable, "Provider is same as receiver");
     }
 
     @Test
@@ -318,7 +247,7 @@ public class RepositoryUserServiceTest {
 
         //then
         Executable executable = () -> userModule.leaveFeedback(user1.getEmail(), dinnerRecord.getId(), leaveFeedbackRequest);
-        assertThrows(IllegalStateException.class, executable, "No such common dinner for users");
+        assertThrows(IllegalArgumentException.class, executable, "No such common dinner for users");
     }
 
     @Test
@@ -381,7 +310,7 @@ public class RepositoryUserServiceTest {
                 .thenReturn(userRecord1);
         Mockito.when(dinnerRecordRepository.getGoodDinners(any()))
                 .thenReturn(List.of(dinnerRecord));
-        
+
         List<Dinner> result = userModule.getGoodMatchDinners(userRecord1.getEmail());
 
         //then

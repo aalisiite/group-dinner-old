@@ -21,8 +21,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    //todo catch exceptions + response codes
-
     @PostMapping
     public ResponseEntity<Dinner> createDinner(
             Principal principal,
@@ -64,7 +62,14 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(IllegalStateException.class)
-    public void handleIllegalState(IllegalStateException e){
+    public void handleIllegalState(IllegalStateException e) {
         log.warn("Exception caught: ", e);
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public void handleIllegalArgument(IllegalArgumentException e) {
+        log.warn("Exception caught: ", e);
+    }
+
 }

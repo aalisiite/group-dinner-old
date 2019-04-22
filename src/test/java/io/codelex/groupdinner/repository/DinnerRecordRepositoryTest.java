@@ -32,7 +32,7 @@ class DinnerRecordRepositoryTest extends Assertions {
     private DinnerRecord dinnerRecord = generator.createDinnerRecord(userRecord, location, localDateTime);
     private FeedbackRecord goodFeedbackRecord1to2 = generator.createGoodFeedbackRecord(dinnerRecord, userRecord, userRecord2);
     private FeedbackRecord badFeedbackRecord1to2 = generator.createBadFeedbackRecord(dinnerRecord, userRecord, userRecord2);
-    
+
     @Test
     void should_return_true_when_match_found() {
         //given

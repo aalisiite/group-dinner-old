@@ -19,8 +19,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-//todo separate auth methods from functionality of app
-
 @Component
 public class RepositoryUserService implements UserService {
 
@@ -29,7 +27,6 @@ public class RepositoryUserService implements UserService {
     private final AttendeeRecordRepository attendeeRecordRepository;
     private final FeedbackRecordRepository feedbackRecordRepository;
     private final MapDBRecordToApiCompatible toApiCompatible = new MapDBRecordToApiCompatible();
-    private final PasswordEncoder passwordEncoder;
 
     public RepositoryUserService(DinnerRecordRepository dinnerRecordRepository,
                                  UserRecordRepository userRecordRepository,
@@ -38,7 +35,6 @@ public class RepositoryUserService implements UserService {
         this.userRecordRepository = userRecordRepository;
         this.attendeeRecordRepository = attendeeRecordRepository;
         this.feedbackRecordRepository = feedbackRecordRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -75,41 +71,11 @@ public class RepositoryUserService implements UserService {
     }
 
     @Override
-    public User registerUser(RegistrationRequest request) {
-        if (!userRecordRepository.isUserPresent(request.getEmail())) {
-            UserRecord user = new UserRecord(
-                    request.getFirstName(),
-                    request.getLastName(),
-                    request.getEmail().toLowerCase().trim(),
-                    passwordEncoder.encode(request.getPassword())
-            );
-            user = userRecordRepository.save(user);
-            return toApiCompatible.apply(user);
-        } else {
-            throw new IllegalStateException("Email already exists");
-        }
-    }
-
-    @Override
-    public User authenticateUser(SignInRequest request) {
-        UserRecord user = userRecordRepository.findByEmail(request.getEmail().toLowerCase().trim());
-        if (user != null) {
-            if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-                return toApiCompatible.apply(user);
-            } else {
-                throw new IllegalStateException("Password incorrect");
-            }
-        } else {
-            throw new IllegalStateException("Email incorrect");
-        }
-    }
-
-    @Override
     public Attendee joinDinner(String userEmail, Long dinnerId) {
         Optional<DinnerRecord> dinner = dinnerRecordRepository.findById(dinnerId);
         UserRecord user = userRecordRepository.findByEmail(userEmail);
         if (dinner.isEmpty()) {
-            throw new IllegalArgumentException("No such dinner present");
+            throw new IllegalArgumentException("No such dinner exists");
         }
         if (!attendeeRecordRepository.userJoinedDinner(dinner.get().getId(), user.getId())) {
             Integer attendeeCount = attendeeRecordRepository.countDinnerAttendees(dinnerId);
@@ -131,18 +97,22 @@ public class RepositoryUserService implements UserService {
     public Feedback leaveFeedback(String providerEmail, Long dinnerId, LeaveFeedbackRequest request) {
         UserRecord provider = userRecordRepository.findByEmail(providerEmail);
         UserRecord receiver = userRecordRepository.findByEmail(request.getReceiver());
+        Optional<DinnerRecord> dinner = dinnerRecordRepository.findById(dinnerId);
         if (receiver == null) {
-            throw new IllegalStateException("No such user");
+            throw new IllegalArgumentException("No such user exists");
         }
         if (provider.equals(receiver)) {
-            throw new IllegalStateException("Provider is same as receiver");
+            throw new IllegalArgumentException("Provider is same as receiver");
+        }
+        if (dinner.isEmpty()) {
+            throw new IllegalArgumentException("No such dinner exists");
         }
         if (feedbackRecordRepository.isFeedbackPresent(dinnerId, provider.getId(), receiver.getId())) {
             FeedbackRecord feedback = feedbackRecordRepository.getFeedback(dinnerId, provider.getId(), receiver.getId());
             return toApiCompatible.apply(feedback);
-        } else if (attendeeRecordRepository.userJoinedDinner(dinnerId, provider.getId())
+        }
+        if (attendeeRecordRepository.userJoinedDinner(dinnerId, provider.getId())
                 && attendeeRecordRepository.userJoinedDinner(dinnerId, receiver.getId())) {
-            Optional<DinnerRecord> dinner = dinnerRecordRepository.findById(dinnerId);
             FeedbackRecord feedback = new FeedbackRecord(
                     dinner.get(),
                     provider,
@@ -152,7 +122,7 @@ public class RepositoryUserService implements UserService {
             feedback = feedbackRecordRepository.save(feedback);
             return toApiCompatible.apply(feedback);
         } else {
-            throw new IllegalStateException("No such common dinner for users");
+            throw new IllegalArgumentException("No such common dinner for users");
         }
     }
 
@@ -186,18 +156,7 @@ public class RepositoryUserService implements UserService {
         return resultingDinners;
     }
 
-    private List<DinnerRecord> deleteDinnerFromList(List<DinnerRecord> dinners, DinnerRecord delete) {
-        List<DinnerRecord> result = new ArrayList<>();
-        for (DinnerRecord dinner : dinners) {
-            if (!dinner.equals(delete)) {
-                result.add(dinner);
-            }
-        }
-        return result;
-    }
-
-    //todo how to make private and be able to test
-    public DinnerRecord createDinnerRecordFromRequest(Long creatorId, CreateDinnerRequest request) {
+    DinnerRecord createDinnerRecordFromRequest(Long creatorId, CreateDinnerRequest request) {
         DinnerRecord dinner = new DinnerRecord();
         dinner.setTitle(request.getTitle());
         Optional<UserRecord> creator = userRecordRepository.findById(creatorId);
@@ -208,5 +167,4 @@ public class RepositoryUserService implements UserService {
         dinner.setDateTime(request.getDateTime());
         return dinner;
     }
-
 }
