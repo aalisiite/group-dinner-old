@@ -1,7 +1,12 @@
 package io.codelex.groupdinner.repository.service;
 
 import io.codelex.groupdinner.MapDBRecordToApiCompatible;
-import io.codelex.groupdinner.api.*;
+import io.codelex.groupdinner.api.Attendee;
+import io.codelex.groupdinner.api.Dinner;
+import io.codelex.groupdinner.api.Feedback;
+import io.codelex.groupdinner.api.User;
+import io.codelex.groupdinner.api.request.CreateDinnerRequest;
+import io.codelex.groupdinner.api.request.LeaveFeedbackRequest;
 import io.codelex.groupdinner.repository.*;
 import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
@@ -36,6 +41,7 @@ public class DinnerServiceTest {
     private UserRecord userRecord1 = generator.createUserRecord1();
     private UserRecord userRecord2 = generator.createUserRecord2();
     private User user1 = generator.getUserFromUserRecord(1L, userRecord1);
+    private User user2 = generator.getUserFromUserRecord(2L, userRecord2);
     private CreateDinnerRequest createDinnerRequest = generator.createDinnerRequest(location, localDateTime);
     private DinnerRecord dinnerRecord = generator.createDinnerRecord(userRecord1, location, localDateTime);
     private Dinner dinner = generator.getDinnerFromDinnerRecord(1L, dinnerRecord);
@@ -44,7 +50,7 @@ public class DinnerServiceTest {
     private Attendee acceptedAttendee1 = generator.getAttendeeFromAttendeeRecord(1L, acceptedAttendeeRecord1);
     private FeedbackRecord goodFeedbackRecord = generator.createGoodFeedbackRecord(dinnerRecord, userRecord1, userRecord2);
     private Feedback goodFeedback = generator.getFeedbackFromFeedbackRecord(1L, goodFeedbackRecord);
-    private LeaveFeedbackRequest leaveFeedbackRequest = generator.createLeaveFeedbackRequest();
+    private LeaveFeedbackRequest leaveFeedbackRequest = generator.createLeaveFeedbackRequest(user2);
 
     @Test
     public void should_be_able_to_create_dinner() {

@@ -10,6 +10,9 @@ public class Feedback {
     private User receiver;
     private boolean rating;
 
+    public Feedback() {
+    }
+
     public Feedback(Long id, Dinner dinner, User provider, User receiver, boolean rating) {
         this.id = id;
         this.dinner = dinner;

@@ -1,6 +1,11 @@
 package io.codelex.groupdinner;
 
-import io.codelex.groupdinner.api.*;
+import io.codelex.groupdinner.api.Attendee;
+import io.codelex.groupdinner.api.Dinner;
+import io.codelex.groupdinner.api.Feedback;
+import io.codelex.groupdinner.api.User;
+import io.codelex.groupdinner.api.request.CreateDinnerRequest;
+import io.codelex.groupdinner.api.request.LeaveFeedbackRequest;
 import io.codelex.groupdinner.repository.service.DinnerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +46,7 @@ public class UserController {
             Principal principal,
             @PathVariable Long id,
             @Valid @RequestBody LeaveFeedbackRequest request) {
-        return new ResponseEntity<>(dinnerService.leaveFeedback(principal.getName(), id, request), HttpStatus.OK);
+        return new ResponseEntity<>(dinnerService.leaveFeedback(principal.getName(), id, request), HttpStatus.CREATED);
     }
 
     @GetMapping("/dinners/{id}")
@@ -50,7 +55,7 @@ public class UserController {
     }
 
     @GetMapping("/dinners/{id}/attendees")
-    public ResponseEntity<List<User>> getAcceptedDinnerAttendees(
+    public ResponseEntity<List<User>> getDinnerAttendees(
             @PathVariable("id") Long id,
             @RequestParam("accepted") Boolean accepted) {
         return new ResponseEntity<>(dinnerService.findDinnerAttendees(id, accepted), HttpStatus.OK);

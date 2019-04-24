@@ -1,8 +1,9 @@
 package io.codelex.groupdinner;
 
-import io.codelex.groupdinner.api.RegistrationRequest;
-import io.codelex.groupdinner.api.SignInRequest;
 import io.codelex.groupdinner.api.User;
+import io.codelex.groupdinner.api.request.RegistrationRequest;
+import io.codelex.groupdinner.api.request.SignInRequest;
+import io.codelex.groupdinner.repository.service.AuthContextService;
 import io.codelex.groupdinner.repository.service.AuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,29 +22,30 @@ public class AuthController {
 
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
     private final AuthService authService;
+    private final AuthContextService authContext;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, AuthContextService authContext) {
         this.authService = authService;
+        this.authContext = authContext;
     }
 
     @PostMapping("/sign-in")
     public ResponseEntity<User> signIn(@Valid @RequestBody SignInRequest request) {
         User user = authService.authenticateUser(request);
-        authService.authorise(request.getEmail().trim().toLowerCase(), request.getPassword(), REGISTERED_CLIENT);
+        authContext.authorise(request.getEmail().trim().toLowerCase(), request.getPassword(), REGISTERED_CLIENT);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(
-            @Valid @RequestBody RegistrationRequest request) {
+    public ResponseEntity<User> register(@Valid @RequestBody RegistrationRequest request) {
         User user = authService.registerUser(request);
-        authService.authorise(request.getEmail().trim().toLowerCase(), request.getPassword(), REGISTERED_CLIENT);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        authContext.authorise(request.getEmail().trim().toLowerCase(), request.getPassword(), REGISTERED_CLIENT);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     @PostMapping("/sign-out")
     public void signOut() {
-        authService.clearAuthentication();
+        authContext.clearAuthentication();
     }
 
     @GetMapping("/account")

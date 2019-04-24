@@ -13,6 +13,8 @@ public class Dinner {
     private String location;
     private LocalDateTime dateTime;
 
+    public Dinner() {
+    }
 
     public Dinner(Long id, String title, User creator, int maxGuests, String description, String location, LocalDateTime dateTime) {
         this.id = id;

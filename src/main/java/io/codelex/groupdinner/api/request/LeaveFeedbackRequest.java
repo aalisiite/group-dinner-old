@@ -1,9 +1,10 @@
-package io.codelex.groupdinner.api;
+package io.codelex.groupdinner.api.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 public class LeaveFeedbackRequest {
 
@@ -36,5 +37,19 @@ public class LeaveFeedbackRequest {
 
     public void setFeedback(Boolean rating) {
         this.rating = rating;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LeaveFeedbackRequest that = (LeaveFeedbackRequest) o;
+        return receiver.equals(that.receiver)
+                && rating.equals(that.rating);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(receiver, rating);
     }
 }

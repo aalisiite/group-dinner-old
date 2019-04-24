@@ -1,9 +1,9 @@
 package io.codelex.groupdinner.repository.service;
 
 import io.codelex.groupdinner.MapDBRecordToApiCompatible;
-import io.codelex.groupdinner.api.RegistrationRequest;
-import io.codelex.groupdinner.api.SignInRequest;
 import io.codelex.groupdinner.api.User;
+import io.codelex.groupdinner.api.request.RegistrationRequest;
+import io.codelex.groupdinner.api.request.SignInRequest;
 import io.codelex.groupdinner.repository.TestVariableGenerator;
 import io.codelex.groupdinner.repository.UserRecordRepository;
 import io.codelex.groupdinner.repository.model.UserRecord;

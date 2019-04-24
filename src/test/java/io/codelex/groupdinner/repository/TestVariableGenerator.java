@@ -1,7 +1,14 @@
 package io.codelex.groupdinner.repository;
 
 import io.codelex.groupdinner.MapDBRecordToApiCompatible;
-import io.codelex.groupdinner.api.*;
+import io.codelex.groupdinner.api.Attendee;
+import io.codelex.groupdinner.api.Dinner;
+import io.codelex.groupdinner.api.Feedback;
+import io.codelex.groupdinner.api.User;
+import io.codelex.groupdinner.api.request.CreateDinnerRequest;
+import io.codelex.groupdinner.api.request.LeaveFeedbackRequest;
+import io.codelex.groupdinner.api.request.RegistrationRequest;
+import io.codelex.groupdinner.api.request.SignInRequest;
 import io.codelex.groupdinner.repository.model.AttendeeRecord;
 import io.codelex.groupdinner.repository.model.DinnerRecord;
 import io.codelex.groupdinner.repository.model.FeedbackRecord;
@@ -91,9 +98,9 @@ public class TestVariableGenerator {
         );
     }
 
-    public LeaveFeedbackRequest createLeaveFeedbackRequest() {
+    public LeaveFeedbackRequest createLeaveFeedbackRequest(User user) {
         return new LeaveFeedbackRequest(
-                "a.kalnina@gmail.com",
+                user.getEmail(),
                 true
         );
     }

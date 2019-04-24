@@ -1,7 +1,12 @@
 package io.codelex.groupdinner.repository.service;
 
 import io.codelex.groupdinner.MapDBRecordToApiCompatible;
-import io.codelex.groupdinner.api.*;
+import io.codelex.groupdinner.api.Attendee;
+import io.codelex.groupdinner.api.Dinner;
+import io.codelex.groupdinner.api.Feedback;
+import io.codelex.groupdinner.api.User;
+import io.codelex.groupdinner.api.request.CreateDinnerRequest;
+import io.codelex.groupdinner.api.request.LeaveFeedbackRequest;
 import io.codelex.groupdinner.repository.AttendeeRecordRepository;
 import io.codelex.groupdinner.repository.DinnerRecordRepository;
 import io.codelex.groupdinner.repository.FeedbackRecordRepository;

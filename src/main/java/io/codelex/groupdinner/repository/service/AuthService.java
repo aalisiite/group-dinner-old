@@ -1,18 +1,13 @@
 package io.codelex.groupdinner.repository.service;
 
 import io.codelex.groupdinner.MapDBRecordToApiCompatible;
-import io.codelex.groupdinner.api.RegistrationRequest;
-import io.codelex.groupdinner.api.SignInRequest;
 import io.codelex.groupdinner.api.User;
+import io.codelex.groupdinner.api.request.RegistrationRequest;
+import io.codelex.groupdinner.api.request.SignInRequest;
 import io.codelex.groupdinner.repository.UserRecordRepository;
 import io.codelex.groupdinner.repository.model.UserRecord;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import static java.util.Collections.singleton;
-import static org.springframework.security.core.context.SecurityContextHolder.getContext;
 
 @Component
 public class AuthService {
@@ -26,16 +21,6 @@ public class AuthService {
             PasswordEncoder passwordEncoder) {
         this.userRecordRepository = userRecordRepository;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    public void authorise(String email, String password, Role role) {
-        var authorities = singleton(new SimpleGrantedAuthority("ROLE_" + role.name()));
-        var token = new UsernamePasswordAuthenticationToken(email, password, authorities);
-        getContext().setAuthentication(token);
-    }
-
-    public void clearAuthentication() {
-        getContext().setAuthentication(null);
     }
 
     public User registerUser(RegistrationRequest request) {

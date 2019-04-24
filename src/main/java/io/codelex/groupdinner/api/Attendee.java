@@ -9,6 +9,9 @@ public class Attendee {
     private User user;
     private boolean accepted;
 
+    public Attendee() {
+    }
+
     public Attendee(Long id, Dinner dinner, User user, boolean accepted) {
         this.id = id;
         this.dinner = dinner;
