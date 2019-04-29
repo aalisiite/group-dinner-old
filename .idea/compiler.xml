@@ -11,5 +11,9 @@
       <entry name="!?*.kt" />
       <entry name="!?*.clj" />
     </wildcardResourcePatterns>
+    <bytecodeTargetLevel>
+      <module name="io.codelex.group-dinner.main" target="11" />
+      <module name="io.codelex.group-dinner.test" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

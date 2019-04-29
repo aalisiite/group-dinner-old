@@ -12,25 +12,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.security.Principal;
 
 import static io.codelex.groupdinner.repository.service.Role.REGISTERED_CLIENT;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/api")
-public class AuthController {
+public class FacebookController {
 
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
     private final AuthService authService;
     private final AuthContextService authContext;
 
-    public AuthController(AuthService authService, AuthContextService authContext) {
+    public FacebookController(AuthService authService, AuthContextService authContext) {
         this.authService = authService;
         this.authContext = authContext;
     }
 
-    @PostMapping("/log-in")
+
+    @PostMapping("/sign-in")
     public ResponseEntity<User> signIn(@Valid @RequestBody SignInRequest request) {
         User user = authService.authenticateUser(request);
         authContext.authorise(request.getEmail().trim().toLowerCase(), request.getPassword(), REGISTERED_CLIENT);
@@ -42,21 +42,5 @@ public class AuthController {
         User user = authService.registerUser(request);
         authContext.authorise(request.getEmail().trim().toLowerCase(), request.getPassword(), REGISTERED_CLIENT);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
-    }
-
-    @PostMapping("/sign-out")
-    public void signOut() {
-        authContext.clearAuthentication();
-    }
-
-    @GetMapping("/account")
-    public String account(Principal principal) {
-        return principal.getName();
-    }
-
-    @ResponseStatus(HttpStatus.CONFLICT)
-    @ExceptionHandler(IllegalStateException.class)
-    public void handleIllegalState(IllegalStateException e) {
-        log.warn("Exception caught: ", e);
     }
 }
