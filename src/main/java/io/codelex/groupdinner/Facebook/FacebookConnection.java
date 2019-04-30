@@ -12,7 +12,7 @@ import java.net.URLEncoder;
 public class FacebookConnection {
     public static final String FB_APP_ID = "354017915232853";
     public static final String FB_APP_SECRET = "AIzaSyBuAnpN0wjlLoOJN-we1FmlxEEm_hpQRTY";
-    public static final String REDIRECT_URI = "http://localhost:3000/login";
+    public static final String REDIRECT_URI = "http://localhost:3000/log-in";
 
     static String accessToken = "";
 

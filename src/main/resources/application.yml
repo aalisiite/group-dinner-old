@@ -9,15 +9,15 @@ spring:
   liquibase:
     change-log: classpath:/liquibase/updates.xml
   
-security:
-  oath2:
-    client:
-      clientID: 354017915232853
-      clientSecret: cd124d866ed65799be1b88ea23b87511
-      accessTokenUri: https://graph.facebook.com/oath/access_token
-      userAuthorizationUri: https://www.facebook.com/dialog/oath
-      tokenName: oath_token
-      authentificationScheme: query
-      clientAuthenticationScheme: form
-    resource:
-      userInfoUri: https://graph.facebook.com/me
+facebook:
+  client:
+    clientId: 354017915232853
+    clientSecret: cd124d866ed65799be1b88ea23b87511
+
+    accessTokenUri: https://graph.facebook.com/oauth/access_token
+    userAuthorizationUri: https://www.facebook.com/dialog/oauth
+    tokenName: oauth_token
+    authenticationScheme: query
+    clientAuthenticationScheme: form
+  resource:
+    userInfoUri: https://graph.facebook.com/me
