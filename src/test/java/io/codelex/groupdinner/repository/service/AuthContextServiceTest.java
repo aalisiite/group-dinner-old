@@ -98,7 +98,7 @@ public class AuthContextServiceTest {
     }
 
     private ResponseEntity<User> signIn() {
-        var uri = fromPath("/api/sign-in")
+        var uri = fromPath("/api/log-in")
                 .build()
                 .toUri();
         return restTemplate.postForEntity(uri, signInRequest, User.class);

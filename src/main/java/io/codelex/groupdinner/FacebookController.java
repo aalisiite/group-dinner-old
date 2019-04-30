@@ -30,17 +30,11 @@ public class FacebookController {
     }
 
 
-    @PostMapping("/sign-in")
+    @PostMapping("/login/facebook")
     public ResponseEntity<User> signIn(@Valid @RequestBody SignInRequest request) {
         User user = authService.authenticateUser(request);
         authContext.authorise(request.getEmail().trim().toLowerCase(), request.getPassword(), REGISTERED_CLIENT);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
-
-    @PostMapping("/register")
-    public ResponseEntity<User> register(@Valid @RequestBody RegistrationRequest request) {
-        User user = authService.registerUser(request);
-        authContext.authorise(request.getEmail().trim().toLowerCase(), request.getPassword(), REGISTERED_CLIENT);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
-    }
+    
 }

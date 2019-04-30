@@ -145,7 +145,8 @@ public class DinnerService {
 
     public List<Dinner> getGoodMatchDinners(String userEmail) {
         UserRecord user = userRecordRepository.findByEmail(userEmail);
-        List<DinnerRecord> goodDinners = dinnerRecordRepository.getGoodDinners(user.getId());
+        List<DinnerRecord> goodDinners = dinnerRecordRepository.findAll();
+//        List<DinnerRecord> goodDinners = dinnerRecordRepository.getGoodDinners(user.getId());
         List<Dinner> resultingDinners = new ArrayList<>();
         for (DinnerRecord dinnerRecord : goodDinners) {
             resultingDinners.add(toApiCompatible.apply(dinnerRecord));

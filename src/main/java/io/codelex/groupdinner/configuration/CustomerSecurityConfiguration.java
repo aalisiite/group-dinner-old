@@ -10,12 +10,14 @@ import static io.codelex.groupdinner.repository.service.Role.REGISTERED_CLIENT;
 @Order(100)
 @Configuration
 class CustomerSecurityConfiguration extends WebSecurityConfigurerAdapter {
+    
+    
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.antMatcher("/api/**")
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/sign-in", "/api/register").permitAll()
+                .antMatchers("/api/log-in", "/api/register").permitAll()
                 .anyRequest().hasRole(REGISTERED_CLIENT.name());
     }
 }
