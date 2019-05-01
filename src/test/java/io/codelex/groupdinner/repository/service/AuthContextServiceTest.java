@@ -3,6 +3,7 @@ package io.codelex.groupdinner.repository.service;
 import io.codelex.groupdinner.api.User;
 import io.codelex.groupdinner.api.request.RegistrationRequest;
 import io.codelex.groupdinner.api.request.SignInRequest;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,11 @@ public class AuthContextServiceTest {
     );
     @Autowired
     TestRestTemplate restTemplate;
+    
+    @Before
+    public void setup(){
+        
+    }
 
     @Test
     public void customer_account_should_be_secured_by_default() {
