@@ -1,11 +1,15 @@
 package io.codelex.groupdinner.api;
 
+import javax.persistence.*;
 import java.util.Objects;
 
-public class User {
 
+public class User {
+    
     private Long id;
+    
     private String fullName;
+    
     private String email;
 
     public User() {

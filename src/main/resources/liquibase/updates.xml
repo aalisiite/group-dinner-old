@@ -5,19 +5,16 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
-    <changeSet id="create users table" author="alise">
-        <createSequence sequenceName="user_seq"/>
-        <createTable tableName="users">
-            <column name="id" type="bigint" defaultValueSequenceNext="user_seq">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user"/>
+    <changeSet id="create users_data table" author="alise">
+        <createSequence sequenceName="users_data_seq"/>
+        <createTable tableName="users_data">
+            <column name="id" type="bigint" defaultValueSequenceNext="users_data_seq">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_data"/>
             </column>
             <column name="full_name" type="varchar(100)">
                 <constraints nullable="false"/>
             </column>
             <column name="email" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="password" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -51,8 +48,8 @@
         </createTable>
         <addForeignKeyConstraint baseTableName="dinners"
                                  baseColumnNames="creator_id"
-                                 constraintName="fk_dinners_creator_id_users_id"
-                                 referencedTableName="users"
+                                 constraintName="fk_dinners_creator_id_users_data_id"
+                                 referencedTableName="users_data"
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"
         />
@@ -86,8 +83,8 @@
         </createIndex>
         <addForeignKeyConstraint baseTableName="attendees"
                                  baseColumnNames="user_id"
-                                 constraintName="fk_attendees_user_id_users_id"
-                                 referencedTableName="users"
+                                 constraintName="fk_attendees_user_id_users_data_id"
+                                 referencedTableName="users_data"
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"
         />
@@ -125,8 +122,8 @@
         />
         <addForeignKeyConstraint baseTableName="feedbacks"
                                  baseColumnNames="provider_id"
-                                 constraintName="fk_feedbacks_provider_id_users_id"
-                                 referencedTableName="users"
+                                 constraintName="fk_feedbacks_provider_id_users_data_id"
+                                 referencedTableName="users_data"
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"
         />
@@ -135,8 +132,8 @@
         </createIndex>
         <addForeignKeyConstraint baseTableName="feedbacks"
                                  baseColumnNames="receiver_id"
-                                 constraintName="fk_feedbacks_receiver_id_users_id"
-                                 referencedTableName="users"
+                                 constraintName="fk_feedbacks_receiver_id_users_data_id"
+                                 referencedTableName="users_data"
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"
         />

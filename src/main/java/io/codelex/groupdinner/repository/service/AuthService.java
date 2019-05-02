@@ -27,8 +27,8 @@ public class AuthService {
         if (!userRecordRepository.isUserPresent(request.getEmail())) {
             UserRecord user = new UserRecord(
                     request.getFullName(),
-                    request.getEmail().toLowerCase().trim(),
-                    passwordEncoder.encode(request.getPassword())
+                    request.getEmail().toLowerCase().trim()
+                    // passwordEncoder.encode(request.getPassword())
             );
             user = userRecordRepository.save(user);
             return toApiCompatible.apply(user);
@@ -40,14 +40,14 @@ public class AuthService {
     public User authenticateUser(SignInRequest request) {
         UserRecord user = userRecordRepository.findByEmail(request.getEmail().toLowerCase().trim());
         if (user != null) {
-            if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-                return toApiCompatible.apply(user);
-            } else {
-                throw new IllegalStateException("Password incorrect");
-            }
+//            if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+//                return toApiCompatible.apply(user);
+//            } else {
+//                throw new IllegalStateException("Password incorrect");
+//            }
         } else {
             throw new IllegalStateException("Email incorrect");
         }
+        return new User();
     }
-
 }

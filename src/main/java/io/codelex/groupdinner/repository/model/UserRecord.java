@@ -5,24 +5,27 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users_data")
+@Inheritance(
+        strategy = InheritanceType.JOINED
+)
 public class UserRecord {
 
     @Id
     @GeneratedValue(generator = "user_seq_generator", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "user_seq_generator", sequenceName = "user_seq", allocationSize = 1)
     private Long id;
+    @Column(name = "full_name")
     private String fullName;
+    @Column(name = "email")
     private String email;
-    private String password;
 
     public UserRecord() {
     }
 
-    public UserRecord(String fullName, String email, String password) {
+    public UserRecord(String fullName, String email) {
         this.fullName = fullName;
         this.email = email;
-        this.password = password;
     }
 
     public Long getId() {
@@ -49,13 +52,6 @@ public class UserRecord {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     @Override
     public boolean equals(Object o) {
