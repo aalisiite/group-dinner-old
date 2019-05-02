@@ -26,8 +26,7 @@ public class AuthService {
     public User registerUser(RegistrationRequest request) {
         if (!userRecordRepository.isUserPresent(request.getEmail())) {
             UserRecord user = new UserRecord(
-                    request.getFirstName(),
-                    request.getLastName(),
+                    request.getFullName(),
                     request.getEmail().toLowerCase().trim(),
                     passwordEncoder.encode(request.getPassword())
             );

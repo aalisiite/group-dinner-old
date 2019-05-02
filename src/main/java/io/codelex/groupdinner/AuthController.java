@@ -1,6 +1,7 @@
 package io.codelex.groupdinner;
 
 import io.codelex.groupdinner.api.User;
+import io.codelex.groupdinner.api.request.FacebookRequest;
 import io.codelex.groupdinner.api.request.RegistrationRequest;
 import io.codelex.groupdinner.api.request.SignInRequest;
 import io.codelex.groupdinner.repository.service.AuthContextService;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.security.Principal;
 
-import static io.codelex.groupdinner.repository.service.Role.REGISTERED_CLIENT;
+import static io.codelex.groupdinner.repository.service.Role.USER;
 
 @CrossOrigin
 @RestController
@@ -33,14 +34,19 @@ public class AuthController {
     @PostMapping("/log-in")
     public ResponseEntity<User> signIn(@Valid @RequestBody SignInRequest request) {
         User user = authService.authenticateUser(request);
-        authContext.authorise(request.getEmail().trim().toLowerCase(), request.getPassword(), REGISTERED_CLIENT);
+        authContext.authorise(request.getEmail().trim().toLowerCase(), request.getPassword(), USER);
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @PostMapping("/login-facebook")
+    public ResponseEntity<User> facebookLogin(FacebookRequest request) {
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PostMapping("/register")
     public ResponseEntity<User> register(@Valid @RequestBody RegistrationRequest request) {
         User user = authService.registerUser(request);
-        authContext.authorise(request.getEmail().trim().toLowerCase(), request.getPassword(), REGISTERED_CLIENT);
+        authContext.authorise(request.getEmail().trim().toLowerCase(), request.getPassword(), USER);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 

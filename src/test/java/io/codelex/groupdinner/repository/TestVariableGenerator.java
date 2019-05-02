@@ -22,8 +22,7 @@ public class TestVariableGenerator {
 
     public UserRecord createUserRecord1() {
         return new UserRecord(
-                "Janis",
-                "Berzins",
+                "Janis Berzins",
                 "berzins@gmai.com",
                 "password"
         );
@@ -31,8 +30,7 @@ public class TestVariableGenerator {
 
     public UserRecord createUserRecord2() {
         return new UserRecord(
-                "Anna",
-                "Kalniņa",
+                "Anna Kalniņa",
                 "a.kalnina@gmail.com",
                 "password"
         );
@@ -107,8 +105,7 @@ public class TestVariableGenerator {
 
     public RegistrationRequest createRegistrationRequest() {
         return new RegistrationRequest(
-                "Janis",
-                "Berzins",
+                "Janis Berzins",
                 "berzins@gmai.com",
                 "password"
         );

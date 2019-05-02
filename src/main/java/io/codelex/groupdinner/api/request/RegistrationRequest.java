@@ -8,11 +8,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 public class RegistrationRequest {
-
-    @NotEmpty(message = "Please enter your name")
-    private String firstName;
-    @NotEmpty(message = "Please enter your last name")
-    private String lastName;
+    
+    @NotEmpty(message = "Please enter your full name")
+    private String fullName;
     @Email(message = "Please enter a valid email")
     private String email;
     @Size(min = 8, max = 30, message = "Password must be at least 8 characters long")
@@ -21,30 +19,20 @@ public class RegistrationRequest {
 
     @JsonCreator
     public RegistrationRequest(
-            @JsonProperty("firstName") @NotEmpty String firstName,
-            @JsonProperty("lastName") @NotEmpty String lastName,
+            @JsonProperty("lastName") @NotEmpty String fullName,
             @JsonProperty("email") @Email String email,
             @JsonProperty("password") @NotEmpty String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.fullName = fullName;
         this.email = email;
         this.password = password;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getEmail() {

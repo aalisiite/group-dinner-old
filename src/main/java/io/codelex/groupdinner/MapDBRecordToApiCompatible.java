@@ -14,8 +14,7 @@ public class MapDBRecordToApiCompatible {
     public User apply(UserRecord userRecord) {
         return new User(
                 userRecord.getId(),
-                userRecord.getFirstName(),
-                userRecord.getLastName(),
+                userRecord.getFullName(),
                 userRecord.getEmail()
         );
     }

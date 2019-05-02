@@ -25,13 +25,11 @@ import static org.springframework.web.util.UriComponentsBuilder.fromPath;
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 public class AuthContextServiceTest {
 
-    static final String firstName = "First";
-    static final String lastName = "Last";
+    static final String fullName = "First";
     static final String email = "email@email.com";
     static final String password = "Password123";
     static final RegistrationRequest registrationRequest = new RegistrationRequest(
-            firstName,
-            lastName,
+            fullName,
             email,
             password
     );

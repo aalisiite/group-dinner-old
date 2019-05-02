@@ -12,17 +12,15 @@ public class UserRecord {
     @GeneratedValue(generator = "user_seq_generator", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "user_seq_generator", sequenceName = "user_seq", allocationSize = 1)
     private Long id;
-    private String firstName;
-    private String lastName;
+    private String fullName;
     private String email;
     private String password;
 
     public UserRecord() {
     }
 
-    public UserRecord(String firstName, String lastName, String email, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public UserRecord(String fullName, String email, String password) {
+        this.fullName = fullName;
         this.email = email;
         this.password = password;
     }
@@ -35,20 +33,12 @@ public class UserRecord {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getEmail() {
