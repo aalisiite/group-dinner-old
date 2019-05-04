@@ -9,6 +9,7 @@ import javax.validation.constraints.NotEmpty;
 public class SignInRequest {
 
     @Email(message = "Please enter a valid email")
+    @NotEmpty
     private String email;
     @NotEmpty(message = "Please enter your password")
     private String password;
