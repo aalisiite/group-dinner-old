@@ -16,7 +16,7 @@ public class SignInRequest {
 
     @JsonCreator
     public SignInRequest(
-            @JsonProperty("email") @Email String email,
+            @JsonProperty("email") @Email @NotEmpty String email,
             @JsonProperty("password") @NotEmpty String password) {
         this.email = email;
         this.password = password;
