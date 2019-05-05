@@ -23,16 +23,16 @@ public class TestVariableGenerator {
     public UserRecord createUserRecord1() {
         return new UserRecord(
                 "Janis Berzins",
-                "berzins@gmai.com",
-                "password"
+                "berzins@gmai.com"
+                //"password"
         );
     }
 
     public UserRecord createUserRecord2() {
         return new UserRecord(
                 "Anna Kalniņa",
-                "a.kalnina@gmail.com",
-                "password"
+                "a.kalnina@gmail.com"
+                //"password"
         );
     }
 
@@ -77,7 +77,7 @@ public class TestVariableGenerator {
         );
     }
 
-    public FeedbackRecord createBadFeedbackRecord(DinnerRecord dinnerRecord, UserRecord userRecord1, UserRecord userRecord2) {
+     FeedbackRecord createBadFeedbackRecord(DinnerRecord dinnerRecord, UserRecord userRecord1, UserRecord userRecord2) {
         return new FeedbackRecord(
                 dinnerRecord,
                 userRecord1,
