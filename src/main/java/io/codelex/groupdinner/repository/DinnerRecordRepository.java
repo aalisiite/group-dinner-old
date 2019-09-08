@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 
 public interface DinnerRecordRepository extends JpaRepository<DinnerRecord, Long> {
 
-
     @Query("select count(dinner) > 0 from DinnerRecord dinner where"
             + " dinner.title = :title"
             + " and dinner.creator = :creator"
@@ -31,6 +30,4 @@ public interface DinnerRecordRepository extends JpaRepository<DinnerRecord, Long
     void incrementCurrentGuests(
             @Param("id") Long id
     );
-    
-    
 }

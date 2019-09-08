@@ -19,5 +19,3 @@ public interface UserRecordRepository extends JpaRepository<UserRecord, Long> {
                                     @Param("lastName") String lastName,
                                     @Param("email") String email);
 }
-
-

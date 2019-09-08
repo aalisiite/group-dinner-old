@@ -46,8 +46,6 @@ public class RepositoryUserModule implements UserModule {
         }
     }
 
-    
-    
     @Override
     public Attendee joinDinner(JoinDinnerRequest request) {
         Optional<DinnerRecord> dinnerRecord = dinnerRecordRepository.findById(request.getDinner().getId());
@@ -58,6 +56,7 @@ public class RepositoryUserModule implements UserModule {
                     createOrGetUser(request.getUser()),
                     status
             );
+
             attendeeRecordRepository.save(attendeeRecord);
             dinnerRecord.get().incrementCurrentGuests();
             dinnerRecordRepository.incrementCurrentGuests(dinnerRecord.get().getId());
@@ -79,10 +78,10 @@ public class RepositoryUserModule implements UserModule {
             Optional<UserRecord> userRecord = userRecordRepository.findById(attendee.getUser().getId());
             userRecord.ifPresent(users::add);
         }
+
         return users.stream().map(toUser).collect(Collectors.toList());
     }
-    
-    
+
     private DinnerRecord createDinnerRecordFromRequest(CreateDinnerRequest request) {
         DinnerRecord dinnerRecord = new DinnerRecord();
         dinnerRecord.setId(id.incrementAndGet());
@@ -104,8 +103,8 @@ public class RepositoryUserModule implements UserModule {
                             user.getLastName(),
                             user.getEmail()
                     );
+
                     return userRecordRepository.save(created);
                 });
     }
-
 }

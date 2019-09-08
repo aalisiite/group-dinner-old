@@ -14,7 +14,6 @@ public class CreateDinnerRequest {
 
     @NotEmpty
     private String title;
-    
     @NotNull
     private User creator;
     @NotNull
@@ -87,7 +86,6 @@ public class CreateDinnerRequest {
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
-
 
     @Override
     public boolean equals(Object o) {

@@ -8,7 +8,7 @@ import java.util.List;
 @Component
 public class AttendeeService {
 
-    List<Attendee> attendees;
+    private List<Attendee> attendees;
 
     public AttendeeService(List<Attendee> attendees) {
         this.attendees = attendees;
@@ -18,6 +18,4 @@ public class AttendeeService {
         attendees.add(attendee);
         return attendee;
     }
-
-
 }

@@ -9,7 +9,6 @@ import java.util.List;
 
 public interface AttendeeRecordRepository extends JpaRepository<AttendeeRecord, Long> {
 
-
     @Query("select attendee from AttendeeRecord attendee"
             + " where attendee.dinner = :id "
             + " and attendee.status = :status ")

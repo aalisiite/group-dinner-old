@@ -12,7 +12,6 @@ public class Dinner {
     private String description;
     private String location;
     private LocalDateTime dateTime;
-    
 
     public Dinner(Long id, String title, User creator, int maxGuests, String description, String location, LocalDateTime dateTime) {
         this.id = id;
@@ -96,5 +95,4 @@ public class Dinner {
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
-
 }

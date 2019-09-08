@@ -1,6 +1,5 @@
 package io.codelex.groupdinner.InMemory;
 
-
 import io.codelex.groupdinner.InMemory.service.AttendeeService;
 import io.codelex.groupdinner.InMemory.service.DinnerService;
 import io.codelex.groupdinner.UserModule;
